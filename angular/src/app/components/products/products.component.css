@@ -166,15 +166,17 @@
   color: #D10024;
 }
 .mat-paginator{
-  background-color: #343a40 !important;
-
+  /* background-color: #343a40 !important; */
+  -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
 }
 .mat-paginator-range-label {
   width: 100px !important;
   margin: 0 16px 0 16px !important;
 }
 .mat-tree{
-  background-color: #343a40 !important;
+  -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
 }
 
 @media screen and (max-width: 1192) {

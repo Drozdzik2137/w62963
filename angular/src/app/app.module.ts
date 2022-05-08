@@ -79,7 +79,7 @@ import { MatTreeModule } from '@angular/material/tree';
     MatProgressSpinnerModule,
     MatSidenavModule,
     MatTableModule,
-    MatTreeModule
+    MatTreeModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -10,8 +10,59 @@
   </div>
 </section>
 <div class="container">
-  <div class="row">
+  <div class="contact-info">
+    <div>
+      <h2>Kontakt</h2>
+      <ul class="info">
+        <li>
+          <span><i class="fas fa-map-marker-alt"></i></span>
+        </li>
+        <li>
+          <span><i class="fas fa-envelope"></i></span>
+        </li>
+        <li>
+          <span><i class="fas fa-map-marker-alt"></i></span>
+        </li>
+      </ul>
+      <ul class="list-unstyled d-flex">
+        <li>
+          <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+            <i class="fab fa-tiktok"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="contact-form">
+      <h2>Wyślij do nas wiadomość!</h2>
+      <div class="inputBox w50">
+        <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" fillColor="accent">
+        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="emailFormControl.hasError('required')">
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
 
+      </div>
+    </div>
   </div>
 </div>
 <div class="mt-5">

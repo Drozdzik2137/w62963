@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { catchError, map, Observable, of } from 'rxjs';
 
 @Component({
@@ -18,6 +19,7 @@ export class ContactComponent implements OnInit {
   markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
   markerPositions: google.maps.LatLngLiteral[] = [];
   center: google.maps.LatLngLiteral = {lat: 50.048924580103346, lng: 21.981803279444392};
+  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
 
 
   constructor(http: HttpClient) {
