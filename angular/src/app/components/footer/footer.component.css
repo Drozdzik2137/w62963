@@ -1,0 +1,21 @@
+footer .brand {
+  font-family: var(--lg-font);
+  letter-spacing: 2px;
+}
+
+footer a {
+  -webkit-transition: color 0.3s ease;
+  -o-transition: color 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: red !important;
+}
+
+@media (max-width: 1036px) {
+  .google-map{
+    visibility: hidden !important;
+    display: none !important;
+  }
+}

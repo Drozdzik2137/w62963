@@ -1,0 +1,164 @@
+<div class="container">
+  <div class="row mt-5">
+    <div class="text-center my-5" *ngIf="cartData.data[0].numInCart === 0">
+      <div class="empty-cart">
+        <h1 style="font-weight: 600;">Koszyk jest pusty</h1>
+        <button class="cart-empty-btn btn-lg mt-3" routerLink="/"><i class="fas fa-store"></i> Przejdz do sklepu</button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="cartData.data[0].numInCart !== 0">
+    <div class="row">
+      <div class="col-12 mt-5 p-5">
+        <table class="table table-bordered align-middle">
+          <thead class="table-dark">
+            <tr class="text-center">
+              <th>Zdjęcie</th>
+              <th>Nazwa</th>
+              <th>Cena</th>
+              <th>Ilość</th>
+              <th>Łącznie</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr *ngFor="let c of cartData.data; let i=index">
+              <td>
+                <div class="cart-product-img">
+                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}">
+                  <div class="middle">
+                    <button class="quick-view" (click)="SelectProduct(c.product.id)"><i class="fa fa-eye"></i></button>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <p class="cart-product-name" (click)="SelectProduct(c.product.id)">{{c.product.brand}}
+                  {{c.product.name}}</p>
+              </td>
+              <td>
+                <p>{{c.product.price}} zł</p>
+              </td>
+              <td>
+                <div>
+                  <form class="d-flex justify-content-center">
+                    <button class="btn" id="decrease" (click)="ChangeQuantity(i, false)">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <input class="form-control" type="number" id="number" [value]="c.numInCart" readonly
+                      [max]="c.product.quantity" />
+                    <button class="btn" id="increase" (click)="ChangeQuantity(i, true)">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </form>
+                </div>
+              </td>
+              <td>
+                <p>{{cartService.SubTotal(i)}} zł</p>
+              </td>
+              <td><i class="fas fa-trash-alt" id="trash" (click)="cartService.DeleteProductFromCart(i)"></i></td>
+            </tr>
+            <tr>
+              <td style="border: none;"></td>
+              <td style="border: none;"></td>
+              <td style="border: none;"></td>
+              <td><strong>Razem do zapłaty: </strong></td>
+              <td><strong>{{cartTotal}} zł</strong></td>
+              <td style="border: none;"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-md-12">
+        <div class="d-flex w-100 justify-content-evenly p-3 mb-5">
+          <button routerLink="/checkout" class="cart-checkout-btn order-1"><i class="fas fa-coins"></i>Zapłać</button>
+          <button routerLink="/" class="cart-ctn-btn order-0">Kontynuuj zakupy <i
+              class="fas fa-store"></i></button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <div class="col-md-12 mt-5 mb-5">
+    <mat-tab-group mat-align-tabs="center" animationDuration="1500ms" dynamicHeight>
+      <mat-tab label="Promocje">
+        <section id="collection" class="py-5">
+          <div class="container">
+            <div class="title text-center">
+              <h2 class="position-relative d-inline-block">Gorące oferty</h2>
+            </div>
+            <div class="product-list mt-4 row gx-0 gy-3">
+              <div class="col-md-6 col-lg-4 col-xl-3 p-2" *ngFor="let prod of products">
+                <div class="product">
+                  <div class="product-img border position-relative">
+                    <img alt="{{prod.name}}" src="{{prod.img}}" class="image w-100">
+                    <div class="middle">
+                      <div class="product-btns">
+                        <button class="add-to-cart-btn" [disabled]="prod.quantity < 1"
+                          [class.disabled]="prod.quantity < 1" (click)="AddToCart(prod.id)"><i
+                            class="fa fa-shopping-cart"></i></button>
+                        <button class="quick-view" (click)="SelectProduct(prod.id)"><i class="fa fa-eye"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="product-label">
+                    <span class="sale">-50%</span>
+                  </div>
+                  <div class="product-body text-center">
+                    <p class="product-category">{{prod.category}}</p>
+                    <h3 class="product-name"><a (click)="SelectProduct(prod.id)">{{prod.brand + ' ' +
+                        prod.name}}</a></h3>
+                    <h4 class="product-price">{{prod.price}} zł
+                      <del class="product-old-price">{{2*prod.price}} zł</del>
+                    </h4>
+                    <div class="product-rating">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </mat-tab>
+      <mat-tab label="Podobne">
+        <section id="collection" class="py-5">
+          <div class="container">
+            <div class="title text-center">
+              <h2 class="position-relative d-inline-block">Gorące oferty</h2>
+            </div>
+            <div class="product-list mt-4 row gx-0 gy-3">
+              <div class="col-md-6 col-lg-4 col-xl-3 p-2" *ngFor="let prod of products">
+                <div class="product">
+                  <div class="product-img border position-relative">
+                    <img alt="{{prod.name}}" src="{{prod.img}}" class="image w-100">
+                    <div class="middle">
+                      <div class="product-btns">
+                        <button class="add-to-cart-btn" [disabled]="prod.quantity < 1"
+                          [class.disabled]="prod.quantity < 1" (click)="AddToCart(prod.id)"><i
+                            class="fa fa-shopping-cart"></i></button>
+                        <button class="quick-view" (click)="SelectProduct(prod.id)"><i class="fa fa-eye"></i></button>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container>
+                    <div class="product-label">
+                      <span class="sale">-50%</span>
+                    </div>
+                  </ng-container>
+                  <div class="product-body text-center">
+                    <p class="product-category">{{prod.category}}</p>
+                    <h3 class="product-name"><a (click)="SelectProduct(prod.id)">{{prod.brand + ' ' +
+                        prod.name}}</a></h3>
+                    <h4 class="product-price">{{prod.price}} zł
+                      <del class="product-old-price">{{2*prod.price}} zł</del>
+                    </h4>
+                    <div class="product-rating">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

@@ -1,0 +1,204 @@
+#breadcrumb {
+  padding: 30px 20px 15px 20px;
+  background: #FBFBFC;
+  border-bottom: 1px solid #E4E7ED;
+}
+
+#breadcrumb .breadcrumb-header {
+  display: inline-block;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 15px;
+  text-transform: uppercase;
+}
+
+#breadcrumb .breadcrumb-tree {
+  display: inline-block;
+}
+
+#breadcrumb .breadcrumb-tree li {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+#breadcrumb .breadcrumb-tree li+li {
+  margin-left: 10px;
+}
+
+#breadcrumb .breadcrumb-tree li+li:before {
+  content: '/';
+  display: inline-block;
+  color: #8D99AE;
+  margin-right: 10px;
+}
+
+#breadcrumb .breadcrumb-tree li a {
+  color: #8D99AE;
+}
+
+#breadcrumb .breadcrumb-tree li a:hover {
+  color: #D10024;
+}
+
+.product {
+  position: relative;
+  margin: 15px 0px;
+  -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  -webkit-transition: 1s ease;
+  transition: 1s ease;
+}
+.product:hover {
+  -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+  box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+}
+.product .product-body {
+  position: relative;
+  padding: 15px;
+  background-color: #FFF;
+  text-align: center;
+  z-index: 20;
+}
+.product .product-body .product-category {
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #8D99AE;
+}
+
+.product .product-body .product-name {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.product .product-body .product-name>a {
+  color: black;
+  text-decoration: none !important;
+}
+
+.product .product-body .product-name>a:hover,
+.product .product-body .product-name>a:focus {
+  color: #D10024;
+  cursor: pointer;
+}
+
+.product .product-body .product-price {
+  color: rgb(107, 104, 104);
+  font-size: 18px;
+}
+
+.product .product-body .product-price .product-old-price {
+  font-size: 70%;
+  font-weight: 400;
+  color: #8D99AE;
+}
+.product .product-img{
+  position: relative;
+  overflow: hidden;
+}
+.product .product-img .image {
+  opacity: 1;
+  display: block;
+  width: 180px;
+  height: auto;
+  backface-visibility: hidden;
+  transition: 1s all ease-in-out;
+}
+.product .product-img:hover .image{
+  transform: scale(1.5);
+}
+.product .product-img .middle{
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+.product .product-img:hover .image {
+  opacity: 0.5;
+}
+.product:hover .product-img .image{
+  opacity: 0.7;
+}
+.product:hover .product-img .middle{
+  opacity: 1;
+}
+.product .product-img  .middle .product-btns {
+  position: relative;
+  cursor: pointer;
+  -webkit-transition: 0.5s all;
+  transition: 0.5s all;
+}
+.product .product-img .product-btns>button {
+  width: 60px;
+  height: 60px;
+  line-height: 40px;
+  font-size: 30px;
+  background: transparent;
+  border: none;
+}
+.product .product-img .product-btns>button:not(:last-child) {
+  margin-right: 6px;
+}
+.product .product-img .product-btns>button:hover {
+  background: rgba(88, 90, 88, 0.4);
+  color: #D10024;
+  border-radius: 50%;
+}
+.product .product-label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+.product .product-label>span {
+  border: 2px solid;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+.product .product-label>span.sale {
+  background-color: #FFF;
+  border-color: #D10024;
+  color: #D10024;
+}
+.mat-paginator{
+  background-color: #343a40 !important;
+
+}
+.mat-paginator-range-label {
+  width: 100px !important;
+  margin: 0 16px 0 16px !important;
+}
+.mat-tree{
+  background-color: #343a40 !important;
+}
+
+@media screen and (max-width: 1192) {
+  .product .product-img .product-btns>button:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+@media screen and (max-width: 764px) {
+  .product .product-img .product-btns>button:not(:last-child) {
+    margin-right: 60px;
+  }
+}
+@media screen and (max-width: 436px) {
+  .product .product-img .product-btns>button:not(:last-child) {
+    margin-right: 30px;
+  }
+}
+@media screen and (max-width: 368px) {
+  .product .product-img .product-btns>button:not(:last-child) {
+    margin-right: 18px;
+  }
+}
+@media screen and (max-width: 340px) {
+  .product .product-img .product-btns>button:not(:last-child) {
+    margin-right: 0px;
+  }
+}

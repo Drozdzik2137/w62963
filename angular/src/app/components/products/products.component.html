@@ -1,0 +1,86 @@
+<section id="breadcrumb">
+  <div class="row">
+    <div class="col-md-12 mt-5 ps-5 pt-5">
+      <ul class="breadcrumb-tree">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Coś</a></li>
+        <li class="active">Coś</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-3">
+      <section id="collection" class="pb-5">
+        <div class="title">
+          <h2 class="position-relative d-inline-block mt-4">Lista kategorii</h2>
+        </div>
+        <div class="mt-0 row gx-0 gy-3">
+          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+            <!-- This is the tree node template for leaf nodes -->
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="20">
+              <!-- use a disabled button to provide padding for tree leaf -->
+              <button mat-icon-button disabled></button>
+              {{node.name}}
+            </mat-tree-node>
+            <!-- This is the tree node template for expandable nodes -->
+            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
+              <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
+                <mat-icon class="mat-icon-rtl-mirror">
+                  {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+              </button>
+              {{node.name}}
+            </mat-tree-node>
+          </mat-tree>
+          <a *ngFor="let cat of categories">
+            {{cat.name}}<br>
+          </a>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-md-9">
+      <section id="collection" class="pb-5">
+        <div class="product-list mt-4 row gx-0 gy-3">
+          <mat-paginator #paginatorTop appStylePaginator showFirstLastButtons [length]="productsTotalCount"
+            [pageSize]="12" [pageSizeOptions]="[12,24,48,96]"
+            (page)="pageEvent = $event; onPageChange($event); paginatorBottom.pageIndex = $event.pageIndex; paginatorBottom.pageSize = $event.pageSize">
+          </mat-paginator>
+          <div class="col-12 col-md-6 col-lg-4 col-xxl-3 p-2" *ngFor="let prod of products">
+            <div class="product h-100">
+              <div class="product-img border position-relative">
+                <img alt="{{prod.name}}" src="{{prod.img}}" class="image w-100">
+                <div class="middle">
+                  <div class="product-btns">
+                    <button class="add-to-cart-btn" [disabled]="prod.quantity < 1" [class.disabled]="prod.quantity < 1"
+                      (click)="AddToCart(prod.id)"><i class="fa fa-shopping-cart"></i></button>
+                    <button class="quick-view" (click)="SelectProduct(prod.id)"><i class="fa fa-eye"></i></button>
+                  </div>
+                </div>
+              </div>
+              <!-- <ng-container>
+                  <div class="product-label">
+                    <span class="sale">-50%</span>
+                  </div>
+                </ng-container> -->
+              <div class="product-body text-center">
+                <p class="product-category">{{prod.category}}</p>
+                <h3 class="product-name"><a (click)="SelectProduct(prod.id)">{{prod.brand}} {{prod.name}}</a></h3>
+                <h4 class="product-price">{{prod.price}} zł
+                  <!-- <del class="product-old-price">{{2*prod.price}} zł</del> -->
+                </h4>
+                <div class="product-rating">
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-paginator #paginatorBottom appStylePaginator showFirstLastButtons [length]="productsTotalCount"
+            [pageSize]="12" [pageSizeOptions]="[12,24,48,96]"
+            (page)="pageEvent = $event; onPageChange($event); paginatorTop.pageIndex = $event.pageIndex; paginatorTop.pageSize = $event.pageSize">
+          </mat-paginator>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+<footer class="bg-dark pt-5 pb-2">
+  <div class="container">
+    <div class="row text-white border-bottom border-secondary pb-3 mb-3 g-4">
+      <div class="col-xs-6 col-md-3">
+        <a class="text-uppercase text-decoration-none brand text-white" href="index.html">Nazwa</a>
+        <p class="text-white text-muted mt-3">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Nostrum mollitia quisquam veniam odit cupiditate, ullam aut voluptas velit dolor ipsam?</p>
+      </div>
+
+      <div class="col-xs-6 col-md-3">
+        <h5 class="fw-light">Linki</h5>
+        <ul class="list-unstyled">
+          <li class="my-3">
+            <a href="#" class="text-white text-decoration-none text-muted">
+              <i class="fas fa-chevron-right me-1"></i> Oferta
+            </a>
+          </li>
+          <li class="my-3">
+            <a href="#" class="text-white text-decoration-none text-muted">
+              <i class="fas fa-chevron-right me-1"></i> Produkty
+            </a>
+          </li>
+          <li class="my-3">
+            <a href="#" class="text-white text-decoration-none text-muted">
+              <i class="fas fa-chevron-right me-1"></i> Kategorie
+            </a>
+          </li>
+          <li class="my-3">
+            <a href="#" class="text-white text-decoration-none text-muted">
+              <i class="fas fa-chevron-right me-1"></i> Blog
+            </a>
+          </li>
+          <li class="my-3">
+            <a href="#" class="text-white text-decoration-none text-muted">
+              <i class="fas fa-chevron-right me-1"></i> Kontakt
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-xs-6 col-md-3">
+        <h5 class="fw-light mb-3">Adres</h5>
+        <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+          <span class="me-3">
+            <i class="fas fa-map-marked-alt"></i>
+          </span>
+          <span class="fw-light">
+            Sucharskiego 2, 35-225 Rzeszów
+          </span>
+        </div>
+        <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+          <span class="me-3">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <span class="fw-light">
+            w62963@student.wsiz.edu.pl
+          </span>
+        </div>
+        <div class="d-flex justify-content-start align-items-start my-2 text-muted">
+          <span class="me-3">
+            <i class="fas fa-phone-alt"></i>
+          </span>
+          <span class="fw-light">
+            +123 456 789
+          </span>
+        </div>
+        <div class="google-map d-flex justify-content-start align-items-start my-2">
+          <div *ngIf="apiLoaded | async">
+            <google-map height="140px" [options]="options">
+              <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+                [options]="markerOptions"></map-marker>
+            </google-map>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-xs-6 col-md-3">
+        <h5 class="fw-light mb-3">Śledź Nas</h5>
+        <div>
+          <ul class="list-unstyled d-flex">
+            <li>
+              <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="text-white text-decoration-none text-muted fs-4 me-4">
+                <i class="fab fa-tiktok"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-white">&copy; 2022 Michał Drozd</p>
+  </div>
+</footer>

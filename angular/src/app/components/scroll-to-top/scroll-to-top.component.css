@@ -1,0 +1,40 @@
+.scroll-to-top {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  bottom: 15px;
+  right: 15px;
+  opacity: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  color: #fff !important;
+  outline: none;
+  background-color: #D10024;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.scroll-to-top:hover, .scroll-to-top .i:hover{
+  background-color: gray;
+  transition: all .4s ease-in-out;
+}
+.scroll-to-top .fa-chevron-up{
+  color: #fff;
+  font-size: 22px;
+}
+.scroll-to-top .fa-arrow-up{
+  color: #464646;
+  font-size: 22px;
+}
+* > .fa-hover-show,
+*:hover > .fa-hover-hidden,
+*:focus > .fa-hover-hidden {
+  display: none;
+}
+*:focus > .fa-hover-show,
+*:hover > .fa-hover-show {
+  display: inline-block;
+}
+.show-scrollTop {
+  opacity: 1;
+  transition: all .2s ease-in-out;
+}

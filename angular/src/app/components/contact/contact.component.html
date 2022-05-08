@@ -1,0 +1,26 @@
+<section id="breadcrumb">
+  <div class="row">
+    <div class="col-md-12 mt-5 ps-5 pt-5">
+      <ul class="breadcrumb-tree">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Coś</a></li>
+        <li class="active">Coś</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="row">
+
+  </div>
+</div>
+<div class="mt-5">
+  <div class="row">
+    <div class="mt-5" *ngIf="apiLoaded | async">
+      <google-map width="100%" height="400px" [options]="options">
+        <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+          [options]="markerOptions"></map-marker>
+      </google-map>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,211 @@
+.btn:not(.nav-btns button) {
+  position: relative;
+  border: 2px solid transparent;
+  height: 48px;
+  padding: 0 30px;
+  background-color: #D10024;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 20px;
+  border-radius: 4px;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+.btn:not(.nav-btns button)>i{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  line-height: 42px;
+  color: #FFF;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+.btn:not(.nav-btns button):hover i {
+  color: #333638;
+}
+.btn:not(.nav-btns button):hover {
+  background-color: #FFF;
+  color: #333638;
+  border-color: #333638;
+  padding: 0px 30px 0px 50px;
+}
+.btn:not(.nav-btns button):hover>i {
+  opacity: 1;
+  visibility: visible;
+}
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+.bg-primary {
+  background-color: rgb(77, 77, 77) !important;
+}
+#header {
+  background: url(/assets/img/tematyka/ski-932188.jpg) top/cover no-repeat;
+}
+
+.carousel-inner h1,
+.carousel-inner h2 {
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.9);
+}
+
+.carousel-inner h1 {
+  font-size: 60px;
+  font-family: var(--lg-font);
+}
+
+.carousel-inner .btn {
+  font-size: 18px;
+}
+
+/* Title */
+.title h2::before {
+  position: absolute;
+  content: "";
+  width: 4px;
+  height: 50px;
+  background-color: #D10024;
+  left: -20px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+/* About */
+#about {
+  background-color: rgba(179, 179, 179, 0.05);
+}
+
+/* Collection */
+.product {
+  position: relative;
+  margin: 15px 0px;
+  -webkit-box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+
+.product:hover {
+  -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+  box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+}
+.product .product-img{
+  overflow: hidden;
+}
+.product .product-img img{
+  transition: 1s all ease-in-out;
+}
+.product .product-img:hover img{
+  transform: scale(1.5);
+  cursor: pointer;
+}
+.product .product-body {
+  position: relative;
+  padding: 15px;
+  background-color: #FFF;
+  text-align: center;
+  z-index: 20;
+}
+.product .product-body .product-category {
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #8D99AE;
+}
+
+.product .product-body .product-name {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.product .product-body .product-name>a {
+  color: black;
+  text-decoration: none !important;
+}
+
+.product .product-body .product-name>a:hover,
+.product .product-body .product-name>a:focus {
+  color: #D10024;
+  cursor: pointer;
+}
+
+.product .product-body .product-price {
+  color: rgb(107, 104, 104);
+  font-size: 18px;
+}
+
+.product .product-body .product-price .product-old-price {
+  font-size: 70%;
+  font-weight: 400;
+  color: #8D99AE;
+}
+
+.product .product-body .product-btns>button {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  line-height: 40px;
+  font-size: 24px;
+  background: transparent;
+  border: none;
+  -webkit-transition: 0.4s all;
+  transition: 0.4s all;
+}
+
+.product .product-body .product-btns>button:hover {
+  background-color: #E4E7ED;
+  color: #D10024;
+  border-radius: 50%;
+}
+
+.product .product-label {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+}
+.product .product-label>span {
+  border: 2px solid;
+  padding: 2px 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.product .product-label>span.sale {
+  background-color: #FFF;
+  border-color: #D10024;
+  color: #D10024;
+}
+
+
+/* Offers */
+#offers {
+  background: url(/assets/img/tematyka/snowboarding-4763731.jpg) center/cover no-repeat;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+#offers .row {
+  min-height: 60vh;
+}
+
+.offers-content span {
+  font-size: 28px;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.9);
+}
+
+.offers-content h2 {
+  font-size: 60px;
+  font-family: var(--lg-font);
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.9);
+}
+
+.offers-content .btn {
+  font-size: 18px;
+}
