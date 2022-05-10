@@ -36,6 +36,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @NgModule({
@@ -80,6 +82,8 @@ import { MatTreeModule } from '@angular/material/tree';
     MatSidenavModule,
     MatTableModule,
     MatTreeModule,
+    NgxPaginationModule,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

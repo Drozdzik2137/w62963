@@ -70,9 +70,13 @@ exports.getProducts = async (req, res) => {
         let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
         const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
         const offset = (page - 1) * limit
+        const orderType = (req.query.orderType != undefined && ["ASC", "DESC"].includes(req.query.orderType.toUpperCase())) ? req.query.orderType : "ASC"
+        const orderBy = (req.query.orderBy != undefined && (["brand", "price"].includes(req.query.orderBy.toLowerCase()))) ? req.query.orderBy : "brand"
         const countQuery = await client.query(`SELECT COUNT(*) as count FROM product`)
         const numOfProducts = countQuery.rows[0].count
         const numOfPages = Math.ceil(numOfProducts / limit)
+
+        console.log(orderBy,orderType);
 
         const {rows} = await client.query(`SELECT
         product.id,
@@ -89,8 +93,8 @@ exports.getProducts = async (req, res) => {
         FROM product
         JOIN brand ON product.brand_id = brand.id
         JOIN category ON product.category_id = category.id
-        ORDER BY name asc
-        LIMIT $1 
+        ORDER BY ${orderBy} ${orderType}
+        LIMIT $1
         OFFSET $2`, [limit, offset])
         res.status(200).json({
             limit: limit,

@@ -7,7 +7,7 @@ import {
   Renderer2,
   Self,
   ViewContainerRef,
-  Input
+  Input,
 } from "@angular/core";
 import { MatButton } from '@angular/material/button';
 import { MatPaginator } from '@angular/material/paginator';
