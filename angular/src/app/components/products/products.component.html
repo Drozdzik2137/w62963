@@ -11,21 +11,21 @@
 </section>
 <div class="container">
   <div class="row">
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-2">
       <section id="collection" class="pb-5">
         <div class="title">
-          <h2 class="position-relative d-inline-block mt-4">Lista kategorii</h2>
+          <h2 class="position-relative d-inline-block mt-4">Kategorie</h2>
         </div>
         <div class="mt-0 row gx-0 gy-3">
           <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
             <!-- This is the tree node template for leaf nodes -->
-            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="20">
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding matTreeNodePaddingIndent="5">
               <!-- use a disabled button to provide padding for tree leaf -->
               <button mat-icon-button disabled></button>
               {{node.name}}
             </mat-tree-node>
             <!-- This is the tree node template for expandable nodes -->
-            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="20">
+            <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodePaddingIndent="15">
               <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'Toggle ' + node.name">
                 <mat-icon class="mat-icon-rtl-mirror">
                   {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
@@ -40,7 +40,7 @@
         </div>
       </section>
     </div>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-md-10">
       <!-- <section id="collection" class="pb-5">
         <div class="product-list mt-4 row gx-0 gy-3">
           <mat-paginator #paginatorTop appStylePaginator showFirstLastButtons [length]="productsTotalCount"

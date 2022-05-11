@@ -142,9 +142,9 @@
   background: transparent;
   border: none;
 }
-.product .product-img .product-btns>button:not(:last-child) {
+/* .product .product-img .product-btns>button:not(:last-child) {
   margin-right: 6px;
-}
+} */
 .product .product-img .product-btns>button:hover {
   background: rgba(88, 90, 88, 0.4);
   color: #D10024;
