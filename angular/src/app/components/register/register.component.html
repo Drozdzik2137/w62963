@@ -1,0 +1,138 @@
+<section class="py-5">
+  <div class="container my-5">
+    <div class="row">
+      <div class="col-12 col-md-6 mt-5">
+        <div class="d-flex justify-content-end">
+          <div class="card text-center px-5 py-3" style="width: 75vh;">
+            <div class="card-body">
+              <h3 class="card-title mb-3 text-md-start">Załóż konto</h3>
+              <div class="card-text py-3">
+                <div class="row">
+                  <form id="registerForm" (ngSubmit)="registerUser()" [formGroup]="registrationForm">
+
+                    <div class="row">
+
+                      <div class="col-md-12">
+                        <div class="md-form mb-2">
+                          <mat-form-field appearance="fill" style="width:100%">
+                            <mat-label>Imię</mat-label>
+                            <input type="email" matInput formControlName="fnameFormControl" placeholder="Np. Jan"
+                              fillColor="accent">
+                              <mat-error *ngIf="this.registrationForm.controls.fnameFormControl.hasError('email') && !this.registrationForm.controls.fnameFormControl.hasError('required')">
+                                Podaj poprawny adres email
+                              </mat-error>
+                            <mat-error *ngIf="this.registrationForm.controls.fnameFormControl.hasError('required')">
+                              Imię jest <strong>wymagane</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="md-form mb-2">
+                          <mat-form-field appearance="fill" style="width:100%">
+                            <mat-label>Nazwisko</mat-label>
+                            <input type="email" matInput formControlName="lnameFormCntrol" placeholder="Np. Kowalski"
+                              fillColor="accent">
+                            <mat-error *ngIf="this.registrationForm.controls.lnameFormCntrol.hasError('required')">
+                              Nazwisko jest <strong>wymagane</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="md-form mb-2">
+                          <mat-form-field appearance="fill" style="width:100%">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput formControlName="emailFormControl" placeholder="Np. pat@example.com"
+                              fillColor="accent">
+                            <mat-error *ngIf="this.registrationForm.controls.emailFormControl.hasError('email') && !this.registrationForm.controls.emailFormControl.hasError('required')">
+                              Podaj poprawny adres email
+                            </mat-error>
+                            <mat-error *ngIf="this.registrationForm.controls.emailFormControl.hasError('required')">
+                              Email jest <strong>wymagany</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="md-form mb-2">
+                          <mat-form-field appearance="fill" style="width:100%">
+                            <mat-label>Hasło</mat-label>
+                            <input matInput formControlName="passwordFormControl" [type]="hide ? 'password' : 'text'">
+                            <a mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" class="text-muted">
+                              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </a>
+                            <mat-error *ngIf="this.registrationForm.controls.passwordFormControl.hasError('minlength')">
+                              Hasło powinno mieć minimum 6 znaków
+                            </mat-error>
+                            <mat-error *ngIf="this.registrationForm.controls.passwordFormControl.hasError('required')">
+                              Hasło jest <strong>wymagane</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="md-form mx-1 text-start">
+                          <mat-checkbox (change)="OnChange($event)" [checked]="isChecked">Akceptuje <a href="" class="text-decoration-none">regulamin</a> sklepu<span class="text-danger">*</span></mat-checkbox>
+                          <mat-error *ngIf="isChecked == false">
+                            Zgoda jest <strong>wymagana</strong>
+                          </mat-error>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="text-center mt-4">
+                      <button type="submit" class="register-btn" style="width:100%" [disabled]="registrationForm.invalid || isChecked == false"><i class="fas fa-sign-in-alt"></i>Załóż konto</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-2">
+          <span>Masz już konto?<a href="" class="text-decoration-none" [routerLink]="['/login']"> Zaloguj się</a></span>
+        </div>
+      </div>
+      <div class="col-12 col-md-6 d-flex justify-content-start my-5">
+        <div class="container mt-2 mx-5 p-4">
+          <div class="text-dark">
+            <h4>Dlaczego warto mieć u nas konto</h4>
+            <div class="register-info text-muted">
+              <div class="row py-2">
+                <div class="col-2 text-center">
+                  <i class="fas fa-shopping-basket"></i>
+                </div>
+                <div class="col-10 d-flex justify-content-start align-items-center">
+                  <span>zamawiaj online</span>
+                </div>
+              </div>
+              <div class="row py-2">
+                <div class="col-2 text-center">
+                  <i class="fas fa-shipping-fast me-2"></i>
+                </div>
+                <div class="col-10 d-flex justify-content-start align-items-center">
+                  <span>śledź status zamówienia</span>
+                </div>
+              </div>
+              <div class="row py-2">
+                <div class="col-2 text-center">
+                  <i class="fas fa-book"></i>
+                </div>
+                <div class="col-10 d-flex justify-content-start align-items-center">
+                  <span>sprawdzaj poprzednie zamówienia</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

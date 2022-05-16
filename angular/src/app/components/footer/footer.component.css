@@ -13,9 +13,3 @@ footer a:hover {
   color: red !important;
 }
 
-@media (max-width: 1036px) {
-  .google-map{
-    visibility: hidden !important;
-    display: none !important;
-  }
-}

@@ -1,3 +1,5 @@
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 import { CartComponent } from './components/cart/cart.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { CategoriesComponent } from './components/categories/categories.component';
@@ -26,6 +28,12 @@ const routes: Routes = [
   },
   {
     path: 'cart', component: CartComponent
+  },
+  {
+    path: 'login', component: LoginComponent
+  },
+  {
+    path: 'register', component: RegisterComponent
   }
 ];
 

@@ -38,6 +38,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTreeModule } from '@angular/material/tree';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 @NgModule({
@@ -52,7 +55,9 @@ import { MatSelectModule } from '@angular/material/select';
     CategoriesComponent,
     ContactComponent,
     CartComponent,
-    StylePaginatorDirective
+    StylePaginatorDirective,
+    LoginComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
@@ -84,6 +89,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatTreeModule,
     NgxPaginationModule,
     MatSelectModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
