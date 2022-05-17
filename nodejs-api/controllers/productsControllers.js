@@ -371,7 +371,7 @@ exports.findProducts = async (req, res) => {
 //     }
 // }
 
-exports.getSingleProduct = async (req, res, next) => {
+exports.getSingleProduct = async (req, res) => {
     try{
         console.log("Podłączono do bazy z routa single product")
         const client = await pool.connect()

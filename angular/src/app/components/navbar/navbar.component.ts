@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,8 +14,10 @@ import { CartService } from 'src/app/services/cart.service';
 export class NavbarComponent implements OnInit {
   cartData!: ICartModelServer;
   cartTotal!: number;
+  authState!: boolean;
 
-  constructor(public cartService: CartService, private router: Router) { }
+
+  constructor(public cartService: CartService, private router: Router, public userService: UserService) { }
 
   ngOnInit(): void {
     this.cartService.cartTotal$.subscribe(total=>{
@@ -23,10 +26,16 @@ export class NavbarComponent implements OnInit {
 
     this.cartService.cartData$.subscribe(data=> this.cartData = data);
 
+    this.userService.authState$.subscribe(authState => this.authState = authState)
+
   }
 
   SelectProduct(id: number){
     this.router.navigate(['/product', id]).then();
+  }
+
+  logout(){
+    this.userService.logout();
   }
 
 }

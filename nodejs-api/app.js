@@ -17,10 +17,12 @@ app.use(express.json())
 // Import Router
 const productsRouter = require('./routes/products')
 const ordersRouter = require('./routes/orders')
+const authRouter = require('./routes/auth')
 
 // Use Routes
 app.use('/api/', productsRouter)
 app.use('/api/', ordersRouter)
+app.use('/api/', authRouter)
 
 // Nasłuch
 app.listen(port, () => {

@@ -1,3 +1,5 @@
+import { ProfileGuard } from './guard/profile.guard';
+import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -34,6 +36,9 @@ const routes: Routes = [
   },
   {
     path: 'register', component: RegisterComponent
+  },
+  {
+    path: 'profile', component: ProfileComponent, canActivate:[ProfileGuard]
   }
 ];
 
