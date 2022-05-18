@@ -7,4 +7,8 @@ const router = express.Router()
 // Login route
 router.route('/auth/login').post([helper.hasAuthFields, helper.isPasswordAndUserMatch], authController.login)
 
+// Register route
+router.route('/auth/register').post(authController.register)
+
+
 module.exports = router

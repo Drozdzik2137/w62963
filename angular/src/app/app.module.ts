@@ -67,7 +67,10 @@ import { ProfileComponent } from './components/profile/profile.component';
     HttpClientModule,
     BrowserAnimationsModule,
     NgxSpinnerModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+      resetTimeoutOnDuplicate: true
+    }),
     MatTabsModule,
     MatFormFieldModule,
     MatInputModule,

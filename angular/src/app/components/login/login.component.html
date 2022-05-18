@@ -7,8 +7,9 @@
             <h3 class="card-title mb-3 text-md-start">Zaloguj się</h3>
             <div class="card-text py-3">
               <ng-container *ngIf="loginMessage">
-                <div class="alert alert-danger alert-dismissible text-center">
+                <div class="alert alert-danger" role="alert" style="background-color: #BD362F; color: #fff; font-weight: 500;">
                   {{loginMessage}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               </ng-container>
               <div class="row">
@@ -22,9 +23,12 @@
                           <mat-label>Email</mat-label>
                           <input type="email" matInput formControlName="emailFormControl" placeholder="Np. pat@example.com"
                             fillColor="accent">
+                            <!-- <mat-error *ngIf="this.loginForm.controls.emailFormControl.hasError('pattern') && !this.loginForm.controls.emailFormControl.hasError('email') && !this.loginForm.controls.emailFormControl.hasError('required')">
+                              Pełny adres email jest <strong>wymagany</strong>
+                            </mat-error>
                           <mat-error *ngIf="this.loginForm.controls.emailFormControl.hasError('email') && !this.loginForm.controls.emailFormControl.hasError('required')">
-                            Podaj poprawny adres email
-                          </mat-error>
+                            Podaj <strong>poprawny</strong> adres email
+                          </mat-error> -->
                           <mat-error *ngIf="this.loginForm.controls.emailFormControl.hasError('required')">
                             Email jest <strong>wymagany</strong>
                           </mat-error>
@@ -66,26 +70,26 @@
             <h5>Dlaczego warto miec u nas konto</h5>
             <div class="register-info">
               <div class="row py-2">
-                <div class="col-2 text-center">
+                <div class="col-12 col-lg-2">
                   <i class="fas fa-shopping-basket"></i>
                 </div>
-                <div class="col-10 d-flex justify-content-start align-items-center">
+                <div class="col-12 col-lg-10 d-flex justify-content-start align-items-center">
                   <span>zamawiaj online</span>
                 </div>
               </div>
               <div class="row py-2">
-                <div class="col-2 text-center">
+                <div class="col-12 col-lg-2">
                   <i class="fas fa-shipping-fast me-2"></i>
                 </div>
-                <div class="col-10 d-flex justify-content-start align-items-center">
+                <div class="col-12 col-lg-10 d-flex justify-content-start align-items-center">
                   <span>śledź status zamówienia</span>
                 </div>
               </div>
               <div class="row py-2">
-                <div class="col-2 text-center">
+                <div class="col-12 col-lg-2">
                   <i class="fas fa-book"></i>
                 </div>
-                <div class="col-10 d-flex justify-content-start align-items-center">
+                <div class="col-12 col-lg-10 d-flex justify-content-start align-items-center">
                   <span>sprawdzaj poprzednie zamówienia</span>
                 </div>
               </div>
