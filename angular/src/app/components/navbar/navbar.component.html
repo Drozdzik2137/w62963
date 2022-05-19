@@ -60,12 +60,12 @@
             <i class="fas fa-user"></i>
         </button>
         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <li *ngIf="authState == true"><a role="button" class="dropdown-item" [routerLink]="['/profile']">Moje dane</a></li>
-          <li *ngIf="authState == true">
+          <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item" [routerLink]="['/profile']">Moje dane</a></li>
+          <li *ngIf="userService.isLoggedIn$ | async">
             <hr class="dropdown-divider">
           </li>
-          <li *ngIf="authState == false"><a role="button" class="dropdown-item" [routerLink]="['/login']">Zaloguj</a></li>
-          <li *ngIf="authState == true"><a role="button" class="dropdown-item" [routerLink]="['/login']" (click)="logout()">Wyloguj</a></li>
+          <li *ngIf="isLoggedIn == false"><a role="button" class="dropdown-item" [routerLink]="['/login']">Zaloguj</a></li>
+          <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item" [routerLink]="['/login']" (click)="logout()">Wyloguj</a></li>
         </ul>
       </div>
     </div>

@@ -4,14 +4,21 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 // Login logic
-exports.login = async (req,res) => {
+exports.login = async (req, res) => {
     try{
-        let token = jwt.sign({state: 'true', email: req.body.email}, helper.secret, {
-            algorithm: 'HS512',
-            expiresIn: '10min',
+        const accessToken = jwt.sign({state: 'true', email: req.body.email}, helper.secret, {
+            algorithm: 'HS256',
+            expiresIn: '30d'
         })
+
+        // res.cookie('SESSIONID', accessToken, {
+        //     httpOnly: true,
+        //     secure: true,
+        // })
+
+
         res.status(200).json({
-            token: token,
+            token: accessToken,
             auth: true,
             email: req.email,
             fname: req.fname,

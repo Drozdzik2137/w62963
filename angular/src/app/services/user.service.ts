@@ -9,17 +9,35 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class UserService {
-  auth: boolean = false;
   private SERVER_URL = 'http://localhost:4000/api';
   user: any;
-  authState$ = new BehaviorSubject<boolean>(this.auth);
+  _isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  isLoggedIn$ = this._isLoggedIn$.asObservable();
   // @ts-ignore
   userData$ = new BehaviorSubject<IUserResponseModel>(null);
   // @ts-ignore
   loginMessage$ = new BehaviorSubject<string>(null);
   isAdmin!: boolean;
 
-  constructor(private http: HttpClient, private router: Router, private toast: ToastrService) { }
+  constructor(private http: HttpClient, private router: Router, private toast: ToastrService) {
+    // const token = localStorage.getItem('authToken');
+    // this._isLoggedIn$.next(!!token);
+    // console.log(!!token, !token);
+    // if(!token){
+    //   console.log('pustka')
+    //   this._isLoggedIn$.next(!token);
+    // }else{
+    //   if(this.tokenExpired(token)){
+    //     console.log('autoryzacja')
+    //     this._isLoggedIn$.next(!!token);
+    //   }else{
+    //     console.log('wygasly')
+    //     localStorage.removeItem('authToken');
+    //     this._isLoggedIn$.next(!token);
+    //   }
+    // }
+    this.isLoggedIn();
+   }
 
   loginUser(email: string, password: string){
     this.http.post(`${this.SERVER_URL}/auth/login`, {email, password}).pipe(catchError((err: HttpErrorResponse) => of(err.error.message))).subscribe((data: IUserResponseModel) => {
@@ -38,10 +56,10 @@ export class UserService {
           progressAnimation: 'increasing',
           positionClass: 'toast-top-right'
         })
-        console.log(data)
-        this.auth = data.auth;
+        console.log(data.token);
+        localStorage.setItem('authToken', data.token);
+        this._isLoggedIn$.next(true);
         this.isAdmin = data.isAdmin;
-        this.authState$.next(this.auth);
         this.userData$.next(data);
       }
     })
@@ -49,8 +67,8 @@ export class UserService {
   }
 
   logout(){
-    this.auth = false;
-    this.authState$.next(this.auth);
+    this._isLoggedIn$.next(false);
+    localStorage.removeItem('authToken');
     this.toast.info(`Zostałeś pomyślnie wylogowany`, 'Wylogowano', {
       timeOut: 5000,
       progressBar: true,
@@ -62,5 +80,29 @@ export class UserService {
   registerUser(email: string, password: string, fname: string, lname: string, photoUrl?: string, type?: string){
     return this.http.post(`${this.SERVER_URL}/auth/register`, {email, password, fname, lname, photoUrl, type}, {observe: 'response'})
   }
+
+  isLoggedIn(){
+    const token = localStorage.getItem('authToken');
+    if(token){
+      const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+      const currentTime = Math.round((new Date().getTime() / 1000));
+      console.log(currentTime, expiry);
+      if(expiry > currentTime){
+        return this._isLoggedIn$.next(true);
+      }else{
+        this._isLoggedIn$.next(false);
+        localStorage.removeItem('authToken');
+        this.toast.info(`Skończył się czas twojej autoryzacji. Zaloguj się ponownie.`, 'Wylogowano', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'increasing',
+          positionClass: 'toast-top-right'
+        })
+      }
+    }
+    return this._isLoggedIn$.next(false);
+  }
 }
+
+
 

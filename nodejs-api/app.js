@@ -1,5 +1,6 @@
 const express =require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 require('dotenv').config()
 
@@ -14,6 +15,7 @@ app.use(cors({
 const port = process.env.PORT || 4000
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
+app.use(cookieParser())
 
 // Import Router
 const productsRouter = require('./routes/products')

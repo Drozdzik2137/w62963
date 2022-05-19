@@ -14,7 +14,7 @@ import { CartService } from 'src/app/services/cart.service';
 export class NavbarComponent implements OnInit {
   cartData!: ICartModelServer;
   cartTotal!: number;
-  authState!: boolean;
+  isLoggedIn!: boolean;
 
 
   constructor(public cartService: CartService, private router: Router, public userService: UserService) { }
@@ -26,8 +26,7 @@ export class NavbarComponent implements OnInit {
 
     this.cartService.cartData$.subscribe(data=> this.cartData = data);
 
-    this.userService.authState$.subscribe(authState => this.authState = authState)
-
+    this.userService.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
   }
 
   SelectProduct(id: number){
