@@ -8,4 +8,5 @@ export interface IUserResponseModel{
   photoUrl: string;
   type: string;
   isAdmin: boolean;
+  createdAt: Date
 }

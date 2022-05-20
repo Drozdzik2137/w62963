@@ -42,6 +42,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { JwtModule } from "@auth0/angular-jwt";
+import { UserOrderHistoryComponent } from './components/user-order-history/user-order-history.component';
+import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
 
 
 @NgModule({
@@ -60,6 +63,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
+    UserOrderHistoryComponent,
+    UserComplaintsReturnsComponent,
   ],
   imports: [
     BrowserModule,

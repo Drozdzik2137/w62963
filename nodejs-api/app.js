@@ -21,11 +21,13 @@ app.use(cookieParser())
 const productsRouter = require('./routes/products')
 const ordersRouter = require('./routes/orders')
 const authRouter = require('./routes/auth')
+const usersRouter = require('./routes/users')
 
 // Use Routes
 app.use('/api/', productsRouter)
 app.use('/api/', ordersRouter)
 app.use('/api/', authRouter)
+app.use('/api/', usersRouter)
 
 // Nasłuch
 app.listen(port, () => {

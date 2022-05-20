@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt');
 // Login logic
 exports.login = async (req, res) => {
     try{
-        const accessToken = jwt.sign({state: 'true', email: req.body.email}, helper.secret, {
-            algorithm: 'HS256',
+        const accessToken = jwt.sign({state: 'true', id: req.userId, email: req.body.email}, helper.secret, {
+            algorithm: 'HS512',
             expiresIn: '30d'
         })
 
@@ -20,13 +20,14 @@ exports.login = async (req, res) => {
         res.status(200).json({
             token: accessToken,
             auth: true,
+            userId: req.userId,
             email: req.email,
             fname: req.fname,
             lname: req.lname,
             photoUrl: req.photoUrl,
-            userId: req.userId,
             type: req.type,
-            isAdmin: req.isAdmin
+            isAdmin: req.isAdmin,
+            createdAt: req.createdAt
         })
 
 

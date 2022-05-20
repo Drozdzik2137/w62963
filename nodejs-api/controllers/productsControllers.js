@@ -375,14 +375,6 @@ exports.getSingleProduct = async (req, res) => {
     try{
         console.log("Podłączono do bazy z routa single product")
         const client = await pool.connect()
-
-        let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
-        const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
-        const offset = (page - 1) * limit
-        const countQuery = await client.query(`SELECT COUNT(*) as count FROM product`)
-        const numOfProducts = countQuery.rows[0].count
-        const numOfPages = Math.ceil(numOfProducts / limit)
-
         
         const {rows} = await client.query(`SELECT
         product.id,

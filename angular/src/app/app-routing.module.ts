@@ -1,3 +1,5 @@
+import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
+import { UserOrderHistoryComponent } from './components/user-order-history/user-order-history.component';
 import { ProfileGuard } from './guard/profile.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -39,7 +41,15 @@ const routes: Routes = [
   },
   {
     path: 'profile', component: ProfileComponent, canActivate:[ProfileGuard]
-  }
+  },
+  {
+    path: 'orders', component: UserOrderHistoryComponent, canActivate:[ProfileGuard]
+  },
+  {
+    path: 'returns', component: UserComplaintsReturnsComponent, canActivate:[ProfileGuard]
+  },
+  { path: '**',
+  redirectTo: ''}
 ];
 
 @NgModule({

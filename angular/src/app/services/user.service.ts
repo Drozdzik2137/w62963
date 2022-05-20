@@ -10,14 +10,13 @@ import { Injectable } from '@angular/core';
 })
 export class UserService {
   private SERVER_URL = 'http://localhost:4000/api';
-  user: any;
   _isLoggedIn$ = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   // @ts-ignore
   userData$ = new BehaviorSubject<IUserResponseModel>(null);
   // @ts-ignore
   loginMessage$ = new BehaviorSubject<string>(null);
-  isAdmin!: boolean;
+  isAdmin$= new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router, private toast: ToastrService) {
     // const token = localStorage.getItem('authToken');
@@ -56,10 +55,9 @@ export class UserService {
           progressAnimation: 'increasing',
           positionClass: 'toast-top-right'
         })
-        console.log(data.token);
         localStorage.setItem('authToken', data.token);
         this._isLoggedIn$.next(true);
-        this.isAdmin = data.isAdmin;
+        this.isAdmin$.next(data.isAdmin);
         this.userData$.next(data);
       }
     })
@@ -86,7 +84,6 @@ export class UserService {
     if(token){
       const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
       const currentTime = Math.round((new Date().getTime() / 1000));
-      console.log(currentTime, expiry);
       if(expiry > currentTime){
         return this._isLoggedIn$.next(true);
       }else{
@@ -101,6 +98,10 @@ export class UserService {
       }
     }
     return this._isLoggedIn$.next(false);
+  }
+
+  getUser(id: number){
+    return this.http.get<IUserResponseModel>(`${this.SERVER_URL}/user/` + id)
   }
 }
 

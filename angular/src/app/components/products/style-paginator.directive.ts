@@ -24,6 +24,8 @@ interface PageObject {
 })
 
 export class StylePaginatorDirective  {
+  // Style for Mat Paginator, now using ngx paginator
+
   // public currentPage = 1;
   // public directiveLoaded = false;
   // public pageGapTxt = '...';

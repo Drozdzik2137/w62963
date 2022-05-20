@@ -1,18 +1,17 @@
-import { IUserResponseModel } from './../../models/user.model';
-import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { map } from 'rxjs';
+import { IUserResponseModel } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-user-order-history',
+  templateUrl: './user-order-history.component.html',
+  styleUrls: ['./user-order-history.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class UserOrderHistoryComponent implements OnInit {
   userData!: IUserResponseModel;
   helper = new JwtHelperService();
-
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {

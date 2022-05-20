@@ -1,0 +1,127 @@
+<section class="m-5">
+  <div class="container">
+    <div class="row">
+      <div class="control-panel col-12 col-md-3 border-end">
+
+        <div class="row">
+          <div class="hello-user">
+            <div class="mb-4">
+              <span style="font-size: 14px;">Cześć,</span><br>
+              <span style="font-size: 16px; font-weight: 600;">{{userData.fname}}</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2">
+            <div class="col-12 col-md-2">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" [routerLink]="['/orders']">
+              <span><strong>Zamówienia</strong></span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" [routerLink]="['/returns']">
+              <span>Reklamacje i zwroty</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" [routerLink]="['/profile']">
+              <span>Ustawienia konta</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="order-section col-12 col-md-9">
+
+
+        <div class="order-title mb-4 py-1 ms-4">
+          <h4>Zamówienia</h4>
+        </div>
+
+        <div class="order-controls d-flex ms-3">
+          <div class="row">
+            <div class="col-auto">
+              <mat-form-field appearance="fill">
+                <mat-label>Sortuj</mat-label>
+                <mat-select disableOptionCentering>
+                  <mat-option [value]="1">Od najnowszych</mat-option>
+                  <mat-option [value]="2">Od najstarszych</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-auto">
+              <mat-form-field appearance="fill">
+                <mat-label>Zamówienia na stronę</mat-label>
+                <mat-select disableOptionCentering>
+                  <mat-option [value]="12">12</mat-option>
+                  <mat-option [value]="24">24</mat-option>
+                  <mat-option [value]="48">48</mat-option>
+                  <mat-option [value]="96">96</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-auto d-flex justify-content-end align-items-center">
+              <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" id="server"></pagination-controls>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-history py-1 ms-4">
+
+          <div class="order-card mb-5">
+            <div class="row">
+              <div class="order-info border col-12 col-md-3">
+                <div class="row">
+                  <div class="order-status">
+                    <span style="font-size: 16px;"><strong>Status</strong></span>
+                  </div>
+                  <div class="order-details py-2">
+                    <div class="row">
+                      <span style="font-size: 16px">Data</span>
+                      <span style="font-size: 16px" class="text-muted">Nr Zamówienia</span>
+                    </div>
+                  </div>
+                  <div class="order-price">
+                    <span style="font-size: 15px;"><strong>Cena</strong></span>
+                  </div>
+                </div>
+              </div>
+              <div class="order-product border d-flex justify-content-start align-items-center col-12 col-md-9">
+                <div class="row">
+
+                  <div class="order-img col-4">
+                    <img src="{{userData.photoUrl}}" alt="" class="img-responsive center-block w-75">
+                  </div>
+
+                  <div class="order-name d-flex justify-content-start align-items-center col-8">
+                    <span>Nazwa produktu</span>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
