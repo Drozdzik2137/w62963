@@ -1,12 +1,13 @@
 import { IProductModelServer } from 'src/app/models/product.model';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { OrderService } from './order.service';
 import { ProductService } from 'src/app/services/product.service';
-import { HttpClient, JsonpClientBackend } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { ICartModelServer, ICartModelPublic } from './../models/cart.model';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class CartService {
   cartTotal$ = new BehaviorSubject<number>(0);
   cartData$ = new BehaviorSubject<ICartModelServer>(this.cartDataServer);
 
-  constructor(private http: HttpClient, private productService: ProductService, private orderService: OrderService, private toast: ToastrService, private spinner: NgxSpinnerModule) {
+  constructor(private http: HttpClient, private productService: ProductService, private orderService: OrderService, private toast: ToastrService, private spinner: NgxSpinnerService, private router: Router) {
 
     this.cartTotal$.next(this.cartDataServer.total);
     this.cartData$.next(this.cartDataServer);
@@ -276,6 +277,50 @@ export class CartService {
     }
   }
 
+  CheckoutFromCart(userId: number){
+    this.http.post(`${this.SERVER_URL}/order/payment`, null).subscribe((res: {success?: boolean}) => {
+      if(res.success){
+        this.resetServerData();
+        this.http.post(`${this.SERVER_URL}/order/new`, {
+          userId: userId,
+          products: this.cartDataClient.productData
+        }).subscribe((data: any) => this.orderService.getSingleOrder(data.orderId).then(prods => {
+          if(data) {
+            console.log(data);
+            const navigationExtras: NavigationExtras = {
+              state: {
+                message: data.message,
+                products: prods,
+                orderId: data.orderId,
+                total: this.cartDataClient.total
+              }
+            };
+
+            this.spinner.hide().then();
+            this.router.navigate(['/thankyou'], navigationExtras).then(p=> {
+              this.cartDataClient = {
+                total: 0,
+                productData: [{ inCart: 0, id: 0 }]
+              };
+              this.cartTotal$.next(0);
+              localStorage.removeItem('cart');
+            });
+          }
+        }));
+      }else{
+        this.spinner.hide().then();
+        this.router.navigateByUrl('/checkout').then();
+        this.toast.error('Ups, nie udało się złożyć zamówienia', 'Niepowodzenie',{
+          timeOut: 2000,
+          progressBar: true,
+          progressAnimation: 'increasing',
+          positionClass: 'toast-top-right'
+        });
+      }
+    });
+  }
+
+
   private CalculateTotal() {
     let total = 0;
 
@@ -305,6 +350,7 @@ export class CartService {
         product: undefined!
       }]
     };
+    this.cartData$.next({...this.cartDataServer});
   }
 
 }

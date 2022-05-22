@@ -32,7 +32,7 @@ exports.login = async (req, res) => {
 
 
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -99,7 +99,7 @@ exports.register = async (req,res) => {
         }
 
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 

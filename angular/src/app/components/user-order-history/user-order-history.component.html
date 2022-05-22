@@ -1,7 +1,7 @@
 <section class="m-5">
   <div class="container">
     <div class="row">
-      <div class="control-panel col-12 col-md-3 border-end">
+      <div class="control-panel col-12 col-lg-3 border-end">
 
         <div class="row">
           <div class="hello-user">
@@ -38,7 +38,7 @@
 
         </div>
       </div>
-      <div class="order-section col-12 col-md-9">
+      <div class="order-section col-12 col-lg-9">
 
 
         <div class="order-title mb-4 py-1 ms-4">
@@ -50,7 +50,7 @@
             <div class="col-auto">
               <mat-form-field appearance="fill">
                 <mat-label>Sortuj</mat-label>
-                <mat-select disableOptionCentering>
+                <mat-select disableOptionCentering [(value)]="orderOrdersBySelectedValue" (selectionChange)="getPage($any($event))">
                   <mat-option [value]="1">Od najnowszych</mat-option>
                   <mat-option [value]="2">Od najstarszych</mat-option>
                 </mat-select>
@@ -59,56 +59,67 @@
             <div class="col-auto">
               <mat-form-field appearance="fill">
                 <mat-label>Zamówienia na stronę</mat-label>
-                <mat-select disableOptionCentering>
-                  <mat-option [value]="12">12</mat-option>
-                  <mat-option [value]="24">24</mat-option>
-                  <mat-option [value]="48">48</mat-option>
-                  <mat-option [value]="96">96</mat-option>
+                <mat-select disableOptionCentering [(value)]="ordersLimit" (selectionChange)="getPage($any($event))">
+                  <mat-option [value]="5">5</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="20">20</mat-option>
+                  <mat-option [value]="50">50</mat-option>
                 </mat-select>
               </mat-form-field>
-            </div>
-            <div class="col-auto d-flex justify-content-end align-items-center">
-              <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" id="server"></pagination-controls>
             </div>
           </div>
         </div>
 
         <div class="order-history py-1 ms-4">
 
-          <div class="order-card mb-5">
-            <div class="row">
-              <div class="order-info border col-12 col-md-3">
-                <div class="row">
-                  <div class="order-status">
-                    <span style="font-size: 16px;"><strong>Status</strong></span>
-                  </div>
-                  <div class="order-details py-2">
-                    <div class="row">
-                      <span style="font-size: 16px">Data</span>
-                      <span style="font-size: 16px" class="text-muted">Nr Zamówienia</span>
+          <ng-container *ngIf="loading === true">
+            <div class="container">
+              <div class="my-5">
+                <mat-spinner mode="indeterminate" color="warn" class="my-5"></mat-spinner>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="loading === false">
+            <div class="order-card mb-5" *ngFor="let order of orders | paginate: {id: 'server', itemsPerPage: ordersLimit, currentPage: page, totalItems: ordersTotalCount}">
+              <div class="row">
+                <div class="order-info border col-12 col-md-3">
+                  <div class="row">
+                    <div class="order-status">
+                      <span style="font-size: 16px;"><strong>Tu sie zrobi status
+                      </strong></span>
+                    </div>
+                    <div class="order-details py-2">
+                      <div class="row">
+                        <span style="font-size: 16px">{{order.created_at | date: "dd-MM-yyyy HH:mm"}}</span>
+                        <span style="font-size: 16px" class="text-muted">Nr {{order.id}}</span>
+                      </div>
+                    </div>
+                    <div class="order-price">
+                      <span style="font-size: 15px; font-weight: 500;">{{order.price}} zł</span>
                     </div>
                   </div>
-                  <div class="order-price">
-                    <span style="font-size: 15px;"><strong>Cena</strong></span>
-                  </div>
                 </div>
-              </div>
-              <div class="order-product border d-flex justify-content-start align-items-center col-12 col-md-9">
-                <div class="row">
+                <div class="order-product border d-flex justify-content-start align-items-center col-12 col-md-9">
+                  <div class="row">
 
-                  <div class="order-img col-4">
-                    <img src="{{userData.photoUrl}}" alt="" class="img-responsive center-block w-75">
+                    <div class="order-img col-4">
+                      <img src="{{order.img}}" alt="" class="img-responsive center-block w-75">
+                    </div>
+
+                    <div class="order-name d-flex justify-content-start align-items-center col-8">
+                      <span style="font-weight: 500;">{{order.brand}} {{order.name}}</span>
+                    </div>
+
                   </div>
-
-                  <div class="order-name d-flex justify-content-start align-items-center col-8">
-                    <span>Nazwa produktu</span>
-                  </div>
-
                 </div>
               </div>
             </div>
-          </div>
+          </ng-container>
 
+          <div class="text-center mt-5">
+            <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" (pageChange)="getPage($event)"
+              id="server"></pagination-controls>
+          </div>
 
         </div>
 

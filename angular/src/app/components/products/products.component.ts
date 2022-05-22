@@ -113,7 +113,6 @@ export class ProductsComponent implements OnInit {
     if(limit !== undefined && orderBy !== undefined && orderType !== undefined)
     {
       if(this.orderProductsBySelectedValue === 1){
-
         this.productService.getAllProducts(page, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
           this.productsLimit = prods.limit;
           this.productsCount = prods.count;
@@ -187,6 +186,7 @@ export class ProductsComponent implements OnInit {
       orderType = "DESC"
 
       const getProducts = () =>{
+        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
@@ -196,6 +196,7 @@ export class ProductsComponent implements OnInit {
       orderType = "ASC"
 
       const getProducts = () =>{
+        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
@@ -205,12 +206,14 @@ export class ProductsComponent implements OnInit {
       orderType = "DESC"
 
       const getProducts = () =>{
+        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
       window.setTimeout(getProducts, 500);
     }else{
       const getProducts = () =>{
+        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }

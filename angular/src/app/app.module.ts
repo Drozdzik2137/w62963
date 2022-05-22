@@ -43,8 +43,10 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { JwtModule } from "@auth0/angular-jwt";
-import { UserOrderHistoryComponent } from './components/user-order-history/user-order-history.component';
+import { UserOrderHistoryComponent } from "./components/user-order-history/user-order-history.component";
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
+import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
+import { CheckoutComponent } from './components/checkout/checkout.component';
 
 
 @NgModule({
@@ -65,6 +67,8 @@ import { UserComplaintsReturnsComponent } from './components/user-complaints-ret
     ProfileComponent,
     UserOrderHistoryComponent,
     UserComplaintsReturnsComponent,
+    ThankYouForTheOrderComponent,
+    CheckoutComponent,
   ],
   imports: [
     BrowserModule,

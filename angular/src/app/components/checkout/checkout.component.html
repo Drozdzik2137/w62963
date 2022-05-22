@@ -1,0 +1,89 @@
+<section *ngIf="cartData.total > 0 else emptyCart">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-5 px-5">
+        <div class="row">
+          <div class="col-sm-12 col-md-8">
+            <h2>Dostawa i płatność</h2>
+            <mat-card class="order-options-card">
+              <mat-card-header class="d-flex justify-content-center align-items-center">
+                <mat-card-title>
+                  <div class="col-md-12">
+                    <h1 id="section-title">Dane kupujacego</h1>
+                  </div>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-actions class="d-flex w-100 justify-content-center p-3">
+                <button routerLink="/cart" class="cart-ctn-btn order-0">Kontynuuj zakupy <i
+                    class="fas fa-store"></i></button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+
+          <div class="col-sm-12 col-md-4">
+            <mat-card class="order-info-card">
+              <mat-card-header class="d-flex justify-content-center align-items-center">
+                <mat-card-title>
+                  <div class="col-md-12">
+                    <h1 id="order-title">Twoje zamówienie</h1>
+                  </div>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="order-summary">
+                  <div class="order-products">
+                    <div class="col-12" *ngFor="let c of cartData.data;">
+                      <div class="row">
+                        <div class="col-4 order-img"><img class="image" src="{{c.product.img}}" alt=""></div>
+                        <div class="col-4">
+                          <div class="row">
+                            <div class="col-12">
+                              <span style="font-weight: 500;">{{c.product.brand}} {{c.product.name | slice:0:10}}...</span>
+                            </div>
+                            <div class="col-12">
+                              <span class="text-muted">{{c.numInCart}}  szt.</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-4 d-flex justify-content-center align-items-end"><span style="font-weight: 500;">{{(c.product.price*c.numInCart)}} zł</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="order-col">
+                    <div>Dostawa</div>
+                    <div><strong>0 zł</strong></div>
+                  </div>
+                  <div class="order-col dropdown-divider">
+                    <div><strong>Do zapłaty:</strong></div>
+                    <div><strong class="order-total">{{cartTotal}} zł</strong></div>
+                  </div>
+                </div>
+              </mat-card-content>
+              <mat-card-actions class="d-flex w-100 justify-content-center p-3">
+                <button type="submit" class="cart-checkout-btn order-1" (click)="onCheckout()"><i
+                    class="fas fa-coins"></i> Zamawiam</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<ng-template #emptyCart>
+  <div class="container">
+    <div class="row">
+      <div class="d-flex justify-content-center align-items-center text-center m-5 p-5">
+        <div class="row">
+          <h1><strong>Twoja lista zakupowa jest pusta :(</strong></h1>
+          <h2>Przejdz do sklepu</h2>
+          <button mat-raised-button color="warn" routerLink="/">SKLEP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ngx-spinner bdColor="rgba(151,149,149,0.4)" size="large" color="red" type="ball-clip-rotate-pulse">
+  <p class="mt-5" style="font-size: 24px; color: black;">Przetwarzam zamówienie...</p>
+</ngx-spinner>

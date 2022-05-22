@@ -35,7 +35,7 @@ exports.user = async (req,res) =>{
             
         }
     }catch(err){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(err.message)
     }
 

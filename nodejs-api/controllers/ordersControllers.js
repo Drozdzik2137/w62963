@@ -1,4 +1,5 @@
 const pool = require('../config/db')
+const { connect } = require('../routes/auth')
 
 exports.getAllOrders = async (req, res) => {
     try{
@@ -21,7 +22,7 @@ exports.getAllOrders = async (req, res) => {
         res.status(200).json(rows)
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -39,6 +40,7 @@ exports.getSingleOrder = async (req, res) => {
         product.name,
         product.price,
         order_details.quantity,
+        order_details.created_at,
         "user".email,
         product.img
 		FROM "order"
@@ -51,10 +53,10 @@ exports.getSingleOrder = async (req, res) => {
         if(rows.length > 0){
             res.status(200).json(rows[0])
         }else{
-            res.status(404).json({msg: `Nie znaleziono zamówienia z ID: ${orderId}`})
+            res.status(404).json({message: `Nie znaleziono zamówienia z ID: ${orderId}`})
         }
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -68,6 +70,7 @@ exports.newOrder = async (req, res) => {
             "order" (user_id)
             VALUES ($1)
             RETURNING id`, [userId])
+            console.log(products)
             const insertedId = newOrder.rows[0].id
             if(insertedId > 0){
                 products.forEach(async (p) =>{
@@ -116,7 +119,7 @@ exports.newOrder = async (req, res) => {
         }
 
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -128,9 +131,64 @@ exports.payment = async (req, res) => {
         }, 3000)
 
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
+}
+
+exports.getUserOrders = async (req, res) => {
+    try{
+        let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
+        const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
+        const offset = (page - 1) * limit
+        let userId = req.params.id
+
+        const client = await pool.connect();
+        const countQuery = await client.query(`SELECT 
+        COUNT(*) as count
+        FROM 
+        public."order"
+        WHERE user_id=${userId}`)
+        const numOfOrders = countQuery.rows[0].count
+        const numOfPages = Math.ceil(numOfOrders / limit)
+        const orderType = (req.query.orderType != undefined && ["ASC", "DESC"].includes(req.query.orderType.toUpperCase())) ? req.query.orderType : "DESC"
+        console.log(orderType)
+
+        const {rows} = await client.query(`SELECT 
+            "order".id,
+            brand.name as brand,
+            product.name,
+            product.price,
+            order_details.quantity,
+            order_details.created_at,
+            "user".email,
+            "user".id as userId,
+            product.img
+            FROM "order"
+            JOIN order_details ON order_details.order_id = "order".id
+            JOIN product ON product.id = order_details.product_id
+            JOIN brand ON product.brand_id = brand.id
+            JOIN "user" ON "user".id = "order".user_id
+            WHERE "user".id=${userId}
+            ORDER BY created_at ${orderType}
+            LIMIT ${limit}
+            OFFSET ${offset}`)
+
+        res.status(200).json({
+            count: rows.length,
+            limit: limit,
+            totalOrders: numOfOrders,
+            totalPages: numOfPages,
+            currentPage: page,
+            orders: rows
+        })
+        client.release()
+
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.log(err.message)
+    }
+
 }
 
 

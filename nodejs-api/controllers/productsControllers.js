@@ -76,8 +76,6 @@ exports.getProducts = async (req, res) => {
         const numOfProducts = countQuery.rows[0].count
         const numOfPages = Math.ceil(numOfProducts / limit)
 
-        console.log(orderBy,orderType);
-
         const {rows} = await client.query(`SELECT
         product.id,
         product.name,
@@ -106,7 +104,7 @@ exports.getProducts = async (req, res) => {
         })
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -189,7 +187,7 @@ exports.getNewProducts = async (req, res) => {
         })
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -306,11 +304,11 @@ exports.findProducts = async (req, res) => {
                 products: rows
             })
         }else{
-            res.json({msg: 'Nazwa szukanego produktu jest za krótka.'})
+            res.json({message: 'Nazwa szukanego produktu jest za krótka.'})
         }
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -395,7 +393,7 @@ exports.getSingleProduct = async (req, res) => {
         res.status(200).json(rows[0])
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -442,7 +440,7 @@ exports.categories = async (req, res) => {
         })
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }
@@ -493,11 +491,11 @@ exports.category = async (req, res) => {
                 products: rows
             })
         }else{
-            res.json({msg: 'Brak produktów w danej kategorii'})
+            res.json({message: 'Brak produktów w danej kategorii'})
         }
         client.release()
     }catch(e){
-        res.status(404).json({msg: 'Error 404'})
+        res.status(404).json({message: 'Error 404'})
         console.error(e.message)
     }
 }

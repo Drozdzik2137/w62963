@@ -1,5 +1,7 @@
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
-import { UserOrderHistoryComponent } from './components/user-order-history/user-order-history.component';
+import { UserOrderHistoryComponent } from "./components/user-order-history/user-order-history.component";
 import { ProfileGuard } from './guard/profile.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -12,7 +14,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { SingleProductComponent } from './components/single-product/single-product.component';
 import { HomeComponent } from './components/home/home.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, CanActivate } from '@angular/router';
 
 const routes: Routes = [
   {
@@ -47,6 +49,12 @@ const routes: Routes = [
   },
   {
     path: 'returns', component: UserComplaintsReturnsComponent, canActivate:[ProfileGuard]
+  },
+  {
+    path: 'checkout', component: CheckoutComponent, canActivate:[ProfileGuard]
+  },
+  {
+    path: 'thankyou', component: ThankYouForTheOrderComponent, canActivate:[ProfileGuard]
   },
   { path: '**',
   redirectTo: ''}

@@ -101,7 +101,7 @@ export class UserService {
   }
 
   getUser(id: number){
-    return this.http.get<IUserResponseModel>(`${this.SERVER_URL}/user/` + id)
+    return this.http.get<IUserResponseModel>(`${this.SERVER_URL}/user/` + id);
   }
 }
 
