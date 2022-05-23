@@ -12,5 +12,7 @@ router.route('/order/new').post(ordersController.newOrder)
 router.route('/order/payment/').post(ordersController.payment)
 //@route to get all orders by user
 router.route('/order/user/:id').get(ordersController.getUserOrders)
+//@route to get total price for order
+router.route('/orderTotal/:id').get(ordersController.getSingleOrderTotal)
 
 module.exports = router

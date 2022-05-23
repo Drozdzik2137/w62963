@@ -1,4 +1,5 @@
 const pool = require('../config/db')
+const bcrypt = require('bcrypt')
 
 exports.user = async (req,res) =>{
     try{
@@ -38,7 +39,43 @@ exports.user = async (req,res) =>{
         res.status(404).json({message: 'Error 404'})
         console.error(err.message)
     }
+}
 
-    
+exports.updateUserData = async (req, res) => {
+    try{
+        let userId = req.params.id
+        let lname = req.body.lname
+        let fname = req.body.fname
+        let password = await bcrypt.hash(req.body.password, 10)
+        const client = await pool.connect()
 
+        if(lname !== undefined && fname !== undefined){
+            const {rows} = await client.query(`UPDATE
+            "user"
+            SET fname='${fname}', lname='${lname}'
+            WHERE "user".id=${userId}
+            RETURNING fname, lname`)
+            if(rows){
+                res.status(200).json({message: 'Zakutalizowano pomyślnie dane'})
+            }else{
+                res.status(404).json({message: 'Nieudało się zaktualizować danych'})
+            }
+        }else if(password !== undefined){
+            const {rows} = await client.query(`UPDATE
+            "user"
+            SET password='${password}'
+            WHERE "user".id=${userId}`)
+            if(rows){
+                res.status(200).json({message: 'Hasło zaktualizowane pomyślnie'})
+            }else{
+                res.status(404).json({message: 'Nieudało się zaktualizować hasła'})
+            }
+        }else{
+            res.status(404).json({message: 'Brak danych, spróbuj jeszcze raz'})
+        }
+        client.release() 
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }
 }

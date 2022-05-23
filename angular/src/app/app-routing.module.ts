@@ -1,3 +1,4 @@
+import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
@@ -55,6 +56,9 @@ const routes: Routes = [
   },
   {
     path: 'thankyou', component: ThankYouForTheOrderComponent, canActivate:[ProfileGuard]
+  },
+  {
+    path: 'details', component: UserOrderDetailsComponent, canActivate:[ProfileGuard]
   },
   { path: '**',
   redirectTo: ''}

@@ -8,6 +8,7 @@ export interface IOrderModelServer{
   email: string;
   user_id: number;
   img: string;
+  total: number;
 }
 
 export interface IOrderServerResponse{
@@ -24,8 +25,8 @@ export interface ICheckoutOrderResponseModel{
   brand: string;
   name: string;
   price: number;
-  quantityOrdered: number;
+  quantity: number;
   img: string;
-  createdAt: Date;
+  created_at: Date;
   email: string;
 }

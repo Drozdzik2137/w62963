@@ -1,7 +1,7 @@
 const pool = require('../config/db')
-const helper = require('../config/helper');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const helper = require('../config/helper')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 // Login logic
 exports.login = async (req, res) => {

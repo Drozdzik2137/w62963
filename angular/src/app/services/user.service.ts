@@ -103,6 +103,14 @@ export class UserService {
   getUser(id: number){
     return this.http.get<IUserResponseModel>(`${this.SERVER_URL}/user/` + id);
   }
+
+  changeUserData(id: number, fname: string, lname: string){
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {fname, lname}, {observe: 'response'})
+  }
+
+  changeUserPassword(id: number, password: string){
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {password}, {observe: 'response'})
+  }
 }
 
 

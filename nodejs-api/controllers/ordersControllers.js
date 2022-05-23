@@ -18,7 +18,7 @@ exports.getAllOrders = async (req, res) => {
         JOIN product ON product.id = order_details.product_id
 		JOIN brand ON product.brand_id = brand.id
         JOIN "user" ON "user".id = "order".user_id
-        ORDER BY "order".id ASC`)
+        ORDER BY "order".id DESC`)
         res.status(200).json(rows)
         client.release()
     }catch(e){
@@ -35,12 +35,14 @@ exports.getSingleOrder = async (req, res) => {
         const orderId = req.params.id
         
         const {rows} = await client.query(`SELECT 
-        "order".id,
+        "order".id as order_id,
         brand.name as brand,
+        product.id,
         product.name,
         product.price,
         order_details.quantity,
-        order_details.created_at,
+        "order".created_at,
+        "order".total,
         "user".email,
         product.img
 		FROM "order"
@@ -51,7 +53,7 @@ exports.getSingleOrder = async (req, res) => {
         WHERE "order".id=$1`, [orderId])
         client.release()
         if(rows.length > 0){
-            res.status(200).json(rows[0])
+            res.status(200).json(rows)
         }else{
             res.status(404).json({message: `Nie znaleziono zamówienia z ID: ${orderId}`})
         }
@@ -61,16 +63,37 @@ exports.getSingleOrder = async (req, res) => {
     }
 }
 
+exports.getSingleOrderTotal = async (req, res) => {
+    try{
+        const client = await pool.connect()
+
+        const orderId = req.params.id
+        
+        const {rows} = await client.query(`SELECT
+        "order".total
+        FROM "order"
+        WHERE "order".id=${orderId}`)
+        client.release()
+        if(rows.length > 0){
+            res.status(200).json(rows[0].total)
+        }else{
+            res.status(404).json({message: `Nie znaleziono zamówienia z ID: ${orderId}`})
+        }  
+    }catch(e){
+        res.status(404).json({message: 'Error 404'})
+        console.error(e.message)
+    }
+}
+
 exports.newOrder = async (req, res) => {
     try{
         const client = await pool.connect()
-        let {userId, products} = req.body
+        let {userId, products, total} = req.body
         if(userId !== null && userId > 0){
             const newOrder = await client.query(`INSERT INTO 
-            "order" (user_id)
-            VALUES ($1)
-            RETURNING id`, [userId])
-            console.log(products)
+            "order" (user_id, total)
+            VALUES (${userId}, ${total})
+            RETURNING id`)
             const insertedId = newOrder.rows[0].id
             if(insertedId > 0){
                 products.forEach(async (p) =>{
@@ -111,7 +134,7 @@ exports.newOrder = async (req, res) => {
             }
             client.release()
             res.status(200).json({
-                message: `Zamówienie zostało pomyślnie złożone. ID zamówienia: ${insertedId}`,
+                message: `Zamówienie zostało pomyślnie złożone.`,
                 success: true,
                 order_id: insertedId,
                 products: products
@@ -128,7 +151,7 @@ exports.payment = async (req, res) => {
     try{
         setTimeout(() => {
             res.status(200).json({success: true})
-        }, 3000)
+        }, 1000)
 
     }catch(e){
         res.status(404).json({message: 'Error 404'})
@@ -143,6 +166,7 @@ exports.getUserOrders = async (req, res) => {
         const offset = (page - 1) * limit
         let userId = req.params.id
 
+
         const client = await pool.connect();
         const countQuery = await client.query(`SELECT 
         COUNT(*) as count
@@ -152,22 +176,14 @@ exports.getUserOrders = async (req, res) => {
         const numOfOrders = countQuery.rows[0].count
         const numOfPages = Math.ceil(numOfOrders / limit)
         const orderType = (req.query.orderType != undefined && ["ASC", "DESC"].includes(req.query.orderType.toUpperCase())) ? req.query.orderType : "DESC"
-        console.log(orderType)
 
         const {rows} = await client.query(`SELECT 
             "order".id,
-            brand.name as brand,
-            product.name,
-            product.price,
-            order_details.quantity,
-            order_details.created_at,
             "user".email,
             "user".id as userId,
-            product.img
+            "order".created_at,
+            "order".total
             FROM "order"
-            JOIN order_details ON order_details.order_id = "order".id
-            JOIN product ON product.id = order_details.product_id
-            JOIN brand ON product.brand_id = brand.id
             JOIN "user" ON "user".id = "order".user_id
             WHERE "user".id=${userId}
             ORDER BY created_at ${orderType}

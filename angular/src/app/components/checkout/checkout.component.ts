@@ -1,5 +1,4 @@
 import { UserService } from './../../services/user.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { OrderService } from './../../services/order.service';
 import { CartService } from 'src/app/services/cart.service';
@@ -8,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 import { IUserResponseModel } from 'src/app/models/user.model';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs';
+import { NgxSpinnerService } from "ngx-spinner";
+
 
 @Component({
   selector: 'app-checkout',

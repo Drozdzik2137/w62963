@@ -33,4 +33,12 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  changeUserData(){
+
+  }
+
+  changeUserPassword(){
+
+  }
+
 }

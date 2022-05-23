@@ -283,15 +283,16 @@ export class CartService {
         this.resetServerData();
         this.http.post(`${this.SERVER_URL}/order/new`, {
           userId: userId,
-          products: this.cartDataClient.productData
-        }).subscribe((data: any) => this.orderService.getSingleOrder(data.orderId).then(prods => {
+          products: this.cartDataClient.productData,
+          total: this.cartDataClient.total
+        }).subscribe((data: any) => {
+        this.orderService.getSingleOrder(data.order_id).then(prods => {
           if(data) {
-            console.log(data);
             const navigationExtras: NavigationExtras = {
               state: {
                 message: data.message,
                 products: prods,
-                orderId: data.orderId,
+                orderId: data.order_id,
                 total: this.cartDataClient.total
               }
             };
@@ -306,7 +307,8 @@ export class CartService {
               localStorage.removeItem('cart');
             });
           }
-        }));
+        })});
+
       }else{
         this.spinner.hide().then();
         this.router.navigateByUrl('/checkout').then();

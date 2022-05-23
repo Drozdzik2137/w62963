@@ -1,5 +1,6 @@
+import { NavigationExtras, Router } from '@angular/router';
 import { OrderService } from './../../services/order.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs';
 import { IUserResponseModel } from 'src/app/models/user.model';
@@ -10,7 +11,8 @@ import { IOrderModelServer, IOrderServerResponse } from './../../models/order.mo
 @Component({
   selector: 'app-user-order-history',
   templateUrl: './user-order-history.component.html',
-  styleUrls: ['./user-order-history.component.css']
+  styleUrls: ['./user-order-history.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class UserOrderHistoryComponent implements OnInit {
   userData!: IUserResponseModel;
@@ -21,12 +23,11 @@ export class UserOrderHistoryComponent implements OnInit {
   page: number = 1;
   totalPage: number = 0;
   orders: IOrderModelServer[] = [];
-
   loading: boolean = false;
   orderOrdersBySelectedValue: number = 1;
 
 
-  constructor(private userService: UserService, private orderService: OrderService) { }
+  constructor(private userService: UserService, private orderService: OrderService, private router: Router) { }
 
   ngOnInit(): void {
     this.userService.userData$.pipe(map((user: IUserResponseModel) => {
@@ -54,6 +55,7 @@ export class UserOrderHistoryComponent implements OnInit {
   initUserOrders(page: number, ordersLimit?: number, orderType?: string) {
     if (ordersLimit !== undefined && orderType !== undefined) {
       if (this.orderOrdersBySelectedValue === 1) {
+        // console.log(page, ordersLimit, orderType)
         this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
           this.ordersLimit = orders.limit;
           this.ordersCount = orders.count;
@@ -63,17 +65,18 @@ export class UserOrderHistoryComponent implements OnInit {
           this.orders = orders.orders;
         });
       } else if (this.orderOrdersBySelectedValue === 2) {
+        // console.log(page, ordersLimit, orderType)
         this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
           this.ordersLimit = orders.limit;
           this.ordersCount = orders.count;
           this.ordersTotalCount = orders.totalOrders;
           this.page = orders.currentPage;
           this.totalPage = orders.totalPages;
+          this.orders = orders.orders;
         });
       }
     }else {
       let orderType = 'DESC';
-      console.log(this.userData.userId, page, 5, orderType)
       this.orderService.getUserOrders(this.userData.userId, page, 5, orderType).subscribe((orders: IOrderServerResponse) => {
         this.ordersLimit = orders.limit;
         this.ordersCount = orders.count;
@@ -89,26 +92,54 @@ export class UserOrderHistoryComponent implements OnInit {
   getPage(page: number){
     this.loading = true;
     this.page = page;
-    if(this.orderOrdersBySelectedValue === 2){
-      let orderType = 'ASC';
-      console.log(this.userData.userId, this.page, this.ordersLimit, orderType)
-
-      const getProducts = () =>{
+    let orderType = 'DESC'
+    if(this.orderOrdersBySelectedValue === 1){
+      const getProducts = () => {
         this.initUserOrders(this.page, this.ordersLimit, orderType);
         this.loading = false;
       }
       window.setTimeout(getProducts, 500);
     }else{
-      let orderType = 'DESC';
-      console.log(this.userData.userId, this.page, this.ordersLimit, orderType)
-      const getProducts = () =>{
-        this.initUserOrders(this.page, this.ordersLimit, orderType);
+      orderType = 'ASC'
+      const getProducts = () => {
+        this.initUserOrders(this.page, this.ordersLimit, orderType)
         this.loading = false;
       }
       window.setTimeout(getProducts, 500);
     }
+    // let orderType = "ASC";
+    // if(this.orderOrdersBySelectedValue === 1){
+    //   orderType = "DESC";
+    //   const getProducts = () =>{
+    //     console.log(this.page,this.ordersLimit, orderType)
+    //     this.initUserOrders(1, this.ordersLimit, orderType);
+    //     this.loading = false;
+    //   }
+    //   window.setTimeout(getProducts, 500);
+    // }else{
+    //   const getProducts = () =>{
+    //     console.log(this.page,this.ordersLimit, orderType)
+    //     this.initUserOrders(1, this.ordersLimit, orderType);
+    //     this.loading = false;
+    //   }
+    //   window.setTimeout(getProducts, 500);
+    // }
+    // this.initUserOrders(page, this.ordersLimit)
     window.scroll(0,0);
   }
 
+  SelectOrder(id: number){
+    this.orderService.getSingleOrder(id).then(prods => {
+      const navigationExtras: NavigationExtras = {
+        state: {
+          products: prods,
+          orderId: id
+        }
+      }
+      console.log(navigationExtras)
+      this.router.navigate(['/details'], navigationExtras);
+    })
+
+  }
 
 }

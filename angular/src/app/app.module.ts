@@ -47,6 +47,8 @@ import { UserOrderHistoryComponent } from "./components/user-order-history/user-
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
 import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
+
 
 
 @NgModule({
@@ -69,6 +71,7 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
     UserComplaintsReturnsComponent,
     ThankYouForTheOrderComponent,
     CheckoutComponent,
+    UserOrderDetailsComponent,
   ],
   imports: [
     BrowserModule,

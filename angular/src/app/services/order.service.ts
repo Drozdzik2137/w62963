@@ -30,5 +30,7 @@ export class OrderService {
     return this.http.get<ICheckoutOrderResponseModel[]>(`${this.SERVER_URL}/order/${orderId}`).toPromise();
   }
 
-
+  getSingleOrderTotal(orderId: number){
+    return this.http.get(`${this.SERVER_URL}/orderTotal/` + orderId);
+  }
 }
