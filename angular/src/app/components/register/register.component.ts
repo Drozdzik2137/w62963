@@ -36,8 +36,8 @@ export class RegisterComponent implements OnInit {
       if(this.registrationStatus == 200){
         console.log(data)
         // @ts-ignore
-        let succesMessage = data.body.message;
-        this.toast.success(`${succesMessage}`, 'Rejestracja udana', {
+        let successMessage = data.body.message;
+        this.toast.success(`${successMessage}`, 'Rejestracja udana', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'increasing',

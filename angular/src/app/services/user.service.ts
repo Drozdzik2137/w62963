@@ -108,8 +108,12 @@ export class UserService {
     return this.http.patch(`${this.SERVER_URL}/user/` + id, {fname, lname}, {observe: 'response'})
   }
 
-  changeUserPassword(id: number, password: string){
-    return this.http.patch(`${this.SERVER_URL}/user/` + id, {password}, {observe: 'response'})
+  changeUserPassword(id: number, oldPassword: string, newPassword: string){
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {oldPassword, newPassword}, {observe: 'response'})
+  }
+
+  deleteUserAccount(id:number){
+    return this.http.delete(`${this.SERVER_URL}/user/` + id, {observe: 'response'})
   }
 }
 

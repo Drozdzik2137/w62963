@@ -1,0 +1,28 @@
+<h4 mat-dialog-title>Edycja danych</h4>
+<div mat-dialog-content>
+  <p>Podaj imię i nazwisko</p>
+  <form [formGroup]="editDataForm" #formDirective="ngForm">
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Imię</mat-label>
+      <input type="text" matInput formControlName="fnameForm" placeholder="Np. Jan"
+        fillColor="accent">
+      <mat-error *ngIf="this.editDataForm.controls.fnameForm.hasError('required')">
+        Imię jest <strong>wymagane</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Nazwisko</mat-label>
+      <input type="text" matInput formControlName="lnameForm" placeholder="Np. Kowalski"
+        fillColor="accent">
+      <mat-error *ngIf="this.editDataForm.controls.lnameForm.hasError('required')">
+        Nazwisko jest <strong>wymagane</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="warn"  (click)="onNoClick()">Wróć</button>
+  <button mat-stroked-button cdkFocusInitial [disabled]="editDataForm.invalid" (click)="onSaveClick()">Zapisz</button>
+</div>

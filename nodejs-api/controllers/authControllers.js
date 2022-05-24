@@ -89,7 +89,7 @@ exports.register = async (req,res) => {
                     if(insertedId > 0){
                         res.status(200).json({message: 'Rejestracja przebiegła pomyślnie. Konto zostało utworzone!'})
                     }else{
-                        res.status(404).json({message: 'Nieudana rejestracja.'});
+                        res.status(404).json({message: 'Nieudana rejestracja.'})
                     }
                 }
 

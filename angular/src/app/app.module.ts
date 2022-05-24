@@ -41,7 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent, EditDataDialog, EditPasswordDialog, DeleteUserDialog } from './components/profile/profile.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { UserOrderHistoryComponent } from "./components/user-order-history/user-order-history.component";
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
@@ -72,6 +72,9 @@ import { UserOrderDetailsComponent } from './components/user-order-details/user-
     ThankYouForTheOrderComponent,
     CheckoutComponent,
     UserOrderDetailsComponent,
+    EditDataDialog,
+    EditPasswordDialog,
+    DeleteUserDialog
   ],
   imports: [
     BrowserModule,
@@ -107,6 +110,7 @@ import { UserOrderDetailsComponent } from './components/user-order-details/user-
     NgxPaginationModule,
     MatSelectModule,
     MatDialogModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

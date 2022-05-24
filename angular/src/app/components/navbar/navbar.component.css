@@ -222,7 +222,7 @@
   background-color: #D10024;
   color: #FFF;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 500;
   border-radius: 4px;
   -webkit-transition: 0.3s all;
   transition: 0.3s all;
@@ -271,6 +271,12 @@
   .shop-cart-dropdown .dropdown-menu {
     right: auto;
     left: -90px !important;
+  }
+  .cart-empty-btn{
+    font-size: 18px;
+  }
+  .cart-empty-btn>i{
+    font-size: 18px;
   }
 }
 @media screen and (max-width: 380px) {

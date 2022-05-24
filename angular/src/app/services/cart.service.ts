@@ -210,7 +210,7 @@ export class CartService {
               inCart: 0
             }]
           };
-          localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
+          localStorage.removeItem('cart');
         }else{
           localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
         }

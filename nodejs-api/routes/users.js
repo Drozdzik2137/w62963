@@ -6,5 +6,7 @@ const router = express.Router()
 router.route('/user/:id').get(usersController.user)
 // Update user data
 router.route('/user/:id').patch(usersController.updateUserData)
+// Delete user
+router.route('/user/:id').delete(usersController.deleteUser)
 
 module.exports = router
