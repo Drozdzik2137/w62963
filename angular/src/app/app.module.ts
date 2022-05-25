@@ -48,6 +48,9 @@ import { UserComplaintsReturnsComponent } from './components/user-complaints-ret
 import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { MatListModule } from '@angular/material/list';
+
 
 
 
@@ -74,7 +77,8 @@ import { UserOrderDetailsComponent } from './components/user-order-details/user-
     UserOrderDetailsComponent,
     EditDataDialog,
     EditPasswordDialog,
-    DeleteUserDialog
+    DeleteUserDialog,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,
@@ -110,7 +114,8 @@ import { UserOrderDetailsComponent } from './components/user-order-details/user-
     NgxPaginationModule,
     MatSelectModule,
     MatDialogModule,
-    MatCardModule
+    MatCardModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]

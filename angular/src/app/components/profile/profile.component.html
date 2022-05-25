@@ -47,6 +47,15 @@
           <h5>Dane konta</h5>
         </div>
 
+        <div class="col-12 button-delete" *ngIf="userData.isAdmin == true">
+          <div class="col-12 my-2 ms-4">
+            <span>Panel administratora</span>
+          </div>
+          <div class="col-12 ms-4 mb-4">
+            <button type="submit" class="admin-btn" style="width:100%; max-width: 200px;" [routerLink]="['/admin']">Przejdź</button>
+          </div>
+        </div>
+
         <div class="settings-2 mb-2 py-1 ms-4">
           <span>Twoje dane</span>
         </div>
@@ -93,19 +102,17 @@
               "HH:mm:ss"}}</span>
           </div>
 
-          <div class="settings-1 mt-5 py-1 ms-4">
-            <h5>Usuwanie konta</h5>
+          <div class="delete-section" *ngIf="userData.isAdmin == false">
+            <div class="settings-1 mt-5 py-1 ms-4">
+              <h5>Usuwanie konta</h5>
+            </div>
+            <div class="settings-2 mb-2 py-1 ms-4">
+              <span>Jeśli chcesz usunąć konto w naszym sklepie, kliknij w ten przycisk. Upewnij się, że na pewno chcesz to zrobić, usuniętego konta nie jesteśmy w stanie przywrócić.</span>
+            </div>
+            <div class="button-delete d-flex align-items-center ms-4 mt-3 mb-5">
+              <button type="submit" class="delete-btn" style="width:100%; max-width: 200px;" (click)="openDeleteDialog()"><i class="fa-solid fa-ban"></i>Usuń konto</button>
+            </div>
           </div>
-          <div class="settings-2 mb-2 py-1 ms-4">
-            <span>Jeśli chcesz usunąć konto w naszym sklepie, kliknij w ten przycisk. Upewnij się, że na pewno chcesz to zrobić, usuniętego konta nie jesteśmy w stanie przywrócić.</span>
-          </div>
-          <div class="button-delete d-flex align-items-center ms-4 mt-3 mb-5">
-            <button type="submit" class="delete-btn" style="width:100%; max-width: 200px;" (click)="openDeleteDialog()"><i class="fa-solid fa-ban"></i>Usuń konto</button>
-          </div>
-
-
-
-
 
         </div>
       </div>

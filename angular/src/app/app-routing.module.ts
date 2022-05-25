@@ -1,3 +1,5 @@
+import { RoleGuard } from './guard/role.guard';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
@@ -59,6 +61,9 @@ const routes: Routes = [
   },
   {
     path: 'details', component: UserOrderDetailsComponent, canActivate:[ProfileGuard]
+  },
+  {
+    path: 'admin', component: AdminPanelComponent, canActivate: [RoleGuard]
   },
   { path: '**',
   redirectTo: ''}

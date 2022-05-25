@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { IUserResponseModel } from './../models/user.model';
 import { BehaviorSubject, catchError, of} from 'rxjs';
 import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,10 @@ export class UserService {
   userData$ = new BehaviorSubject<IUserResponseModel>(null);
   // @ts-ignore
   loginMessage$ = new BehaviorSubject<string>(null);
-  isAdmin$= new BehaviorSubject<boolean>(false);
+  _isAdmin$= new BehaviorSubject<boolean>(false);
+  isAdmin$ = this._isAdmin$.asObservable();
+  helper = new JwtHelperService();
+
 
   constructor(private http: HttpClient, private router: Router, private toast: ToastrService) {
     // const token = localStorage.getItem('authToken');
@@ -36,6 +40,7 @@ export class UserService {
     //   }
     // }
     this.isLoggedIn();
+    this.isAdmin()
    }
 
   loginUser(email: string, password: string){
@@ -57,8 +62,11 @@ export class UserService {
         })
         localStorage.setItem('authToken', data.token);
         this._isLoggedIn$.next(true);
-        this.isAdmin$.next(data.isAdmin);
+        this._isAdmin$.next(data.isAdmin);
         this.userData$.next(data);
+        if(data.isAdmin == true){
+          this.router.navigateByUrl('/admin');
+        }
       }
     })
     // return this.http.post(`${this.SERVER_URL}/auth/login`, {email, password}, {observe: 'response'})
@@ -98,6 +106,17 @@ export class UserService {
       }
     }
     return this._isLoggedIn$.next(false);
+  }
+  isAdmin(){
+    const token = localStorage.getItem('authToken');
+    if(token){
+      const role = this.helper.decodeToken(token)
+      if(role.isAdmin == true){
+        this._isAdmin$.next(true);
+      }else{
+        this._isAdmin$.next(false);
+      }
+    }
   }
 
   getUser(id: number){

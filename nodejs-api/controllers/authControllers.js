@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 // Login logic
 exports.login = async (req, res) => {
     try{
-        const accessToken = jwt.sign({state: 'true', id: req.userId, email: req.body.email}, helper.secret, {
+        const accessToken = jwt.sign({state: 'true', id: req.userId, email: req.body.email, isAdmin: req.isAdmin}, helper.secret, {
             algorithm: 'HS512',
             expiresIn: '30d'
         })
