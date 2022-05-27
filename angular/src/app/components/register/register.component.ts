@@ -16,7 +16,8 @@ export class RegisterComponent implements OnInit {
     emailFormControl: new FormControl('',  [Validators.required, Validators.email, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$/)]),
     passwordFormControl: new FormControl('', [Validators.required, Validators.minLength(6)]),
     fnameFormControl: new FormControl('', [Validators.required]),
-    lnameFormCntrol: new FormControl('', [Validators.required])
+    lnameFormCntrol: new FormControl('', [Validators.required]),
+    phoneFormControl: new FormControl('', [Validators.required, Validators.pattern('[5-9]\\d{8}')])
   });
   hide = true;
   isChecked = false;
@@ -30,7 +31,7 @@ export class RegisterComponent implements OnInit {
 
   registerUser(){
     this.userService.registerUser(this.registrationForm.get('emailFormControl')?.value, this.registrationForm
-    .get('passwordFormControl')?.value, this.registrationForm.get('fnameFormControl')?.value, this.registrationForm.get('lnameFormCntrol')?.value).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+    .get('passwordFormControl')?.value, this.registrationForm.get('fnameFormControl')?.value, this.registrationForm.get('lnameFormCntrol')?.value, this.registrationForm.get('phoneFormControl')?.value).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
       this.registrationStatus = data.status;
       console.log(data.status, data)
       if(this.registrationStatus == 200){
@@ -45,7 +46,7 @@ export class RegisterComponent implements OnInit {
         })
         this.router.navigate(['/login']);
       }else{
-        //@ts-ignore
+        // @ts-ignore
         this.registrationMessage = data.error.message;
         setTimeout(()=>{
           this.registrationMessage = '';
@@ -56,7 +57,7 @@ export class RegisterComponent implements OnInit {
           progressBar: true,
           progressAnimation: 'increasing',
           positionClass: 'toast-top-right'
-        })
+        });
       }
   });
 

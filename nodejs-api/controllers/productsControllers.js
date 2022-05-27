@@ -304,7 +304,7 @@ exports.findProducts = async (req, res) => {
                 products: rows
             })
         }else{
-            res.json({message: 'Nazwa szukanego produktu jest za krótka.'})
+            res.status(404).json({message: 'Nazwa szukanego produktu jest za krótka.'})
         }
         client.release()
     }catch(e){
@@ -433,7 +433,8 @@ exports.categories = async (req, res) => {
         const client = await pool.connect()
 
         const {rows} = await client.query(`SELECT *
-        FROM category`)
+        FROM category
+        ORDER BY id ASC`)
         res.status(200).json({
             count: rows.length,
             categories: rows
@@ -444,6 +445,91 @@ exports.categories = async (req, res) => {
         console.error(e.message)
     }
 }
+
+exports.addCategory = async (req, res) => {
+    try{
+        const newCategory = req.body.categoryName
+        if(newCategory){
+            const client = await pool.connect()
+
+            const {rows} = await client.query(`INSERT 
+            INTO 
+            public.category
+            (name)
+            VALUES ('${newCategory}');`)
+    
+            res.status(200).json({message: 'Pomyślnie dodano nową kategorie'})
+            client.release()
+        }else{
+            res.status(404).json({message: 'Brak przekazanej nowej nazwy kategorii'})
+        } 
+    }catch(e){
+        res.status(404).json({message: 'Error 404'})
+        console.error(e.message)
+    } 
+}
+
+exports.updateCategory = async (req, res) => {
+    try{
+        const categoryId = req.params.id
+        if(categoryId !== undefined){
+            let categoryName = req.body.categoryName
+            if(categoryName !== undefined){
+                const client = await pool.connect()
+
+                const {rows} = await client.query(`UPDATE 
+                public.category
+                SET name='${categoryName}'
+                WHERE id=${categoryId}
+                RETURNING id;`)
+                client.release()
+
+                const updatedId = rows[0].id
+                if(updatedId > 0){
+                    res.status(200).json({message: 'Zaktualizowano pomyślnie nazwe kategorii'})
+                }else{
+                    res.status(404).json({message: 'Nieudana zmiana nazwy kategorii'})
+                }
+            }else{
+                res.status(404).json({message: 'Brak przekazanej nazwy kategorii'})
+            }
+        }else{
+            res.status(404).json({message: 'Brak przekazanego ID kategorii'})
+        }
+    }catch(e){
+        res.status(404).json({message: 'Error 404'})
+        console.error(e.message)
+    }
+}
+
+exports.deleteCategory = async (req, res) => {
+    try{
+        const categoryId = req.params.id
+        if(categoryId !== undefined){
+            const client = await pool.connect()
+
+            const {rows} = await client.query(`DELETE 
+            FROM 
+            public.category
+            WHERE id=${categoryId}
+            RETURNING id;`)
+            let deletedCategory = rows[0].id
+            if(deletedCategory > 0){
+                res.status(200).json({message: 'Pomyślnie usunięto kategorie'})
+            }else{
+                res.status(404).json({message: 'Nie udauło się usunąć kategorii'})
+            }                
+            client.release()
+        }else{
+            res.status(404).json({message: 'Brak przekazanego ID kategorii'})
+        }
+
+    }catch(e){
+        res.status(404).json({message: 'Error 404'})
+        console.error(e.message)
+    }
+}
+
 
 exports.category = async (req, res) => {
     try{
@@ -491,11 +577,68 @@ exports.category = async (req, res) => {
                 products: rows
             })
         }else{
-            res.json({message: 'Brak produktów w danej kategorii'})
+            res.status(404).json({message: 'Brak produktów w danej kategorii'})
         }
         client.release()
     }catch(e){
         res.status(404).json({message: 'Error 404'})
         console.error(e.message)
+    }
+}
+
+exports.allProducts = async (req, res) => {
+    try{
+        const client = await pool.connect()
+        const {rows} = await client.query(`SELECT
+        product.id,
+        product.name,
+        product.img,
+        product.price,
+        product.quantity,
+        product.size,
+        category.name as category,
+        brand.name as brand
+        FROM PRODUCT
+        JOIN BRAND ON product.brand_id = brand.id
+        JOIN CATEGORY ON product.category_id = category.id
+        ORDER BY id ASC`)
+
+        res.status(200).json({
+            count: rows.length,
+            products: rows
+        })
+
+        client.release()
+
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }
+}
+
+exports.deleteProduct = async (req, res) => {
+    try{
+        const prodId = req.params.id
+        if(prodId > 0){
+            const client = await pool.connect()
+
+            const {rows} = await client.query(`DELETE
+            FROM
+            public."product"
+            WHERE id=${prodId}
+            RETURNING id`)
+            let deleteProdId = rows[0].id
+            if(deleteProdId > 0){
+                res.status(200).json({message: 'Pomyślnie usunięto produkt'})
+            }else{
+                res.status(404).json({message: 'Nieudana próba usunięcia produktu'})
+            }
+            client.release() 
+        }else{
+            res.status(404).json({message: 'Bład ID produktu'})
+        }
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
     }
 }

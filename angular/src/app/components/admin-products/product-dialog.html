@@ -1,0 +1,104 @@
+<h4 mat-dialog-title>{{actionLabel}} produktu</h4>
+<div mat-dialog-content>
+  <form [formGroup]="dataForm" #formDirective="ngForm">
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Nazwa produktu</mat-label>
+      <input type="text" matInput formControlName="prodName" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodName.hasError('required')">
+        <strong>Musisz</strong> podać nazwe produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Zdjęcie produktu</mat-label>
+      <input type="text" matInput formControlName="prodImg" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodImg.hasError('required')">
+        <strong>Musisz</strong> podać link do zdjęcia produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Cena produktu</mat-label>
+      <input type="number" matInput formControlName="prodPrice" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodPrice.hasError('required')">
+        <strong>Musisz</strong> podać cene za sztukę produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Ilość produktu</mat-label>
+      <input type="number" matInput formControlName="prodQuantity" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodQuantity.hasError('required')">
+        <strong>Musisz</strong> podać ilość produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Krótki opis produktu</mat-label>
+      <textarea  type="text" matInput formControlName="prodShortDesc" fillColor="accent"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Opis produktu</mat-label>
+      <textarea  type="text" matInput formControlName="prodDescription" fillColor="accent"></textarea>
+      <mat-error *ngIf="this.dataForm.controls.prodDescription.hasError('required')">
+        <strong>Musisz</strong> podać opis produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Rozmiar produktu</mat-label>
+      <input type="text" matInput formControlName="prodSize" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodSize.hasError('required')">
+        <strong>Musisz</strong> podać rozmiar produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Marka produktu</mat-label>
+      <mat-select formControlName="prodBrand" fillColor="accent">
+        <mat-option value="one">First option</mat-option>
+        <mat-option value="two">Second option</mat-option>
+      </mat-select>
+      <mat-error *ngIf="this.dataForm.controls.prodBrand.hasError('required')">
+        <strong>Musisz</strong> podać marke produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Kategoria produktu</mat-label>
+      <mat-select formControlName="prodCategory" fillColor="accent">
+        <mat-option value="one">First option</mat-option>
+        <mat-option value="two">Second option</mat-option>
+      </mat-select>
+      <mat-error *ngIf="this.dataForm.controls.prodCategory.hasError('required')">
+        <strong>Musisz</strong> podać kategorie produktu
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Zdjęcia produktu rozdzielone ";"</mat-label>
+      <textarea type="text" matInput formControlName="prodImages" fillColor="accent" placeholder="link;link;link;"></textarea>
+      <mat-error *ngIf="this.dataForm.controls.prodImages.hasError('required')">
+        <strong>Musisz</strong> podać link do zdjęć produktu. Zdjęcia muszą być rozdzielone za pomocą średnika ";"
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Stan produktu</mat-label>
+      <input type="text" matInput formControlName="prodFreshness" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.prodFreshness.hasError('required')">
+        <strong>Musisz</strong> podać stan produktu
+      </mat-error>
+    </mat-form-field>
+
+
+
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="warn"  (click)="onNoClick()">Wróć</button>
+  <button mat-stroked-button cdkFocusInitial [disabled]="dataForm.invalid" (click)="onSaveClick()">{{actionBtn}}</button>
+</div>

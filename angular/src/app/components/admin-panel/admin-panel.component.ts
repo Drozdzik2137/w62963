@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs';
 import { IUserResponseModel } from 'src/app/models/user.model';
@@ -9,12 +10,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./admin-panel.component.css']
 })
 export class AdminPanelComponent implements OnInit {
-  userService: any;
   helper=  new JwtHelperService();
   userData!: IUserResponseModel;
   isFontsLoaded!: boolean;
 
-  constructor() { }
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit(): void {
     document.fonts.ready.then(() => (this.isFontsLoaded = true));

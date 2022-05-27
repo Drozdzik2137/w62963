@@ -93,7 +93,8 @@ module.exports = {
             photo_url, 
             is_admin, 
             type, 
-            created_at
+            created_at,
+            phone_number
             FROM public."user"
             WHERE email ILIKE $1`, ['%' + userEmail + '%'])
             client.release()            
@@ -102,14 +103,15 @@ module.exports = {
                 const match = await bcrypt.compare(userPassowrd, rows[0].password)
                 if(match){
                     //req.body = rows[0];
-                    req.userId = rows[0].id;
-                    req.email = rows[0].email;
-                    req.fname = rows[0].fname;
-                    req.lname = rows[0].lname;
-                    req.photoUrl = rows[0].photo_url;
-                    req.type = rows[0].type;
-                    req.isAdmin = rows[0].is_admin;
-                    req.createdAt = rows[0].created_at;
+                    req.userId = rows[0].id
+                    req.email = rows[0].email
+                    req.fname = rows[0].fname
+                    req.lname = rows[0].lname
+                    req.photoUrl = rows[0].photo_url
+                    req.type = rows[0].type
+                    req.isAdmin = rows[0].is_admin
+                    req.createdAt = rows[0].created_at
+                    req.phoneNumber = rows[0].phone_number
                     next();
                 }else{
                     res.status(404).json({message: "Login lub hasło nieprawidłowe"})

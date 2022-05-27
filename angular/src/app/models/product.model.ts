@@ -10,6 +10,7 @@ export interface IProductModelServer{
   size: string;
   category: string;
   brand: string;
+  freshness: string;
 }
 
 export interface IServerResponse{

@@ -17,6 +17,7 @@ export class UserOrderDetailsComponent implements OnInit {
   userData!: IUserResponseModel;
   loading: boolean = false;
   orderId: any;
+  orderStatus: any;
   products: any;
   total: any
 
@@ -26,12 +27,14 @@ export class UserOrderDetailsComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {
       products: IProductModelServer[],
-      orderId: number
+      orderId: number,
+      status: string
     };
     if(state !== undefined){
       console.log(state);
       this.products = state.products;
       this.orderId = state.orderId;
+      this.orderStatus = state.status;
     }else{
       this.router.navigateByUrl('/orders');
     }

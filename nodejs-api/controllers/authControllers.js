@@ -27,7 +27,8 @@ exports.login = async (req, res) => {
             photoUrl: req.photoUrl,
             type: req.type,
             isAdmin: req.isAdmin,
-            createdAt: req.createdAt
+            createdAt: req.createdAt,
+            phoneNumber: req.phoneNumber
         })
 
 
@@ -70,6 +71,7 @@ exports.register = async (req,res) => {
                     const fname = req.body.fname
                     const lname = req.body.lname
                     const type = req.body.type
+                    const phone_number = req.body.phoneNumber
                     const photo_url = req.body.photoUrl == null ? 'https://via.placeholder.com/800' : req.body.photoUrl
 
                     /* 'type' types
@@ -81,8 +83,8 @@ exports.register = async (req,res) => {
 
                     const {rows} = await client.query(`INSERT INTO
                     public."user"
-                    (email, password, fname, lname, photo_url, type)
-                    VALUES ('${email}', '${password}', '${fname}', '${lname}', '${photo_url}', '${type || 'local'}')
+                    (email, password, fname, lname, photo_url, type, phone_number)
+                    VALUES ('${email}', '${password}', '${fname}', '${lname}', '${photo_url}', '${type || 'local'}', '${phone_number}')
                     RETURNING id`)
                     client.release()
                     const insertedId = rows[0].id

@@ -6,6 +6,8 @@ const router = express.Router()
 router.route('/allOrders/').get(ordersController.getAllOrders)
 //@route to GET single order
 router.route('/order/:id').get(ordersController.getSingleOrder)
+//@route to change order status
+router.route('/order/:id').patch(ordersController.changeOrderStatus)
 //@route to create new order
 router.route('/order/new').post(ordersController.newOrder)
 //@route to fake payment

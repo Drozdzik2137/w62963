@@ -19,7 +19,8 @@ exports.user = async (req,res) =>{
             photo_url, 
             is_admin, 
             type, 
-            created_at
+            created_at,
+            phone_number
             FROM public."user"
             WHERE id=${userId}`)
             client.release()  
@@ -32,7 +33,8 @@ exports.user = async (req,res) =>{
                 photoUrl: rows[0].photo_url,
                 isAdmin: rows[0].is_admin,
                 type: rows[0].type,
-                createdAt: rows[0].created_at
+                createdAt: rows[0].created_at,
+                phoneNumber: rows[0].phone_number
             })
             
         }
@@ -50,6 +52,7 @@ exports.updateUserData = async (req, res) => {
             let fname = req.body.fname
             let oldPassword = req.body.oldPassword
             let newPassword = req.body.newPassword
+            let phoneNumber = req.body.phoneNumber
             const client = await pool.connect()
     
             if(lname !== undefined && fname !== undefined){
@@ -89,6 +92,16 @@ exports.updateUserData = async (req, res) => {
                 }else{
                     res.status(404).json({message: 'Brak użytkownika'})  
                 }    
+            }else if(phoneNumber !== undefined){
+                const {rows} = await client.query(`UPDATE
+                "user"
+                SET phone_number='${phoneNumber}'
+                WHERE "user".id=${userId}`)
+                if(rows){
+                    res.status(200).json({message: 'Zakutalizowano pomyślnie dane'})
+                }else{
+                    res.status(404).json({message: 'Nieudało się zaktualizować danych'})
+                }
             }else{
                 res.status(404).json({message: 'Brak danych, spróbuj jeszcze raz'})
             }
@@ -127,4 +140,35 @@ exports.deleteUser = async (req, res) => {
         res.status(404).json({message: 'Error 404'})
         console.error(err.message)
     } 
+}
+
+exports.getAllUsers = async (req, res) => {
+    try{
+        const client = await pool.connect()
+
+        const {rows} = await client.query(`SELECT 
+        id, 
+        email, 
+        fname, 
+        lname, 
+        photo_url, 
+        is_admin, 
+        type, 
+        phone_number,
+        created_at
+        FROM public."user";`)
+        
+        if(rows){
+            res.status(200).json({
+                count: rows.length,
+                users: rows
+            })
+        }else{
+            res.status(404).json({message: 'Bład pobrania użytkowników'})
+        }
+        client.release()        
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }
 }

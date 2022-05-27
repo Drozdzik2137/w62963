@@ -1,4 +1,4 @@
-<section class="sticky-top">
+<section class="sticky-top" style="z-index: 1000;">
   <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
     <div class="container">
       <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" style="cursor: pointer;">
@@ -61,6 +61,8 @@
             <i class="fas fa-user"></i>
           </button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngIf="userService._isAdmin$| async"><a role="button" class="dropdown-item"
+              [routerLink]="['/admin']">Panel administratora</a></li>
             <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item"
                 [routerLink]="['/profile']">Moje konto</a></li>
                 <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item"

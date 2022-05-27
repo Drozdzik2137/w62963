@@ -33,4 +33,12 @@ export class OrderService {
   getSingleOrderTotal(orderId: number){
     return this.http.get(`${this.SERVER_URL}/orderTotal/` + orderId);
   }
+
+  getAllOrders(){
+    return this.http.get<IOrderServerResponse>(`${this.SERVER_URL}/allOrders`);
+  }
+
+  updateOrderStatus(id:number, orderStatus: string){
+    return this.http.patch(`${this.SERVER_URL}/order/` + id, {orderStatus}, {observe: 'response'});
+  }
 }

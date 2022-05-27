@@ -144,7 +144,7 @@
                   <div class="middle">
                     <div class="product-btns">
                       <button class="add-to-cart-btn" [disabled]="prod.quantity < 1"
-                        [class.disabled]="prod.quantity < 1" (click)="AddToCart(prod.id)"><i
+                        [class.disabled]="prod.quantity < 1" (click)="AddToCart(prod.id)" [disabled]="prod.quantity < 1"><i
                           class="fa fa-shopping-cart"></i></button>
                       <button class="quick-view" (click)="SelectProduct(prod.id)"><i class="fa fa-eye"></i></button>
                     </div>

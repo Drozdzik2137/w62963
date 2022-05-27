@@ -41,7 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
-import { ProfileComponent, EditDataDialog, EditPasswordDialog, DeleteUserDialog } from './components/profile/profile.component';
+import { ProfileComponent, EditDataDialog, EditPasswordDialog, DeleteUserDialog, EditPhoneDialog } from './components/profile/profile.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { UserOrderHistoryComponent } from "./components/user-order-history/user-order-history.component";
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
@@ -50,6 +50,11 @@ import { CheckoutComponent } from './components/checkout/checkout.component';
 import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { MatListModule } from '@angular/material/list';
+import { AdminProductsComponent, ProductDialog, DeleteDialog } from './components/admin-products/admin-products.component';
+import { AdminCategoriesComponent, CategoryDialog, DeleteCategoryDialog } from './components/admin-categories/admin-categories.component';
+import { AdminOrdersComponent, EditOrderStatusDialog } from './components/admin-orders/admin-orders.component';
+import { AdminUsersComponent, DeleteUserAdminDialog } from './components/admin-users/admin-users.component';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -78,7 +83,18 @@ import { MatListModule } from '@angular/material/list';
     EditDataDialog,
     EditPasswordDialog,
     DeleteUserDialog,
-    AdminPanelComponent
+    AdminPanelComponent,
+    AdminProductsComponent,
+    AdminCategoriesComponent,
+    AdminOrdersComponent,
+    AdminUsersComponent,
+    ProductDialog,
+    DeleteDialog,
+    CategoryDialog,
+    DeleteCategoryDialog,
+    EditOrderStatusDialog,
+    EditPhoneDialog,
+    DeleteUserAdminDialog
   ],
   imports: [
     BrowserModule,
@@ -115,7 +131,8 @@ import { MatListModule } from '@angular/material/list';
     MatSelectModule,
     MatDialogModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

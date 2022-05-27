@@ -31,4 +31,16 @@ export class ProductService {
       catchError(err=> throwError(err))
     );
   }
+
+  getAllProductsAdmin(): Observable<IServerResponse>{
+    return this.http.get<IServerResponse>(this.SERVER_URL + '/allProducts').pipe(
+      map((prods: IServerResponse) => prods),
+      catchError(err => throwError(err))
+    );
+  }
+
+  deleteProduct(id: number){
+    return this.http.delete(`${this.SERVER_URL}/product/` + id, {observe: 'response'});
+  }
+
 }

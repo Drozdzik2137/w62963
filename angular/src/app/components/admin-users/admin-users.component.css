@@ -1,0 +1,10 @@
+table {
+  width: 100%;
+}
+.delete-btn{
+  color: #6c757d;
+  transition: .5s;
+}
+.delete-btn:hover{
+  color: #D10024;
+}

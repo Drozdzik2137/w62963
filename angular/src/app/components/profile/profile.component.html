@@ -10,6 +10,14 @@
               <span style="font-size: 16px; font-weight: 600;">{{userData.fname}}</span>
             </div>
           </div>
+          <div class="profile-controls row py-2" [routerLink]="['/admin']" *ngIf="userData.isAdmin == true">
+            <div class="col-12 col-md-2">
+              <mat-icon>admin_panel_settings</mat-icon>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span>Panel administratora</span>
+            </div>
+          </div>
           <div class="profile-controls row py-2" [routerLink]="['/orders']">
             <div class="col-12 col-md-2">
               <i class="fa-regular fa-file-lines"></i>
@@ -77,6 +85,21 @@
 
         <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
           <span><strong>{{userData.email}}</strong></span>
+        </div>
+
+        <div class="settings-2 mb-2 py-1 ms-4">
+          <span>Numer telefonu</span>
+        </div>
+
+        <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
+          <div class="row">
+            <div class="col-6">
+              <span><strong>{{userData.phoneNumber}}</strong></span>
+            </div>
+            <div class="user-data-edit col-6 d-flex justify-content-end">
+              <a class="text-decoration-none" (click)="openPhoneDialog()">Edytuj</a>
+            </div>
+          </div>
         </div>
 
         <div class="settings-2 mb-2 py-1 ms-4">

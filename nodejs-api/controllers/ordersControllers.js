@@ -8,19 +8,49 @@ exports.getAllOrders = async (req, res) => {
 
         const {rows} = await client.query(`SELECT
         "order".id,
-        brand.name as brand,
-        product.name,
-        product.price,
-		order_details.quantity,
-        "user".email
+        "user".email,
+        "user".phone_number,
+        "order".status,
+        "order".created_at
         FROM "order"
-        JOIN order_details ON order_details.order_id = "order".id
-        JOIN product ON product.id = order_details.product_id
-		JOIN brand ON product.brand_id = brand.id
         JOIN "user" ON "user".id = "order".user_id
-        ORDER BY "order".id DESC`)
-        res.status(200).json(rows)
+        ORDER BY created_at DESC`)
+        res.status(200).json({
+            count: rows.length,
+            orders: rows
+        })
         client.release()
+    }catch(e){
+        res.status(404).json({message: 'Error 404'})
+        console.error(e.message)
+    }
+}
+
+exports.changeOrderStatus = async (req, res) => {
+    try{
+        const orderId = req.params.id
+        if(orderId > 0){
+            const newStatus = req.body.orderStatus
+            if(newStatus !== undefined){
+                const client = await pool.connect()
+                const {rows} = await client.query(`UPDATE 
+                public."order"
+                SET status='${newStatus}'
+                WHERE id=${orderId}
+                RETURNING id`)
+                client.release()
+                const updatedOrderId = rows[0].id
+                if(updatedOrderId > 0){
+                    res.status(200).json({message: 'Pomyślnie zmieniono status'})
+                }else{
+                    res.status(404).json({message: 'Błąd zmiany statusu'})
+                }
+            }else{
+                res.status(404).json({message: 'Błąd nowego statusu'})
+            }
+        }else{
+            res.status(404).json({message: 'Brak ID zamówienia'})
+        }
     }catch(e){
         res.status(404).json({message: 'Error 404'})
         console.error(e.message)
@@ -91,8 +121,8 @@ exports.newOrder = async (req, res) => {
         let {userId, products, total} = req.body
         if(userId !== null && userId > 0){
             const newOrder = await client.query(`INSERT INTO 
-            "order" (user_id, total)
-            VALUES (${userId}, ${total})
+            "order" (user_id, total, status)
+            VALUES (${userId}, ${total}, 'Złożono zamówienie')
             RETURNING id`)
             const insertedId = newOrder.rows[0].id
             if(insertedId > 0){
@@ -182,7 +212,8 @@ exports.getUserOrders = async (req, res) => {
             "user".email,
             "user".id as userId,
             "order".created_at,
-            "order".total
+            "order".total,
+            "order".status
             FROM "order"
             JOIN "user" ON "user".id = "order".user_id
             WHERE "user".id=${userId}

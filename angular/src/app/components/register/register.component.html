@@ -52,6 +52,22 @@
                       <div class="col-md-12">
                         <div class="md-form mb-2">
                           <mat-form-field appearance="fill" style="width:100%">
+                            <mat-label>Numer telefonu</mat-label>
+                            <input type="text" matInput formControlName="phoneFormControl" placeholder="Np. 123456789"
+                              fillColor="accent" maxlength="9" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" >
+                            <mat-error *ngIf="this.registrationForm.controls.phoneFormControl.hasError('required')">
+                              Numer telefonu jest <strong>wymagany</strong>
+                            </mat-error>
+                            <mat-error *ngIf="this.registrationForm.controls.phoneFormControl.hasError('pattern') && !this.registrationForm.controls.phoneFormControl.hasError('required')">
+                              Poprawny numer telefonu jest <strong>wymagany</strong>
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="col-md-12">
+                        <div class="md-form mb-2">
+                          <mat-form-field appearance="fill" style="width:100%">
                             <mat-label>Email</mat-label>
                             <input type="email" matInput formControlName="emailFormControl" placeholder="Np. pat@example.com"
                               fillColor="accent">

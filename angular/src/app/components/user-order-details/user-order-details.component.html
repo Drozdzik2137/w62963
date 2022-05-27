@@ -54,7 +54,7 @@
               <div class="order-info border col-12 col-md-3">
                 <div class="row">
                   <div class="order-status">
-                    <span style="font-size: 16px;"><strong>Informacja</strong></span>
+                    <span style="font-size: 16px;"><strong>{{orderStatus}}</strong></span>
                   </div>
                   <div class="order-details py-2">
                     <div class="row">
@@ -63,7 +63,7 @@
                     </div>
                   </div>
                   <div class="order-price">
-                    <span style="font-size: 15px; font-weight: 500;">{{prod.price}} zł</span>
+                    <span style="font-size: 15px; font-weight: 500;">{{prod.price | number: '1.2-2'}} zł</span>
                   </div>
                 </div>
               </div>
@@ -96,7 +96,7 @@
                       <span style="font-size: 14px;">Wartość koszyka: </span>
                     </div>
                     <div class="col-5 d-flex justify-content-end">
-                      <span style="font-size: 14px;">{{total}} zł</span>
+                      <span style="font-size: 14px;">{{total | number: '1.2-2'}} zł</span>
                     </div>
                   </div>
                   <div class="row">
@@ -114,7 +114,7 @@
                       <span style="font-weight: 500; font-size: 14px;">Razem:</span>
                     </div>
                     <div class="col-5 d-flex justify-content-end">
-                      <span style="font-weight: 500;font-size: 14px;">{{total}} zł</span>
+                      <span style="font-weight: 500;font-size: 14px;">{{total | number: '1.2-2'}} zł</span>
                     </div>
                   </div>
                 </div>

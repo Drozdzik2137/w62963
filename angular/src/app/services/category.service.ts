@@ -27,4 +27,16 @@ export class CategoryService {
     );
   }
 
+  addCategory(categoryName: string){
+    return this.http.post(`${this.SERVER_URL}/category`, {categoryName}, {observe: 'response'});
+  }
+
+  updateCategory(id: number, categoryName: string){
+    return this.http.patch(`${this.SERVER_URL}/category/` + id, {categoryName}, {observe: 'response'});
+  }
+
+  deleteCategory(id: number){
+    return this.http.delete(`${this.SERVER_URL}/category/` + id, {observe: 'response'});
+  }
+
 }

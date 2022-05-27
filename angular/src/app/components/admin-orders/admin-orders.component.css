@@ -1,0 +1,20 @@
+.menu-spacer {
+  flex: 1 1 auto;
+}
+table {
+  width: 100%;
+}
+.edit-btn{
+  color: #6c757d;
+  transition: .5s;
+}
+.edit-btn:hover{
+  color: rgb(0, 130, 250);
+}
+.show-btn{
+  color: #6c757d;
+  transition: .5s;
+}
+.show-btn:hover{
+  color: #D10024;
+}

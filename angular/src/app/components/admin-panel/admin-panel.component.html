@@ -5,37 +5,28 @@
     </button>
     <h1>Zarządzanie treścią</h1>
     <span class="menu-spacer"></span>
-    <!-- <div>
-      <a mat-button [routerLink]="'/accounts'"> Accounts </a>
-      <a mat-button [routerLink]="'/create-account'"> Create Account </a>
-      <a mat-button [routerLink]="'/contacts'"> Contacts </a>
-      <a mat-button [routerLink]="'/create-contact'"> Create Contact </a>
-      <a mat-button [routerLink]="'/activities'"> Activities </a>
-      <a mat-button [routerLink]="'/create-activity'"> Create Activity </a>
-
-    </div> -->
   </mat-toolbar-row>
 
-  <!-- <mat-toolbar-row>
-      <span style="font-size: 12px;">SimpleCRM helps you easily manage your contacts</span>
-    </mat-toolbar-row> -->
 </mat-toolbar>
 
-<mat-sidenav-container>
-  <mat-sidenav #sidenav>
+
+ <mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode="side" opened class="example-sidenav">
+    <div *ngIf="userData !== undefined" class="py-2 px-3 border-bottom">
+      <span>Cześć,</span><br>
+      <span mat-list-item style="font-size: 16px; font-weight: 500;">{{userData.fname}}</span>
+    </div>
     <mat-nav-list>
-      <a mat-list-item [routerLink]="'/'"> Produkty </a>
-      <a mat-list-item [routerLink]="'/'"> Kategorie </a>
-      <a mat-list-item [routerLink]="'/'"> Historia zamówień </a>
-      <a mat-list-item [routerLink]="'/'"> Konta użytkowników </a>
-      <a mat-list-item (click)="sidenav.toggle()" mat-list-item>Zamknij</a>
+      <a mat-list-item [routerLink]="'/admin'"><strong class="fst-italic">Dashboard</strong></a>
+      <a mat-list-item [routerLink]="'/admin-products'"> Produkty </a>
+      <a mat-list-item [routerLink]="'/admin-categories'"> Kategorie </a>
+      <a mat-list-item [routerLink]="'/admin-orders'"> Historia zamówień </a>
+      <a mat-list-item [routerLink]="'/admin-users'"> Konta użytkowników </a>
+      <a mat-list-item (click)="sidenav.toggle()" mat-list-item class="d-flex justify-content-start align-items-center"><mat-icon >close</mat-icon>Zamknij</a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <div class='container' style="height: 88vh;">
 
+  <mat-sidenav-content style="height: 90vh;">
 
-    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-

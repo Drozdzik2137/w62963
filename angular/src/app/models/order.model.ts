@@ -7,8 +7,11 @@ export interface IOrderModelServer{
   created_at: Date;
   email: string;
   user_id: number;
+  phone_number: string;
   img: string;
   total: number;
+  freshness: string;
+  status: string;
 }
 
 export interface IOrderServerResponse{
@@ -29,4 +32,5 @@ export interface ICheckoutOrderResponseModel{
   img: string;
   created_at: Date;
   email: string;
+  freshness: string;
 }

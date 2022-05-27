@@ -1,7 +1,7 @@
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { IUserResponseModel } from './../models/user.model';
+import { IUserAdminResponseServer, IUserResponseModel } from './../models/user.model';
 import { BehaviorSubject, catchError, of} from 'rxjs';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -83,8 +83,8 @@ export class UserService {
     })
   }
 
-  registerUser(email: string, password: string, fname: string, lname: string, photoUrl?: string, type?: string){
-    return this.http.post(`${this.SERVER_URL}/auth/register`, {email, password, fname, lname, photoUrl, type}, {observe: 'response'})
+  registerUser(email: string, password: string, fname: string, lname: string, phoneNumber: string, photoUrl?: string, type?: string){
+    return this.http.post(`${this.SERVER_URL}/auth/register`, {email, password, fname, lname, phoneNumber, photoUrl, type}, {observe: 'response'})
   }
 
   isLoggedIn(){
@@ -102,7 +102,7 @@ export class UserService {
           progressBar: true,
           progressAnimation: 'increasing',
           positionClass: 'toast-top-right'
-        })
+        });
       }
     }
     return this._isLoggedIn$.next(false);
@@ -124,16 +124,25 @@ export class UserService {
   }
 
   changeUserData(id: number, fname: string, lname: string){
-    return this.http.patch(`${this.SERVER_URL}/user/` + id, {fname, lname}, {observe: 'response'})
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {fname, lname}, {observe: 'response'});
   }
 
   changeUserPassword(id: number, oldPassword: string, newPassword: string){
-    return this.http.patch(`${this.SERVER_URL}/user/` + id, {oldPassword, newPassword}, {observe: 'response'})
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {oldPassword, newPassword}, {observe: 'response'});
+  }
+
+  changeUserPhone(id: number, phoneNumber: string){
+    return this.http.patch(`${this.SERVER_URL}/user/` + id, {phoneNumber}, {observe: 'response'});
   }
 
   deleteUserAccount(id:number){
-    return this.http.delete(`${this.SERVER_URL}/user/` + id, {observe: 'response'})
+    return this.http.delete(`${this.SERVER_URL}/user/` + id, {observe: 'response'});
   }
+
+  getAllUsers(){
+    return this.http.get<IUserAdminResponseServer>(`${this.SERVER_URL}/allUsers`);
+  }
+
 }
 
 

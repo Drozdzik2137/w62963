@@ -1,3 +1,7 @@
+import { AdminUsersComponent } from './components/admin-users/admin-users.component';
+import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
+import { AdminCategoriesComponent } from './components/admin-categories/admin-categories.component';
+import { AdminProductsComponent } from './components/admin-products/admin-products.component';
 import { RoleGuard } from './guard/role.guard';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { UserOrderDetailsComponent } from './components/user-order-details/user-order-details.component';
@@ -64,6 +68,18 @@ const routes: Routes = [
   },
   {
     path: 'admin', component: AdminPanelComponent, canActivate: [RoleGuard]
+  },
+  {
+    path: 'admin-products', component: AdminProductsComponent, canActivate: [RoleGuard]
+  },
+  {
+    path: 'admin-categories', component: AdminCategoriesComponent, canActivate: [RoleGuard]
+  },
+  {
+    path: 'admin-orders', component: AdminOrdersComponent, canActivate: [RoleGuard]
+  },
+  {
+    path: 'admin-users', component: AdminUsersComponent, canActivate: [RoleGuard]
   },
   { path: '**',
   redirectTo: ''}

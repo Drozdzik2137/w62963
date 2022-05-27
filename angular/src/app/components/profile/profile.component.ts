@@ -122,6 +122,46 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  openPhoneDialog(): void {
+    const dialogRef = this.dialog.open(EditPhoneDialog, {
+      width: '350px',
+      data: this.userData.phoneNumber
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if(data.phoneNumber !== undefined){
+        this.userService.changeUserPhone(this.userData.userId, data.phoneNumber).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          let userPhoneChangeStatus = data.status;
+          if(userPhoneChangeStatus == 200){
+            // @ts-ignore
+            let successMessage = data.body.message;
+            this.toast.success(`${successMessage}`, 'Udane', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            })
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/profile']);
+            })
+          }else{
+            //@ts-ignore
+            let errorMessage = data.error.message;
+            if(errorMessage != null)
+            this.toast.error(`${errorMessage}`, 'Niepowodzenie', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            })
+          }
+        })
+      }else{
+
+      }
+    })
+  }
+
   openDeleteDialog(): void {
     const dialogRef = this.dialog.open(DeleteUserDialog, {
       width: '350px'
@@ -237,4 +277,35 @@ export class DeleteUserDialog {
     }
   }
 }
+
+@Component({
+  selector: 'edit-phone-dialog',
+  templateUrl: 'edit-phone-dialog.html'
+})
+export class EditPhoneDialog {
+  newPhoneNumberForm = new FormGroup({
+    phoneNumber: new FormControl('', [Validators.required, Validators.pattern('[5-9]\\d{8}')])
+  })
+
+
+  constructor(public dialogRef: MatDialogRef<EditPasswordDialog>,
+     @Inject(MAT_DIALOG_DATA) public data: EditPasswordDialog){}
+
+  ngOnInit(): void {
+    this.newPhoneNumberForm.controls['phoneNumber'].setValue(this.data)
+
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  onSaveClick(){
+    if(this.newPhoneNumberForm.valid){
+      this.dialogRef.close(this.newPhoneNumberForm.value);
+    }
+  }
+}
+
+
 

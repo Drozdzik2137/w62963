@@ -128,15 +128,15 @@ export class UserOrderHistoryComponent implements OnInit {
     window.scroll(0,0);
   }
 
-  SelectOrder(id: number){
+  SelectOrder(id: number, status: string){
     this.orderService.getSingleOrder(id).then(prods => {
       const navigationExtras: NavigationExtras = {
         state: {
           products: prods,
-          orderId: id
+          orderId: id,
+          status: status
         }
       }
-      console.log(navigationExtras)
       this.router.navigate(['/details'], navigationExtras);
     })
 
