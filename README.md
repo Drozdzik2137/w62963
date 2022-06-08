@@ -1,1 +1,1 @@
-# NodeAngularShop
+# Moja aplikacja
