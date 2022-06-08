@@ -86,6 +86,7 @@ exports.getProducts = async (req, res) => {
         product.shortdesc,
         product.description,
         product.size,
+        product.freshness,
         category.name as category,
         brand.name as brand
         FROM product
@@ -174,6 +175,7 @@ exports.getNewProducts = async (req, res) => {
         product.shortdesc,
         product.description,
         product.size,
+        product.freshness,
         category.name as category,
         brand.name as brand
         FROM PRODUCT
@@ -286,6 +288,7 @@ exports.findProducts = async (req, res) => {
             product.shortdesc,
             product.description,
             product.size,
+            product.freshness,
             category.name as category,
             brand.name as brand
             FROM PRODUCT
@@ -384,7 +387,10 @@ exports.getSingleProduct = async (req, res) => {
         product.shortdesc,
         product.description,
         product.size,
+        product.freshness,
+        category.id as category_id,
         category.name as category,
+        brand.id as brand_id,
         brand.name as brand
         FROM PRODUCT
         JOIN BRAND ON product.brand_id = brand.id
@@ -558,6 +564,7 @@ exports.category = async (req, res) => {
         product.shortdesc,
         product.description,
         product.size,
+        product.freshness,
         category.name as category,
         brand.name as brand
         FROM PRODUCT
@@ -616,6 +623,97 @@ exports.allProducts = async (req, res) => {
     }
 }
 
+exports.addProduct = async (req, res) => {
+    try{
+        let prodName = req.body.prodName
+        let prodImg = req.body.prodImg
+        let prodPrice = req.body.prodPrice
+        let prodQuantity = req.body.prodQuantity
+        let prodShortDesc = req.body.prodShortDesc
+        let prodDescription = req.body.prodDescription
+        let prodSize = req.body.prodSize
+        let prodBrand = req.body.prodBrand
+        let prodCategory = req.body.prodCategory
+        let prodImages = req.body.prodImages
+        let prodFreshness = req.body.prodFreshness
+
+        console.log(prodSize)
+
+        if(prodName !== undefined && prodImg !== undefined && prodPrice !== undefined && prodQuantity !== undefined
+            && prodDescription !== undefined && prodSize !== undefined && prodBrand !== undefined && prodCategory !== undefined
+            && prodImages !== undefined && prodFreshness !== undefined){
+            const client = await pool.connect()
+
+            const {rows} = await client.query(`INSERT INTO 
+            public.product
+            (name, img, price, quantity, shortdesc, description, size, brand_id, category_id, images, freshness)
+            VALUES 
+            ('${prodName}', '${prodImg}', '${prodPrice}', ${prodQuantity}, '${prodShortDesc}', '${prodDescription}', '${prodSize}', ${prodBrand}, ${prodCategory}, '${prodImages}', '${prodFreshness}')
+            RETURNING id;`)
+            client.release()
+
+            const insertedId = rows[0].id
+            if(insertedId > 0){
+                res.status(200).json({message: 'Dodano pomyślnie produkt'})
+            }else{
+                res.status(404).json({message: 'Nieudane dodanie produktu'})
+            }
+        }else{
+            res.status(404).json({message: 'Brak przekazanych informacji o produkcie'})
+        }
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }  
+}
+
+exports.updateProduct = async (req, res) => {
+    try{
+        const productId = req.params.id
+
+        if(productId !== undefined){
+            let prodName = req.body.prodName
+            let prodImg = req.body.prodImg
+            let prodPrice = req.body.prodPrice
+            let prodQuantity = req.body.prodQuantity
+            let prodShortDesc = req.body.prodShortDesc
+            let prodDescription = req.body.prodDescription
+            let prodSize = req.body.prodSize
+            let prodBrand = req.body.prodBrand
+            let prodCategory = req.body.prodCategory
+            let prodImages = req.body.prodImages
+            let prodFreshness = req.body.prodFreshness
+            if(prodName !== undefined && prodImg !== undefined && prodPrice !== undefined && prodQuantity !== undefined
+                && prodDescription !== undefined && prodSize !== undefined && prodBrand !== undefined && prodCategory !== undefined
+                && prodImages !== undefined && prodFreshness !== undefined){
+                const client = await pool.connect()
+
+                const {rows} = await client.query(`UPDATE 
+                public.product
+                SET name='${prodName}', img='${prodImg}', price=${prodPrice}, quantity=${prodQuantity}, shortdesc='${prodShortDesc}', description='${prodDescription}', size='${prodSize}', brand_id=${prodBrand},
+                category_id=${prodCategory}, images='${prodImages}', freshness='${prodFreshness}'
+                WHERE id=${productId}
+                RETURNING id;`)
+                client.release()
+
+                const updatedId = rows[0].id
+                if(updatedId > 0){
+                    res.status(200).json({message: 'Zaktualizowano pomyślnie produkt'})
+                }else{
+                    res.status(404).json({message: 'Nieudana zmiana informacji o produkcie'})
+                }
+            }else{
+                res.status(404).json({message: 'Brak przekazanych informacji o produkcie'})
+            }
+        }else{
+            res.status(404).json({message: 'Brak przekazanego ID kategorii'})
+        }
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }
+}
+
 exports.deleteProduct = async (req, res) => {
     try{
         const prodId = req.params.id
@@ -641,4 +739,25 @@ exports.deleteProduct = async (req, res) => {
         res.status(404).json({message: 'Error 404'})
         console.error(err.message)
     }
+}
+
+exports.allBrands = async (req, res) => {
+    try{
+        const client = await pool.connect()
+        const {rows} = await client.query(`SELECT
+        brand.id,
+        brand.name
+        FROM brand`)
+
+        res.status(200).json({
+            count: rows.length,
+            brands: rows
+        })
+
+        client.release()
+
+    }catch(err){
+        res.status(404).json({message: 'Error 404'})
+        console.error(err.message)
+    }  
 }

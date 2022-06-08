@@ -52,7 +52,7 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { MatListModule } from '@angular/material/list';
 import { AdminProductsComponent, ProductDialog, DeleteDialog } from './components/admin-products/admin-products.component';
 import { AdminCategoriesComponent, CategoryDialog, DeleteCategoryDialog } from './components/admin-categories/admin-categories.component';
-import { AdminOrdersComponent, EditOrderStatusDialog } from './components/admin-orders/admin-orders.component';
+import { AdminOrdersComponent, EditOrderStatusDialog, ShowOrderDetailsDialog } from './components/admin-orders/admin-orders.component';
 import { AdminUsersComponent, DeleteUserAdminDialog } from './components/admin-users/admin-users.component';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -94,7 +94,8 @@ import { MatSortModule } from '@angular/material/sort';
     DeleteCategoryDialog,
     EditOrderStatusDialog,
     EditPhoneDialog,
-    DeleteUserAdminDialog
+    DeleteUserAdminDialog,
+    ShowOrderDetailsDialog
   ],
   imports: [
     BrowserModule,

@@ -2,6 +2,11 @@
 <div mat-dialog-content>
   <form [formGroup]="dataForm" #formDirective="ngForm">
 
+    <mat-form-field appearance="fill" style="width:100%" *ngIf="this.data !== null">
+      <mat-label>ID produktu</mat-label>
+      <input type="text" matInput formControlName="prodId" fillColor="accent" readonly>
+    </mat-form-field>
+
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Nazwa produktu</mat-label>
       <input type="text" matInput formControlName="prodName" fillColor="accent">
@@ -20,17 +25,23 @@
 
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Cena produktu</mat-label>
-      <input type="number" matInput formControlName="prodPrice" fillColor="accent">
+      <input type="number" matInput formControlName="prodPrice" fillColor="accent" min="0" max="9999999999999" step="0.01">
       <mat-error *ngIf="this.dataForm.controls.prodPrice.hasError('required')">
         <strong>Musisz</strong> podać cene za sztukę produktu
+      </mat-error>
+      <mat-error *ngIf="this.dataForm.controls.prodPrice.hasError('pattern')">
+        <strong>Musisz</strong> podać cene z dwoma miejscami po przecinku
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Ilość produktu</mat-label>
-      <input type="number" matInput formControlName="prodQuantity" fillColor="accent">
+      <input type="number" matInput formControlName="prodQuantity" fillColor="accent" min="0" step="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');">
       <mat-error *ngIf="this.dataForm.controls.prodQuantity.hasError('required')">
         <strong>Musisz</strong> podać ilość produktu
+      </mat-error>
+      <mat-error *ngIf="this.dataForm.controls.prodQuantity.hasError('pattern')">
+        <strong>Musisz</strong> podać liczbę całkowitą
       </mat-error>
     </mat-form-field>
 
@@ -58,8 +69,7 @@
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Marka produktu</mat-label>
       <mat-select formControlName="prodBrand" fillColor="accent">
-        <mat-option value="one">First option</mat-option>
-        <mat-option value="two">Second option</mat-option>
+        <mat-option [value]="brand.id" *ngFor="let brand of brands">{{brand.name}}</mat-option>
       </mat-select>
       <mat-error *ngIf="this.dataForm.controls.prodBrand.hasError('required')">
         <strong>Musisz</strong> podać marke produktu
@@ -69,8 +79,7 @@
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Kategoria produktu</mat-label>
       <mat-select formControlName="prodCategory" fillColor="accent">
-        <mat-option value="one">First option</mat-option>
-        <mat-option value="two">Second option</mat-option>
+        <mat-option [value]="cat.id" *ngFor="let cat of categories">{{cat.name}}</mat-option>
       </mat-select>
       <mat-error *ngIf="this.dataForm.controls.prodCategory.hasError('required')">
         <strong>Musisz</strong> podać kategorie produktu
@@ -87,7 +96,11 @@
 
     <mat-form-field appearance="fill" style="width:100%">
       <mat-label>Stan produktu</mat-label>
-      <input type="text" matInput formControlName="prodFreshness" fillColor="accent">
+      <mat-select formControlName="prodFreshness" fillColor="accent">
+        <mat-option value="Nowy">Nowy</mat-option>
+        <mat-option value="Używany">Używany</mat-option>
+        <mat-option value="Po zwrocie">Po zwrocie</mat-option>
+      </mat-select>
       <mat-error *ngIf="this.dataForm.controls.prodFreshness.hasError('required')">
         <strong>Musisz</strong> podać stan produktu
       </mat-error>

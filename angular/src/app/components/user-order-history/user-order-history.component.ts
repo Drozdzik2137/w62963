@@ -129,6 +129,7 @@ export class UserOrderHistoryComponent implements OnInit {
   }
 
   SelectOrder(id: number, status: string){
+    console.log(id,status);
     this.orderService.getSingleOrder(id).then(prods => {
       const navigationExtras: NavigationExtras = {
         state: {

@@ -8,7 +8,9 @@ export interface IProductModelServer{
   shortdesc: string;
   description: string;
   size: string;
+  category_id: number;
   category: string;
+  brand_id: number;
   brand: string;
   freshness: string;
 }

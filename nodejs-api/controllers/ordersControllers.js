@@ -68,11 +68,15 @@ exports.getSingleOrder = async (req, res) => {
         "order".id as order_id,
         brand.name as brand,
         product.id,
+        product.img,
+        product.size,
+        product.freshness,
         product.name,
         product.price,
         order_details.quantity,
         "order".created_at,
         "order".total,
+        "order".status,
         "user".email,
         product.img
 		FROM "order"

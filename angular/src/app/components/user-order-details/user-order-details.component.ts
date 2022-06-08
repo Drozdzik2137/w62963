@@ -31,7 +31,6 @@ export class UserOrderDetailsComponent implements OnInit {
       status: string
     };
     if(state !== undefined){
-      console.log(state);
       this.products = state.products;
       this.orderId = state.orderId;
       this.orderStatus = state.status;

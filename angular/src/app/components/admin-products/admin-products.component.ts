@@ -1,3 +1,6 @@
+import { IBrandModelServer, IBrandServerResponse } from './../../models/brand.model';
+import { CategoryService } from './../../services/category.service';
+import { ICategoryModelServer, ICategoryServerResponse } from './../../models/category.model';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
@@ -32,7 +35,6 @@ export class AdminProductsComponent implements OnInit {
   productsCount: number = 0;
   products: IProductModelServer[] = [];
 
-
   constructor(private router: Router, private userService: UserService, private productService: ProductService, private dialog: MatDialog, private toast: ToastrService) {}
 
   ngOnInit(): void {
@@ -63,6 +65,8 @@ export class AdminProductsComponent implements OnInit {
       this.dataSource.sort = this.sort;
     })
 
+
+
   }
 
   openDialog(){
@@ -70,6 +74,37 @@ export class AdminProductsComponent implements OnInit {
       width: '350px'
     });
 
+    dialogRef.afterClosed().subscribe(data => {
+      if(data !== undefined){
+        this.productService.addProduct(data.prodName, data.prodImg, parseFloat(data.prodPrice).toFixed(2), data.prodQuantity, data.prodShortDesc,
+        data.prodDescription, data.prodSize, data.prodBrand, data.prodCategory, data.prodImages, data.prodFreshness).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          let productAddStatus = data.status;
+          if(productAddStatus == 200){
+            //@ts-ignore
+            let successMessage = data.body.message;
+            this.toast.success(`${successMessage}`, 'Udane', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-products']);
+            });
+          }else{
+            this.toast.error(`Nie udało się dodać produktu`, 'Niepowodzenie', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-products']);
+            });
+          }
+        })
+      }
+    })
   }
 
   applyFilter(event: Event) {
@@ -86,6 +121,38 @@ export class AdminProductsComponent implements OnInit {
       width: '350px',
       data: row
     });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if(data !== undefined){
+        this.productService.updateProduct(data.prodId, data.prodName, data.prodImg, parseFloat(data.prodPrice).toFixed(2), data.prodQuantity, data.prodShortDesc,
+          data.prodDescription, data.prodSize, data.prodBrand, data.prodCategory, data.prodImages, data.prodFreshness).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+            let productUpdateStatus = data.status;
+            if(productUpdateStatus == 200){
+              //@ts-ignore
+              let successMessage = data.body.message;
+              this.toast.success(`${successMessage}`, 'Udane', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-products']);
+              });
+            }else{
+              this.toast.error(`Nie udało się zaktualizować produktu`, 'Niepowodzenie', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-products']);
+              });
+            }
+          })
+      }
+    })
 
   }
 
@@ -140,10 +207,11 @@ export class ProductDialog {
   actionBtn: string = 'Dodaj';
   actionLabel: string = 'Dodawanie'
   dataForm = new FormGroup({
+    prodId: new FormControl(''),
     prodName: new FormControl('', [Validators.required]),
     prodImg: new FormControl('', [Validators.required]),
-    prodPrice: new FormControl('', [Validators.required]),
-    prodQuantity: new FormControl('', [Validators.required]),
+    prodPrice: new FormControl('', [Validators.required, Validators.pattern('^([0-9]*\.[0-9]{2})')]),
+    prodQuantity: new FormControl('', [Validators.required, Validators.pattern('[0-9]*')]),
     prodShortDesc: new FormControl('',),
     prodDescription: new FormControl('', [Validators.required]),
     prodSize: new FormControl('', [Validators.required]),
@@ -152,25 +220,39 @@ export class ProductDialog {
     prodImages: new FormControl('', [Validators.required]),
     prodFreshness: new FormControl('', [Validators.required])
   });
+  categories: ICategoryModelServer[] = [];
+  brands: IBrandModelServer[] = [];
 
-  constructor(public dialogRef: MatDialogRef<ProductDialog>,
+  constructor(public dialogRef: MatDialogRef<ProductDialog>, private categoryService: CategoryService, private productService: ProductService,
      @Inject(MAT_DIALOG_DATA) public data: IProductModelServer){}
 
   ngOnInit(): void {
+    this.categoryService.getAllCategories().subscribe((categories: ICategoryServerResponse) => {
+      this.categories = categories.categories;
+    })
+
+    this.productService.getAllBrands().subscribe((brands: IBrandServerResponse) => {
+      this.brands = brands.brands;
+    })
+
     if(this.data){
       this.actionBtn = "Zmień"
       this.actionLabel = 'Edytowanie'
-      this.dataForm.controls['prodName'].setValue(this.data.name);
-      this.dataForm.controls['prodImg'].setValue(this.data.img);
-      this.dataForm.controls['prodPrice'].setValue(this.data.price);
-      this.dataForm.controls['prodQuantity'].setValue(this.data.quantity);
-      this.dataForm.controls['prodShortDesc'].setValue(this.data.shortdesc);
-      this.dataForm.controls['prodDescription'].setValue(this.data.description);
-      this.dataForm.controls['prodSize'].setValue(this.data.size);
-      this.dataForm.controls['prodBrand'].setValue(this.data.brand);
-      this.dataForm.controls['prodCategory'].setValue(this.data.category);
-      this.dataForm.controls['prodImages'].setValue(this.data.images);
-      this.dataForm.controls['prodFreshness'].setValue(this.data.freshness);
+
+      this.productService.getSingleProduct(this.data.id).subscribe((product: IProductModelServer) => {
+        this.dataForm.controls['prodId'].setValue(this.data.id);
+        this.dataForm.controls['prodName'].setValue(this.data.name);
+        this.dataForm.controls['prodImg'].setValue(this.data.img);
+        this.dataForm.controls['prodPrice'].setValue(this.data.price);
+        this.dataForm.controls['prodQuantity'].setValue(this.data.quantity);
+        this.dataForm.controls['prodShortDesc'].setValue(product.shortdesc);
+        this.dataForm.controls['prodDescription'].setValue(product.description);
+        this.dataForm.controls['prodSize'].setValue(product.size);
+        this.dataForm.controls['prodBrand'].setValue(product.brand_id);
+        this.dataForm.controls['prodCategory'].setValue(product.category_id);
+        this.dataForm.controls['prodImages'].setValue(product.images);
+        this.dataForm.controls['prodFreshness'].setValue(product.freshness);
+      })
     }
   }
 
@@ -179,7 +261,9 @@ export class ProductDialog {
   }
 
   onSaveClick(){
-
+    if(this.dataForm.valid){
+      this.dialogRef.close(this.dataForm.value);
+    }
   }
 }
 

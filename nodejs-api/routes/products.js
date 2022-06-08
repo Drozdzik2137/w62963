@@ -20,7 +20,13 @@ router.route('/category/:id').delete(productsControllers.deleteCategory)
 router.route('/category/:category').get(productsControllers.category)
 // @route GET all products
 router.route('/allProducts/').get(productsControllers.allProducts)
-/// @route DELETE to delete product
+// @route to POST to add new product
+router.route('/product').post(productsControllers.addProduct)
+// @route PATCH to update product
+router.route('/product/:id').patch(productsControllers.updateProduct)
+// @route DELETE to delete product
 router.route('/product/:id').delete(productsControllers.deleteProduct)
+// @route GET to get all brands
+router.route('/brands/').get(productsControllers.allBrands)
 
 module.exports = router

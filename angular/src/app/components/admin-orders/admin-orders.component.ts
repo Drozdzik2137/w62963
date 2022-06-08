@@ -1,3 +1,4 @@
+import { IProductModelServer } from 'src/app/models/product.model';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IOrderModelServer } from './../../models/order.model';
@@ -14,6 +15,7 @@ import { IOrderServerResponse } from 'src/app/models/order.model';
 import { IUserResponseModel } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-admin-orders',
@@ -75,8 +77,12 @@ export class AdminOrdersComponent implements OnInit {
     }
   }
 
-  showOrder(id: number){
-
+  showOrder(row: any){
+    const dialogRef = this.dialog.open(ShowOrderDetailsDialog, {
+      width: '1000px',
+      data: row
+    });
+    // this.orderService.getSingleOrder(id)
   }
 
   editOrder(row: any){
@@ -123,6 +129,38 @@ export class AdminOrdersComponent implements OnInit {
 
 }
 
+@Component({
+  selector: 'show-order-details',
+  templateUrl: 'show-order-details.html'
+})
+export class ShowOrderDetailsDialog {
+  orderId: any;
+  orderStatus: any;
+  products: IProductModelServer[] = [];
+  total: any
+
+  constructor(public dialogRef: MatDialogRef<EditOrderStatusDialog>, private orderService: OrderService, private productService: ProductService,
+     @Inject(MAT_DIALOG_DATA) public data: IOrderModelServer){}
+
+  ngOnInit(): void {
+    this.orderService.getSingleOrder(this.data.id).then(prods => {
+      console.log(this.data.id, prods);
+      this.orderId = this.data.id;
+    });
+
+
+    // this.products = state.products;
+    // this.orderId = state.orderId;
+    // this.orderStatus = state.status;
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+
 
 @Component({
   selector: 'edit-order-status',
@@ -153,3 +191,5 @@ export class EditOrderStatusDialog {
 
   }
 }
+
+

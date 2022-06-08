@@ -1,3 +1,4 @@
+import { IBrandServerResponse } from './../models/brand.model';
 import { IProductModelServer, IServerResponse } from 'src/app/models/product.model';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -39,8 +40,27 @@ export class ProductService {
     );
   }
 
+  addProduct(prodName: string, prodImg: string, prodPrice: string, prodQuantity: number,
+    prodShortDesc: string, prodDescription: string, prodSize: string, prodBrand: number, prodCategory: number,
+    prodImages: string, prodFreshness: string){
+    return this.http.post(`${this.SERVER_URL}/product`, {prodName, prodImg, prodPrice, prodQuantity, prodShortDesc, prodDescription,
+      prodSize, prodBrand, prodCategory, prodImages, prodFreshness},  {observe: 'response'});
+
+  }
+
+  updateProduct(id: number, prodName: string, prodImg: string, prodPrice: string, prodQuantity: number,
+    prodShortDesc: string, prodDescription: string, prodSize: string, prodBrand: number, prodCategory: number,
+    prodImages: string, prodFreshness: string){
+    return this.http.patch(`${this.SERVER_URL}/product/` + id, {prodName, prodImg, prodPrice, prodQuantity, prodShortDesc, prodDescription,
+      prodSize, prodBrand, prodCategory, prodImages, prodFreshness},  {observe: 'response'});
+  }
+
   deleteProduct(id: number){
     return this.http.delete(`${this.SERVER_URL}/product/` + id, {observe: 'response'});
+  }
+
+  getAllBrands(){
+    return this.http.get<IBrandServerResponse>(`${this.SERVER_URL}/brands`);
   }
 
 }
