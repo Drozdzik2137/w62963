@@ -33,6 +33,22 @@ export class ProductService {
     );
   }
 
+  findProducts(searchInput: string, page: number, limit: number, orderBy: string, orderType: string): Observable<IServerResponse> {
+    let params = new HttpParams();
+
+
+    params = params.append('searchInput', String(searchInput));
+    params = params.append('page', String(page));
+    params = params.append('limit', String(limit));
+    params = params.append('orderBy', String(orderBy));
+    params = params.append('orderType', String(orderType));
+
+    return this.http.get<IServerResponse>(`${this.SERVER_URL}/findProducts`, {params}).pipe(
+      map((prods: IServerResponse) => prods),
+      catchError(err=> throwError(err))
+    );
+  }
+
   getAllProductsAdmin(): Observable<IServerResponse>{
     return this.http.get<IServerResponse>(this.SERVER_URL + '/allProducts').pipe(
       map((prods: IServerResponse) => prods),

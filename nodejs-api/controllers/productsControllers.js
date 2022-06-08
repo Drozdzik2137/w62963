@@ -1,3 +1,4 @@
+const e = require('express')
 const pool = require('../config/db')
 
 // exports.getProducts = async (req, res) => {
@@ -266,50 +267,60 @@ exports.getNewProducts = async (req, res) => {
 exports.findProducts = async (req, res) => {
     try{
         console.log("Podłączono do bazy z routa find")
-        const client = await pool.connect()
-        let searchPhrase = req.body.searchInput
-        let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
-        const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
-        const offset = (page - 1) * limit
-        const countQuery = await client.query(`SELECT COUNT(*) as count
-        FROM product
-        WHERE product.name LIKE $1`, ['%' + searchPhrase + '%'])
-        const numOfProducts = countQuery.rows[0].count
-        const numOfPages = Math.ceil(numOfProducts / limit)
-
-        if(searchPhrase.length >= 2){
-            const {rows} = await client.query(`SELECT
-            product.id,
-            product.name,
-            product.img,
-            product.images,
-            product.price,
-            product.quantity,
-            product.shortdesc,
-            product.description,
-            product.size,
-            product.freshness,
-            category.name as category,
-            brand.name as brand
-            FROM PRODUCT
-            JOIN BRAND ON product.brand_id = brand.id
-            JOIN CATEGORY ON product.category_id = category.id
-            WHERE product.name ILIKE $1
-            ORDER BY product.name ASC
-            LIMIT $2 
-            OFFSET $3`, ['%' + searchPhrase + '%',limit, offset])
-            res.status(200).json({
-                limit: limit,
-                count: rows.length,
-                totalProducts: numOfProducts,
-                currentPage: page,
-                totalPages: numOfPages,
-                products: rows
-            })
+        let searchPhrase = req.query.searchInput
+        if(searchPhrase !== undefined){
+            const client = await pool.connect()
+            let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
+            const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
+            const offset = (page - 1) * limit
+            const orderType = (req.query.orderType != undefined && ["ASC", "DESC"].includes(req.query.orderType.toUpperCase())) ? req.query.orderType : "ASC"
+            const orderBy = (req.query.orderBy != undefined && (["brand", "price"].includes(req.query.orderBy.toLowerCase()))) ? req.query.orderBy : "brand"
+            const countQuery = await client.query(`SELECT COUNT(*) as count
+            FROM product
+            WHERE product.name ILIKE $1`, ['%' + searchPhrase + '%'])
+            const numOfProducts = countQuery.rows[0].count
+            const numOfPages = Math.ceil(numOfProducts / limit)
+    
+            if(searchPhrase.length >= 2){
+                const {rows} = await client.query(`SELECT
+                product.id,
+                product.name,
+                product.img,
+                product.images,
+                product.price,
+                product.quantity,
+                product.shortdesc,
+                product.description,
+                product.size,
+                product.freshness,
+                category.name as category,
+                brand.name as brand
+                FROM PRODUCT
+                JOIN BRAND ON product.brand_id = brand.id
+                JOIN CATEGORY ON product.category_id = category.id
+                WHERE product.name ILIKE $1
+                ORDER BY ${orderBy} ${orderType}
+                LIMIT $2
+                OFFSET $3`, ['%' + searchPhrase + '%',limit, offset])
+                if(rows.length > 0){
+                    res.status(200).json({
+                        limit: limit,
+                        count: rows.length,
+                        totalProducts: numOfProducts,
+                        currentPage: page,
+                        totalPages: numOfPages,
+                        products: rows
+                    })
+                }else{
+                    res.status(404).json({message: 'Nie znaleziono produktu'})
+                }
+            }else{
+                res.status(404).json({message: 'Nazwa szukanego produktu jest za krótka'})
+            }
+            client.release()
         }else{
-            res.status(404).json({message: 'Nazwa szukanego produktu jest za krótka.'})
+            res.status(404).json({message: 'Podaj szukana fraze'})
         }
-        client.release()
     }catch(e){
         res.status(404).json({message: 'Error 404'})
         console.error(e.message)
@@ -546,47 +557,56 @@ exports.category = async (req, res) => {
         const offset = (page - 1) * limit
         let categoryName = req.params.category
 
-        const countQuery = await client.query(`SELECT COUNT(*) as count 
-        FROM product
-        JOIN category
-        ON product.category_id = category.id
-        WHERE category.name ILIKE $1`, ['%' + categoryName + '%'])
-        const numOfProducts = countQuery.rows[0].count
-        const numOfPages = Math.ceil(numOfProducts / limit)
+        if(categoryName !== undefined){
+            const client = await pool.connect()
+            const countQuery = await client.query(`SELECT COUNT(*) as count 
+            FROM product
+            JOIN category
+            ON product.category_id = category.id
+            WHERE category.name ILIKE $1`, ['%' + categoryName + '%'])
+            const numOfProducts = countQuery.rows[0].count
+            const numOfPages = Math.ceil(numOfProducts / limit)
 
-        const {rows} = await client.query(`SELECT
-        product.id,
-        product.name,
-        product.img,
-        product.images,
-        product.price,
-        product.quantity,
-        product.shortdesc,
-        product.description,
-        product.size,
-        product.freshness,
-        category.name as category,
-        brand.name as brand
-        FROM PRODUCT
-        JOIN BRAND ON product.brand_id = brand.id
-        JOIN CATEGORY ON product.category_id = category.id
-        WHERE category.name ILIKE $1
-        ORDER BY product.name ASC
-        LIMIT $2
-        OFFSET $3`, ['%' + categoryName + '%', limit, offset])
-        if(rows != null){
-            res.status(200).json({
-                limit: limit,
-                count: rows.length,
-                totalProducts: numOfProducts,
-                currentPage: page,
-                totalPages: numOfPages,
-                products: rows
-            })
+            if(numOfProducts > 0){
+                const {rows} = await client.query(`SELECT
+                product.id,
+                product.name,
+                product.img,
+                product.images,
+                product.price,
+                product.quantity,
+                product.shortdesc,
+                product.description,
+                product.size,
+                product.freshness,
+                category.name as category,
+                brand.name as brand
+                FROM PRODUCT
+                JOIN BRAND ON product.brand_id = brand.id
+                JOIN CATEGORY ON product.category_id = category.id
+                WHERE category.name ILIKE $1
+                ORDER BY product.name ASC
+                LIMIT $2
+                OFFSET $3`, ['%' + categoryName + '%', limit, offset])
+                if(rows != null){
+                    res.status(200).json({
+                        limit: limit,
+                        count: rows.length,
+                        totalProducts: numOfProducts,
+                        currentPage: page,
+                        totalPages: numOfPages,
+                        products: rows
+                    })
+                }else{
+                    res.status(404).json({message: 'Brak produktów w danej kategorii'})
+                }
+            }else{
+                res.status(404).json({message: 'Nie ma produktów w tej kategorii'}) 
+            }
+            client.release()
         }else{
-            res.status(404).json({message: 'Brak produktów w danej kategorii'})
+            res.status(404).json({message: 'Nie podano kategorii'})
         }
-        client.release()
     }catch(e){
         res.status(404).json({message: 'Error 404'})
         console.error(e.message)

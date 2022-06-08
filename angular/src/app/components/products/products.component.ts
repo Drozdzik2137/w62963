@@ -69,7 +69,7 @@ export class ProductsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.initAllCategories();
+    this.initAllCategories();
     // this.initAllProducts();
     this.initAllProducts(this.page);
     // this.paginator._intl.itemsPerPageLabel = 'Produkty na stronę:';

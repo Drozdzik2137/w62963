@@ -31,9 +31,9 @@
               <b>{{node.name}}</b>
             </mat-tree-node>
           </mat-tree> -->
-          <a *ngFor="let cat of categories" >
+          <!-- <a *ngFor="let cat of categories" >
             {{cat.name}}<br>
-          </a>
+          </a> -->
         </div>
       </section>
     </div>
@@ -96,8 +96,8 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Produkty na stronę</mat-label>
                   <mat-select disableOptionCentering [(value)]="productsLimit" (selectionChange)="getPage($any($event))">
+                    <mat-option [value]="1">1</mat-option>
                     <mat-option [value]="12">12</mat-option>
-                    <mat-option [value]="24">24</mat-option>
                     <mat-option [value]="48">48</mat-option>
                     <mat-option [value]="96">96</mat-option>
                   </mat-select>

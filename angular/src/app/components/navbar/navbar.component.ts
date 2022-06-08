@@ -1,7 +1,7 @@
 import { UserService } from './../../services/user.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { ICartModelServer } from 'src/app/models/cart.model';
 import { CartService } from 'src/app/services/cart.service';
 
@@ -15,6 +15,10 @@ export class NavbarComponent implements OnInit {
   cartData!: ICartModelServer;
   cartTotal!: number;
   isLoggedIn!: boolean;
+
+  searchForm = new FormGroup({
+    searchValue: new FormControl('')
+  });
 
 
   constructor(public cartService: CartService, private router: Router, public userService: UserService) { }
@@ -35,6 +39,20 @@ export class NavbarComponent implements OnInit {
 
   logout(){
     this.userService.logout();
+  }
+
+  onSubmit(){
+    let searchInput = this.searchForm.controls['searchValue'].value;
+    const navigationExtras: NavigationExtras = {
+      state: {
+        searchInput: searchInput
+      }
+    }
+    //this.router.navigate(['/search'], navigationExtras);
+    this.router.navigate(['/home'], {skipLocationChange: true}).then(() => {
+      this.router.navigate(['/search'], navigationExtras);
+    })
+    this.searchForm.reset();
   }
 
 }

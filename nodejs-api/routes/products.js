@@ -3,7 +3,9 @@ const productsControllers = require('../controllers/productsControllers')
 const router = express.Router()
 
 // @route GET to get products && POST to find products
-router.route('/products/').get(productsControllers.getProducts).post(productsControllers.findProducts)
+router.route('/products/').get(productsControllers.getProducts)
+// @route GET to get searched products
+router.route('/findProducts/').get(productsControllers.findProducts)
 // @route GET to get newest products
 router.route('/newProducts/').get(productsControllers.getNewProducts)
 // @route GET to get single product

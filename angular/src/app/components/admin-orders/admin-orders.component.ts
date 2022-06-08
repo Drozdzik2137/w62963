@@ -131,27 +131,26 @@ export class AdminOrdersComponent implements OnInit {
 
 @Component({
   selector: 'show-order-details',
-  templateUrl: 'show-order-details.html'
+  templateUrl: 'show-order-details.html',
+  styleUrls: ['./show-order-details.css']
 })
 export class ShowOrderDetailsDialog {
   orderId: any;
   orderStatus: any;
-  products: IProductModelServer[] = [];
+  products: any;
   total: any
 
   constructor(public dialogRef: MatDialogRef<EditOrderStatusDialog>, private orderService: OrderService, private productService: ProductService,
      @Inject(MAT_DIALOG_DATA) public data: IOrderModelServer){}
 
   ngOnInit(): void {
+    this.orderService.getSingleOrderTotal(this.data.id).subscribe(total => this.total = total);
     this.orderService.getSingleOrder(this.data.id).then(prods => {
-      console.log(this.data.id, prods);
+      console.log(this.data.id, this.data, prods);
+      this.products = prods;
       this.orderId = this.data.id;
+      this.orderStatus = this.data.status;
     });
-
-
-    // this.products = state.products;
-    // this.orderId = state.orderId;
-    // this.orderStatus = state.status;
   }
 
   onNoClick(): void {

@@ -79,8 +79,8 @@
       </div>
 
       <div class="order-lg-2 nav-btns pe-4">
-        <form class="d-flex" ngNativeValidate>
-          <input class="inputSearch form-control me-2" type="search" placeholder="czego szukasz?" aria-label="Search"
+        <form class="d-flex" [formGroup]="searchForm" (ngSubmit)="onSubmit()" #form="ngForm" ngNativeValidate>
+          <input class="inputSearch form-control me-2" placeholder="czego szukasz?" aria-label="Search" formControlName="searchValue"
             required>
           <button type="submit" class="btn position-relative">
             <i class="fa fa-search"></i>
