@@ -2,10 +2,10 @@ import { IProductModelServer } from 'src/app/models/product.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { OrderService } from './order.service';
 import { ProductService } from 'src/app/services/product.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ICartModelServer, ICartModelPublic } from './../models/cart.model';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, of } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { NavigationExtras, Router } from '@angular/router';
 
@@ -286,32 +286,71 @@ export class CartService {
           products: this.cartDataClient.productData,
           total: this.cartDataClient.total
         }).subscribe((data: any) => {
-        this.orderService.getSingleOrder(data.order_id).then(prods => {
-          if(data) {
-            const navigationExtras: NavigationExtras = {
-              state: {
-                message: data.message,
-                products: prods,
-                orderId: data.order_id,
-                total: this.cartDataClient.total
+          console.log(data);
+          if(data.success == true){
+            this.orderService.getSingleOrder(data.order_id).pipe(catchError((err: HttpErrorResponse) => of(err.error.message))).subscribe(prods => {
+              if(prods){
+                const navigationExtras: NavigationExtras = {
+                  state: {
+                    message: data.message,
+                    products: prods,
+                    orderId: data.order_id,
+                    total: this.cartDataClient.total
+                  }
+                };
+
+                this.spinner.hide().then();
+                this.router.navigate(['/thankyou'], navigationExtras).then(p=> {
+                  this.cartDataClient = {
+                    total: 0,
+                    productData: [{ inCart: 0, id: 0 }]
+                  };
+                  this.cartTotal$.next(0);
+                  localStorage.removeItem('cart');
+                });
+                this.toast.success('Pomyślnie złożono zamówienie', 'Udane',{
+                  timeOut: 2000,
+                  progressBar: true,
+                  progressAnimation: 'increasing',
+                  positionClass: 'toast-top-right'
+                });
+              }else{
+                this.spinner.hide().then();
+                this.router.navigateByUrl('/products').then();
+                this.toast.error(`${data.message}`, 'Niepowodzenie',{
+                  timeOut: 2000,
+                  progressBar: true,
+                  progressAnimation: 'increasing',
+                  positionClass: 'toast-top-right'
+                });
+                this.cartDataClient = {
+                  total: 0,
+                  productData: [{ inCart: 0, id: 0 }]
+                };
+                this.cartTotal$.next(0);
+                localStorage.removeItem('cart');
               }
-            };
-
+            })
+          }else{
             this.spinner.hide().then();
-            this.router.navigate(['/thankyou'], navigationExtras).then(p=> {
-              this.cartDataClient = {
-                total: 0,
-                productData: [{ inCart: 0, id: 0 }]
-              };
-              this.cartTotal$.next(0);
-              localStorage.removeItem('cart');
+            this.router.navigateByUrl('/products').then();
+            this.toast.error(`${data.message}`, 'Niepowodzenie',{
+              timeOut: 2000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
             });
+            this.cartDataClient = {
+              total: 0,
+              productData: [{ inCart: 0, id: 0 }]
+            };
+            this.cartTotal$.next(0);
+            localStorage.removeItem('cart');
           }
-        })});
-
+        });
       }else{
         this.spinner.hide().then();
-        this.router.navigateByUrl('/checkout').then();
+        this.router.navigateByUrl('/products').then();
         this.toast.error('Ups, nie udało się złożyć zamówienia', 'Niepowodzenie',{
           timeOut: 2000,
           progressBar: true,

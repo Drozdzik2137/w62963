@@ -130,7 +130,7 @@ export class UserOrderHistoryComponent implements OnInit {
 
   SelectOrder(id: number, status: string){
     console.log(id,status);
-    this.orderService.getSingleOrder(id).then(prods => {
+    this.orderService.getSingleOrder(id).subscribe(prods => {
       const navigationExtras: NavigationExtras = {
         state: {
           products: prods,

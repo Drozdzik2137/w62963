@@ -7,10 +7,10 @@
           <div class="hello-user">
             <div class="mb-4">
               <span style="font-size: 14px;">Cześć,</span><br>
-              <span style="font-size: 16px; font-weight: 600;">{{userData.fname}}</span>
+              <span style="font-size: 16px; font-weight: 600;">{{userData?.fname}}</span>
             </div>
           </div>
-          <div class="profile-controls row py-2" [routerLink]="['/admin']" *ngIf="userData.isAdmin == true">
+          <div class="profile-controls row py-2" [routerLink]="['/admin']" *ngIf="userData?.isAdmin == true">
             <div class="col-12 col-md-2">
               <mat-icon>admin_panel_settings</mat-icon>
             </div>
@@ -55,7 +55,7 @@
           <h5>Dane konta</h5>
         </div>
 
-        <div class="col-12 button-delete" *ngIf="userData.isAdmin == true">
+        <div class="col-12 button-delete" *ngIf="userData?.isAdmin == true">
           <div class="col-12 my-2 ms-4">
             <span>Panel administratora</span>
           </div>
@@ -71,7 +71,7 @@
         <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
           <div class="row">
             <div class="col-6">
-              <span><strong>{{userData.fname}} {{userData.lname}}</strong></span>
+              <span><strong>{{userData?.fname}} {{userData?.lname}}</strong></span>
             </div>
             <div class="user-data-edit col-6 d-flex justify-content-end">
               <a class="text-decoration-none" (click)="openDataDialog()">Edytuj</a>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
-          <span><strong>{{userData.email}}</strong></span>
+          <span><strong>{{userData?.email}}</strong></span>
         </div>
 
         <div class="settings-2 mb-2 py-1 ms-4">
@@ -94,7 +94,7 @@
         <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
           <div class="row">
             <div class="col-6">
-              <span><strong>{{userData.phoneNumber}}</strong></span>
+              <span><strong>{{userData?.phoneNumber}}</strong></span>
             </div>
             <div class="user-data-edit col-6 d-flex justify-content-end">
               <a class="text-decoration-none" (click)="openPhoneDialog()">Edytuj</a>
@@ -121,11 +121,11 @@
             <span>Konto utworzone</span>
           </div>
           <div class="user-info border col-12 mb-5 py-2 ms-4 w-75">
-            <span>{{userData.createdAt | date: "dd-MM-yyyy"}} o godzinie {{userData.createdAt | date:
+            <span>{{userData?.createdAt | date: "dd-MM-yyyy"}} o godzinie {{userData?.createdAt | date:
               "HH:mm:ss"}}</span>
           </div>
 
-          <div class="delete-section" *ngIf="userData.isAdmin == false">
+          <div class="delete-section" *ngIf="userData?.isAdmin == false">
             <div class="settings-1 mt-5 py-1 ms-4">
               <h5>Usuwanie konta</h5>
             </div>

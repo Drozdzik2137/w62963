@@ -22,7 +22,6 @@ export class ThankYouForTheOrderComponent implements OnInit {
       total: number
     };
     if(state !== undefined){
-      console.log(state);
       this.message = state.message;
       this.products = state.products;
       this.orderId = state.orderId;

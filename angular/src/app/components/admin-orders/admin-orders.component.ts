@@ -145,7 +145,7 @@ export class ShowOrderDetailsDialog {
 
   ngOnInit(): void {
     this.orderService.getSingleOrderTotal(this.data.id).subscribe(total => this.total = total);
-    this.orderService.getSingleOrder(this.data.id).then(prods => {
+    this.orderService.getSingleOrder(this.data.id).subscribe(prods => {
       console.log(this.data.id, this.data, prods);
       this.products = prods;
       this.orderId = this.data.id;

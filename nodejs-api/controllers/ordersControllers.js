@@ -130,51 +130,82 @@ exports.newOrder = async (req, res) => {
             RETURNING id`)
             const insertedId = newOrder.rows[0].id
             if(insertedId > 0){
-                products.forEach(async (p) =>{
-                    let data = await client.query(`SELECT
-                    product.quantity
-                    FROM product
-                    WHERE id=$1`, [p.id])
+                try{
+                    async function searchProducts(){
+                        let getError = false;
 
-                    let dataQuantity = data.rows[0].quantity
-                    let inCart = parseInt(p.inCart)
-                    // Deduct the number of pieces ordered from the quantity column in database
-                    if(dataQuantity > 0){
-                        dataQuantity = dataQuantity - inCart
-                        if(dataQuantity < 0){
-                            dataQuantity = 0
+                        for(const p of products){
+                            let data = await client.query(`SELECT
+                            product.quantity
+                            FROM product
+                            WHERE id=$1`, [p.id])
+        
+                            let dataQuantity = data.rows[0].quantity
+                            let inCart = parseInt(p.inCart)
+                            // Deduct the number of pieces ordered from the quantity column in database
+                            if(dataQuantity > 0){
+                                if(inCart > dataQuantity){
+                                    const delOrder = await client.query(`DELETE 
+                                    FROM 
+                                    public."order"
+                                    WHERE id=${insertedId};
+                                    `)
+                                    const delOrderDetails = await client.query(`DELETE 
+                                    FROM 
+                                    public.order_details
+                                    WHERE order_id=${insertedId};`)
+                                    getError = true
+                                    break
+                                }else{
+                                    dataQuantity = dataQuantity - inCart
+                                    // Insert order details the new generated order id
+                                    const newOrderDetails = await client.query(`INSERT INTO 
+                                    order_details(order_id, product_id, quantity)
+                                    VALUES ($1, $2, $3)
+                                    RETURNING id`,
+                                    [insertedId, p.id, inCart])
+                                    if(newOrderDetails.rows[0].id > 0){
+                                        const updateProductQuantity = await client.query(`UPDATE 
+                                        product
+                                        SET quantity=$1
+                                        WHERE id=$2
+                                        RETURNING id, quantity`, [dataQuantity, p.id])
+                                    }
+                                }
+                            }else{
+                                const delOrder = await client.query(`DELETE 
+                                FROM 
+                                public."order"
+                                WHERE id=${insertedId};
+                                `)
+                                const delOrderDetails = await client.query(`DELETE 
+                                FROM 
+                                public.order_details
+                                WHERE order_id=${insertedId};`)
+                                getError = true
+                                break
+                            }    
                         }
+                    client.release()
+                    if(getError == false){
+                        res.status(200).json({
+                            message: `Zamówienie zostało pomyślnie złożone.`,
+                            success: true,
+                            order_id: insertedId,
+                            products: products
+                        })
                     }else{
-                        dataQuantity = 0
+                        res.json({message: `Utworzenie nowego zamówienia z podanymi danymi nie powiodło się`, success: false})
                     }
-
-                    // Insert order details the new generated order id
-                    const newOrderDetails = await client.query(`INSERT INTO 
-                    order_details(order_id, product_id, quantity)
-                    VALUES ($1, $2, $3)
-                    RETURNING id`,
-                    [insertedId, p.id, inCart])
-                    if(newOrderDetails.rows[0].id > 0){
-                        const updateProductQuantity = await client.query(`UPDATE 
-                        product
-                        SET quantity=$1
-                        WHERE id=$2
-                        RETURNING id, quantity`, [dataQuantity, p.id])
                     }
-                })
-            }else{
-                res.json({message: `Utworzenie nowego zamówienia z podanymi danymi nie powiodło się`, success: false})
-
+                    searchProducts()
+                }catch(e){
+                    throw e
+                }
             }
-            client.release()
-            res.status(200).json({
-                message: `Zamówienie zostało pomyślnie złożone.`,
-                success: true,
-                order_id: insertedId,
-                products: products
-            })
+        }else{
+            res.status(404).json({message: `Brak informacji o użytkowniku i zamówieniu`, success: false})
         }
-
     }catch(e){
         res.status(404).json({message: 'Error 404'})
         console.error(e.message)
@@ -188,7 +219,7 @@ exports.payment = async (req, res) => {
         }, 1000)
 
     }catch(e){
-        res.status(404).json({message: 'Error 404'})
+        res.status(404).json({message: 'Error 404', success: false})
         console.error(e.message)
     }
 }

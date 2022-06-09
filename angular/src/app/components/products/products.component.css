@@ -179,7 +179,6 @@
   box-shadow: 0px 0px 0px 0px #E4E7ED, 0px 0px 0px 1px #E4E7ED;
 }
 .mat-spinner{
-  position: fixed;
   z-index: 999;
   height: 2em;
   width: 2em;

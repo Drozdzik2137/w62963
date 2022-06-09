@@ -28,7 +28,7 @@ export class SearchProductsComponent implements OnInit {
     if(state !== undefined){
       this.searchInput = state.searchInput;
     }else{
-      this.router.navigate(['/product']);
+      this.router.navigate(['/products']);
     }
   }
 

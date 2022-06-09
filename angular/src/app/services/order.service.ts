@@ -27,7 +27,7 @@ export class OrderService {
   }
 
   getSingleOrder(orderId: number){
-    return this.http.get<ICheckoutOrderResponseModel[]>(`${this.SERVER_URL}/order/${orderId}`).toPromise();
+    return this.http.get<ICheckoutOrderResponseModel[]>(`${this.SERVER_URL}/order/${orderId}`);
   }
 
   getSingleOrderTotal(orderId: number){

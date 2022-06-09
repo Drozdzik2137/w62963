@@ -53,7 +53,7 @@
                 </div>
               </td>
               <td>
-                <p>{{cartService.SubTotal(i)}} zł</p>
+                <p>{{cartService.SubTotal(i)  | number: '1.2-2' }} zł</p>
               </td>
               <td><i class="fas fa-trash-alt" id="trash" (click)="cartService.DeleteProductFromCart(i)"></i></td>
             </tr>
