@@ -56,6 +56,7 @@ import { AdminOrdersComponent, EditOrderStatusDialog, ShowOrderDetailsDialog } f
 import { AdminUsersComponent, DeleteUserAdminDialog } from './components/admin-users/admin-users.component';
 import { MatSortModule } from '@angular/material/sort';
 import { SearchProductsComponent } from './components/search-products/search-products.component';
+import { ProductsByCategoryComponent } from './components/products-by-category/products-by-category.component';
 
 
 
@@ -97,7 +98,8 @@ import { SearchProductsComponent } from './components/search-products/search-pro
     EditPhoneDialog,
     DeleteUserAdminDialog,
     ShowOrderDetailsDialog,
-    SearchProductsComponent
+    SearchProductsComponent,
+    ProductsByCategoryComponent
   ],
   imports: [
     BrowserModule,

@@ -19,7 +19,7 @@ router.route('/category/:id').patch(productsControllers.updateCategory)
 // @route DELETE to delete category
 router.route('/category/:id').delete(productsControllers.deleteCategory)
 // @route GET to get products from category
-router.route('/category/:category').get(productsControllers.category)
+router.route('/category/:id').get(productsControllers.category)
 // @route GET all products
 router.route('/allProducts/').get(productsControllers.allProducts)
 // @route to POST to add new product

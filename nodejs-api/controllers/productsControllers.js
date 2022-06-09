@@ -555,15 +555,15 @@ exports.category = async (req, res) => {
         let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
         const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
         const offset = (page - 1) * limit
-        let categoryName = req.params.category
+        const categoryId = req.params.id
 
-        if(categoryName !== undefined){
+        if(categoryId !== undefined){
             const client = await pool.connect()
             const countQuery = await client.query(`SELECT COUNT(*) as count 
             FROM product
             JOIN category
             ON product.category_id = category.id
-            WHERE category.name ILIKE $1`, ['%' + categoryName + '%'])
+            WHERE category.id=$1`, [categoryId])
             const numOfProducts = countQuery.rows[0].count
             const numOfPages = Math.ceil(numOfProducts / limit)
 
@@ -584,10 +584,10 @@ exports.category = async (req, res) => {
                 FROM PRODUCT
                 JOIN BRAND ON product.brand_id = brand.id
                 JOIN CATEGORY ON product.category_id = category.id
-                WHERE category.name ILIKE $1
+                WHERE category.id=$1
                 ORDER BY product.name ASC
                 LIMIT $2
-                OFFSET $3`, ['%' + categoryName + '%', limit, offset])
+                OFFSET $3`, [categoryId, limit, offset])
                 if(rows != null){
                     res.status(200).json({
                         limit: limit,

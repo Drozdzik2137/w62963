@@ -1,3 +1,4 @@
+import { ProductsByCategoryComponent } from './components/products-by-category/products-by-category.component';
 import { SearchProductsComponent } from './components/search-products/search-products.component';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
@@ -50,6 +51,12 @@ const routes: Routes = [
     path: 'register', component: RegisterComponent
   },
   {
+    path: 'search', component: SearchProductsComponent
+  },
+  {
+    path: 'category', component: ProductsByCategoryComponent
+  },
+  {
     path: 'profile', component: ProfileComponent, canActivate:[ProfileGuard]
   },
   {
@@ -81,9 +88,6 @@ const routes: Routes = [
   },
   {
     path: 'admin-users', component: AdminUsersComponent, canActivate: [RoleGuard]
-  },
-  {
-    path: 'search', component: SearchProductsComponent
   },
   { path: '**',
   redirectTo: ''}

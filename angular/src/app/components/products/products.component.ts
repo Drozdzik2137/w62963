@@ -53,7 +53,6 @@ interface ExampleFlatNode {
 
 
 export class ProductsComponent implements OnInit {
-
   productsLimit: number = 0;
   productsCount: number = 0;
   productsTotalCount: number = 0;
@@ -186,7 +185,6 @@ export class ProductsComponent implements OnInit {
       orderType = "DESC"
 
       const getProducts = () =>{
-        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
@@ -196,7 +194,6 @@ export class ProductsComponent implements OnInit {
       orderType = "ASC"
 
       const getProducts = () =>{
-        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
@@ -206,14 +203,12 @@ export class ProductsComponent implements OnInit {
       orderType = "DESC"
 
       const getProducts = () =>{
-        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }
       window.setTimeout(getProducts, 500);
     }else{
       const getProducts = () =>{
-        console.log(this.page, this.productsLimit, orderBy, orderType)
         this.initAllProducts(this.page, this.productsLimit, orderBy, orderType);
         this.loading = false;
       }

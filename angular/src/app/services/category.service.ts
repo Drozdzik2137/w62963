@@ -1,4 +1,4 @@
-import { catchError, map, throwError } from 'rxjs';
+import { catchError, map, throwError, Observable } from 'rxjs';
 import { IServerResponse } from 'src/app/models/product.model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -16,15 +16,17 @@ export class CategoryService {
     return this.http.get<ICategoryServerResponse>(this.SERVER_URL + '/categories')
   }
 
-  getProductsFromCategory(category: string){
+  getProductsFromCategory(page: number, category: number, limit: number, orderBy: string, orderType: string){
     let params = new HttpParams();
 
-    params = params.append('category', String(category));
+    params = params.append('page', String(page));
+    params = params.append('limit', String(limit));
+    params = params.append('orderBy', String(orderBy));
+    params = params.append('orderType', String(orderType));
 
-    return this.http.get<IServerResponse>(this.SERVER_URL + '/category/', {params}).pipe(
-      map((prods: IServerResponse) => prods),
-      catchError(err => throwError(err))
-    );
+    let id = category;
+
+    return this.http.get<IServerResponse>(this.SERVER_URL + '/category/' +  id, {params, observe: 'response'});
   }
 
   addCategory(categoryName: string){
