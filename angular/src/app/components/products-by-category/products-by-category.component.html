@@ -17,8 +17,8 @@
         </div>
         <div class="mt-0">
 
-          <div class="categories-list row py-2 px-2" *ngFor="let cat of categories" >
-            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" (click)="SelectedCategory(cat.id)">
+          <div class="categories-list row py-2 px-2" *ngFor="let cat of categories" (click)="SelectedCategory(cat.id)">
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
               <span> <b *ngIf="cat.id == categoryId">{{cat.name}}</b></span>
               <span *ngIf="cat.id != categoryId"> {{cat.name}}</span>
             </div>
