@@ -1,0 +1,116 @@
+<section class="sticky-top" style="z-index: 1000;">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex justify-content-between align-items-center order-lg-0" style="cursor: pointer;">
+        <img src="" alt="">
+        <span class="text-uppercase fw-lighter ms-2" [routerLink]="['/']">LOGO</span>
+      </a>
+
+      <div class="order-lg-3 nav-btns d-flex">
+        <div class="shop-cart-dropdown dropdown">
+          <button class="btn" type="button" id="dropdownMenuButton1" data-bs-auto-close="outside"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-shopping-bag"></i>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge bg-danger rounded-pill">{{cartData.data[0].numInCart
+              !== 0 ? cartData.data.length : 0}}</span>
+          </button>
+          <ul class="dropdown-menu cart-dropdown" aria-labelledby="navbarDropdownMenuLink"
+            style="margin: 0 !important; padding: 0 !important;">
+            <div class="cart-list" id="style-scroll" *ngIf="cartData.data[0].numInCart !==0 else emptyCart">
+              <div class="product-widget justify-content-between p-3" *ngFor="let c of cartData.data; let i=index">
+                <div class="product-img">
+                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}">
+                  <div class="middle">
+                    <button class="quick-view" (click)="SelectProduct(c.product.id)"><i class="fa fa-eye"></i></button>
+                  </div>
+                </div>
+                <div class="product-body">
+                  <p class="product-name" (click)="SelectProduct(c.product.id)"><a id="pname">{{c.product?.brand}}
+                      {{c.product?.name}}</a></p>
+                  <h4 class="product-price"><span class="qty">{{c.numInCart}} x</span> {{c.product?.price}} zł</h4>
+                </div>
+                <div class="product-delete">
+                  <a class="delete" (click)="cartService.DeleteProductFromCart(i)">
+                    <i class="fas fa-times"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="cart-summary">
+                <small>Ilość przedmiotów w koszyku: <strong>{{cartData.data[0].numInCart !== 0 ? cartData.data.length :
+                    0}}</strong></small>
+                <h6>Do zapłaty: <strong>{{cartTotal}} zł</strong></h6>
+              </div>
+            </div>
+            <div class="cart-btns d-flex" *ngIf="cartData.data[0].numInCart !==0">
+              <a routerLink="/cart">Zobacz koszyk</a>
+              <a routerLink="/checkout">Zapłać <i class="bi bi-arrow-right-circle"></i></a>
+            </div>
+
+            <ng-template #emptyCart>
+              <div class="empty-cart p-3">
+                <h4 style="font-weight: 600;">Koszyk jest pusty</h4>
+                <button class="cart-empty-btn btn-lg " routerLink="/"><i class="fas fa-store"></i> Przejdz do
+                  sklepu</button>
+              </div>
+            </ng-template>
+          </ul>
+        </div>
+        <div class="dropdown pe-all ps-2">
+          <button type="button" class="btn position-relative dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user"></i>
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li *ngIf="userService._isAdmin$| async"><a role="button" class="dropdown-item"
+              [routerLink]="['/admin']">Panel administratora</a></li>
+            <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item"
+                [routerLink]="['/profile']">Moje konto</a></li>
+                <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item"
+                  [routerLink]="['/orders']">Moje zamówienia</a></li>
+            <li *ngIf="userService.isLoggedIn$ | async">
+              <hr class="dropdown-divider">
+            </li>
+            <li *ngIf="isLoggedIn == false"><a role="button" class="dropdown-item" [routerLink]="['/login']">Zaloguj</a>
+            </li>
+            <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item" [routerLink]="['/login']"
+                (click)="logout()">Wyloguj</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="order-lg-2 nav-btns pe-4">
+        <form class="d-flex" [formGroup]="searchForm" (ngSubmit)="onSubmit()" #form="ngForm" ngNativeValidate>
+          <input class="inputSearch form-control me-2" placeholder="czego szukasz?" aria-label="Search" formControlName="searchValue"
+            required>
+          <button type="submit" class="btn position-relative">
+            <i class="fa fa-search"></i>
+          </button>
+        </form>
+      </div>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse order-lg-1" id="navMenu">
+        <ul class="navbar-nav mx-auto text-center">
+          <li class="nav-item px-2 py-2">
+            <a class="nav-link text-uppercase text-dark" [routerLink]="['/']">oferta</a>
+          </li>
+          <li class="nav-item px-2 py-2">
+            <a class="nav-link text-uppercase text-dark" [routerLink]="['/products']">produkty</a>
+          </li>
+          <li class="nav-item px-2 py-2">
+            <a class="nav-link text-uppercase text-dark" [routerLink]="['/categories']">kategorie</a>
+          </li>
+          <li class="nav-item px-2 py-2">
+            <a class="nav-link text-uppercase text-dark" [routerLink]="['/blog']">blog</a>
+          </li>
+          <li class="nav-item px-2 py-2">
+            <a class="nav-link text-uppercase text-dark" [routerLink]="['/contact']">kontakt</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</section>

@@ -1,0 +1,272 @@
+<section class="m-5">
+  <div class="container">
+    <div class="row">
+      <div class="control-panel col-12 col-md-3 border-end">
+
+        <div class="row">
+          <div class="hello-user">
+            <div class="mb-4">
+              <span style="font-size: 14px;">Cześć,</span><br>
+              <span style="font-size: 16px; font-weight: 600;">{{userData?.fname}}</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/admin']" *ngIf="userData?.isAdmin == true">
+            <div class="col-12 col-md-2">
+              <mat-icon>admin_panel_settings</mat-icon>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span>Panel administratora</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/orders']">
+            <div class="col-12 col-md-2">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span>Zamówienia</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/returns']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span>Reklamacje i zwroty</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/profile']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span><strong>Ustawienia konta</strong></span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="settings-section col-12 col-md-9">
+        <div class="settings-title mb-3 py-1 ms-4">
+          <h4>Ustawienia konta</h4>
+        </div>
+
+        <div class="settings-1 mb-3 py-1 ms-4">
+          <h5>Dane konta</h5>
+        </div>
+
+        <div class="col-12 button-delete" *ngIf="userData?.isAdmin == true">
+          <div class="col-12 my-2 ms-4">
+            <span>Panel administratora</span>
+          </div>
+          <div class="col-12 ms-4 mb-4">
+            <button type="submit" class="admin-btn" style="width:100%; max-width: 200px;" [routerLink]="['/admin']">Przejdź</button>
+          </div>
+        </div>
+
+        <div class="settings-2 mb-2 py-1 ms-4">
+          <span>Twoje dane</span>
+        </div>
+
+        <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
+          <div class="row">
+            <div class="col-6">
+              <span><strong>{{userData?.fname}} {{userData?.lname}}</strong></span>
+            </div>
+            <div class="user-data-edit col-6 d-flex justify-content-end">
+              <a class="text-decoration-none" (click)="openDataDialog()">Edytuj</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-2 mb-2 py-1 ms-4">
+          <span>Adres e-mail</span>
+        </div>
+
+        <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
+          <span><strong>{{userData?.email}}</strong></span>
+        </div>
+
+        <div class="settings-2 mb-2 py-1 ms-4">
+          <span>Numer telefonu</span>
+        </div>
+
+        <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
+          <div class="row">
+            <div class="col-6">
+              <span><strong>{{userData?.phoneNumber}}</strong></span>
+            </div>
+            <div class="user-data-edit col-6 d-flex justify-content-end">
+              <a class="text-decoration-none" (click)="openPhoneDialog()">Edytuj</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-2 mb-2 py-1 ms-4">
+          <span>Hasło</span>
+
+        </div>
+        <div class="user-info border col-12 mb-4 py-2 ms-4 w-75">
+          <div class="row">
+            <div class="col-6">
+              <span><strong>••••••••</strong></span>
+            </div>
+            <div class="user-data-edit col-6 d-flex justify-content-end">
+              <a class="text-decoration-none" (click)="openPasswordDialog()">Edytuj</a>
+            </div>
+          </div>
+          </div>
+
+          <div class="settings-2 mb-2 py-1 ms-4">
+            <span>Konto utworzone</span>
+          </div>
+          <div class="user-info border col-12 mb-5 py-2 ms-4 w-75">
+            <span>{{userData?.createdAt | date: "dd-MM-yyyy"}} o godzinie {{userData?.createdAt | date:
+              "HH:mm:ss"}}</span>
+          </div>
+
+          <div class="delete-section" *ngIf="userData?.isAdmin == false">
+            <div class="settings-1 mt-5 py-1 ms-4">
+              <h5>Usuwanie konta</h5>
+            </div>
+            <div class="settings-2 mb-2 py-1 ms-4">
+              <span>Jeśli chcesz usunąć konto w naszym sklepie, kliknij w ten przycisk. Upewnij się, że na pewno chcesz to zrobić, usuniętego konta nie jesteśmy w stanie przywrócić.</span>
+            </div>
+            <div class="button-delete d-flex align-items-center ms-4 mt-3 mb-5">
+              <button type="submit" class="delete-btn" style="width:100%; max-width: 200px;" (click)="openDeleteDialog()"><i class="fa-solid fa-ban"></i>Usuń konto</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <section class="py-5">
+  <div class="container mb-5 d-flex justify-content-center"> -->
+<!-- <div class="row">
+      <div class="col-12 col-md-2">
+        asfsa
+      </div>
+      <div class="col-12 col-md-10">
+        {{userData.userId}}
+        {{userData.createdAt | date: 'yyyy/MM/dd HH:mm:ss'}}
+      </div>
+    </div> -->
+<!-- <div class="border" style="width: 85%;">
+      <form novalidate class="m-3 p-3">
+        <div class="row">
+          <div class="col-md-4">
+            <h4>
+              <p>Cześć, <strong>{{userData.fname}}</strong></p>
+            </h4> -->
+<!-- <div class="profile-options mt-4 me-5">
+              <h5>Moje konto</h5>
+            </div> -->
+<!-- <div class="profile-img ms-5">
+              <img [src]="userData?.photoUrl" alt="{{userData?.fname}}" class="" />
+            </div> -->
+<!-- </div> -->
+
+<!-- <div class="col-md-6">
+                  <label><strong>Email</strong></label>
+                  <p>{{userData.email}}</p>
+                </div>
+                <div class="col-md-6">
+                  <label><strong>Data założenia konta</strong></label>
+                  <p>{{userData.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+                </div>
+                <div class="col-md-6">
+                  <label><strong>Imię</strong></label>
+                  <p>{{userData.fname || "Nieustawiono"}}</p>
+                </div>
+                <div class="col-md-6">
+                  <label><strong>Nazwisko</strong></label>
+                  <p>{{userData.fname || "Nieustawiono"}}</p>
+                </div> -->
+
+
+<!-- <ng-container>
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                      <a aria-controls="home" aria-selected="true" class="nav-link active" data-toggle="tab" href="#home"
+                        id="home-tab" role="tab">O mnie</a>
+                    </li>
+                  </ul>
+                </div>
+                <div class="profile-info p-4">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label><strong>Email</strong></label>
+                      <p>{{userData.email}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label><strong>Data założenia konta</strong></label>
+                      <p>{{userData.createdAt | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label><strong>Imię</strong></label>
+                      <p>{{userData.fname || "Nieustawiono"}}</p>
+                    </div>
+                    <div class="col-md-6">
+                      <label><strong>Nazwisko</strong></label>
+                      <p>{{userData.fname || "Nieustawiono"}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container> -->
+<!--
+        </div>
+      </form>
+    </div>
+  </div>
+</section> -->

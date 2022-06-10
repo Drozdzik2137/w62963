@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Kaisei+Tokumin:wght@400;500;700&family=Poppins:wght@300;400;500&display=swap');
+
+:root {
+  --lg-font: 'Kaisei Tokumin', serif;
+  --sm-font: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: var(--sm-font);
+}
+
+/* Scrollbar */
+#style-1::-webkit-scrollbar-track
+{
+  box-shadow: inset 0 0 4px rgba(0,0,0,1);
+	-webkit-box-shadow: inset 0 0 4px rgba(0,0,0,1);
+	background-color: #cecece;
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+	border-radius: 4px;
+	background-color: #464646;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-tab-label-container {
+  border-bottom: 1px solid silver;
+}
+.mat-tab-label{
+  padding: 5px;
+  background-color: transparent;
+  color: gray;
+  font-weight: 500;
+  font-size: 14px;
+  border-bottom: 1px solid silver;
+}
+.mat-tab-label.mat-tab-label-active {
+  padding: 5px;
+  background-color: transparent;
+  color: #D10024;
+  font-weight: 700;
+  border-bottom: 3px solid #D10024;
+  font-size: 18px;
+}
+.mat-ink-bar {
+  background-color: none !important;
+  visibility: hidden !important;
+  left: 0px !important;
+  width: 0px !important;
+}
+.ngx-pagination .current{
+  font-weight: 700;
+  background: #D10024 !important;
+}

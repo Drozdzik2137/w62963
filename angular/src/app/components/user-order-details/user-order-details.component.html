@@ -1,0 +1,136 @@
+<section class="section m-5">
+  <div class="container">
+    <div class="row">
+      <div class="control-panel col-12 col-md-3 border-end">
+
+        <div class="row">
+          <div class="hello-user">
+            <div class="mb-4">
+              <span style="font-size: 14px;">Cześć,</span><br>
+              <span style="font-size: 16px; font-weight: 600;">{{userData?.fname}}</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/orders']">
+            <div class="col-12 col-md-2">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+              <span><strong>Zamówienia</strong></span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/returns']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Reklamacje i zwroty</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/profile']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Ustawienia konta</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div class="order-section col-12 col-md-9">
+
+        <div class="order-title mb-4 py-1 ms-4">
+          <h4>Szczegóły zamówienia</h4>
+          <span style="font-size: 20px;">Numer zamówienia <span
+              style="font-size: 22; font-weight: 500;">{{orderId}}</span></span>
+        </div>
+
+
+        <div class="order-history py-1 ms-4">
+          <div class="order-card mb-5" *ngFor="let prod of products">
+            <div class="row">
+              <div class="order-info border col-12 col-md-3">
+                <div class="row">
+                  <div class="order-status">
+                    <span style="font-size: 16px;"><strong>{{orderStatus}}</strong></span>
+                  </div>
+                  <div class="order-details py-2">
+                    <div class="row">
+                      <span style="font-size: 16px">{{prod.created_at | date: "dd-MM-yyyy HH:mm"}}</span>
+                      <span style="font-size: 14px" class="text-muted">Nr kat. {{prod.id}}</span>
+                    </div>
+                  </div>
+                  <div class="order-price">
+                    <span style="font-size: 15px; font-weight: 500;">{{prod.price | number: '1.2-2'}} zł</span>
+                  </div>
+                </div>
+              </div>
+              <div class="order-product border d-flex justify-content-start align-items-center col-12 col-md-9">
+                <div class="row">
+
+                  <div class="order-img col-4">
+                    <img src="{{prod.img}}" alt="" class="img-responsive center-block w-75">
+                  </div>
+
+                  <div class="order-name d-flex justify-content-start align-items-center col-8">
+                    <div class="row">
+                      <span style="font-weight: 500; font-size: 18px;">{{prod.brand}}</span>
+                      <span style="font-weight: 500; font-size: 16px;">{{prod.name}}</span>
+                      <span class="text-muted" style="font-size: 15px;">{{prod.quantity}} szt.</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 d-flex justify-content-end">
+            <div class="order-summary" style="width: 220px;">
+              <div class="row">
+                <div class="order-calculation border-bottom">
+                  <div class="row">
+                    <div class="col-7">
+                      <span style="font-size: 14px;">Wartość koszyka: </span>
+                    </div>
+                    <div class="col-5 d-flex justify-content-end">
+                      <span style="font-size: 14px;">{{total | number: '1.2-2'}} zł</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-7">
+                      <span style="font-size: 14px;">Koszt dostawy:</span>
+                    </div>
+                    <div class="col-5 d-flex justify-content-end">
+                      <span style="font-size: 14px;">0 zł</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="order-total">
+                  <div class="row">
+                    <div class="col-7">
+                      <span style="font-weight: 500; font-size: 14px;">Razem:</span>
+                    </div>
+                    <div class="col-5 d-flex justify-content-end">
+                      <span style="font-weight: 500;font-size: 14px;">{{total | number: '1.2-2'}} zł</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="return-btn">
+            <button type="button" class="btn" [routerLink]="['/orders']"><span style="font-size: 14px;">
+                < Pokaż wszystkie zamówienia</span></button>
+          </div>
+
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+<section id="breadcrumb">
+  <div class="row">
+    <div class="col-md-12 ps-5">
+      <ul class="breadcrumb-tree">
+        <li><a href="" [routerLink]="['/home']">Home</a></li>
+        <li class="active">Produkty</li>
+      </ul>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-2">
+      <section id="collection" class="pb-5">
+        <div class="title">
+          <h2 class="position-relative d-inline-block mt-4">Kategorie</h2>
+        </div>
+        <div class="mt-0">
+
+          <div class="categories-list row py-2 px-2" *ngFor="let cat of categories" >
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" (click)="SelectedCategory(cat.id)">
+              <span> <b *ngIf="cat.id == categoryId">{{cat.name}}</b></span>
+              <span *ngIf="cat.id != categoryId"> {{cat.name}}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="col-12 col-md-10">
+      <section id="collection" class="pb-5" *ngIf="noProductMessage == undefined">
+        <div class="product-list mt-4 row gx-0 gy-3">
+            <div class="row">
+              <div class="col-auto">
+                <mat-form-field appearance="fill">
+                  <mat-label>Sortuj</mat-label>
+                  <mat-select disableOptionCentering [(value)]="orderProductsBySelectedValue" (selectionChange)="getPage($any($event))">
+                    <mat-option [value]="1">Po nazwie rosnąco</mat-option>
+                    <mat-option [value]="2">Po nazwie malejąco</mat-option>
+                    <mat-option [value]="3">Po cenie rosnąco</mat-option>
+                    <mat-option [value]="4">Po cenie malejąco</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-auto">
+                <mat-form-field appearance="fill">
+                  <mat-label>Produkty na stronę</mat-label>
+                  <mat-select disableOptionCentering [(value)]="productsLimit" (selectionChange)="getPage($any($event))">
+                    <mat-option [value]="12">12</mat-option>
+                    <mat-option [value]="24">24</mat-option>
+                    <mat-option [value]="48">48</mat-option>
+                    <mat-option [value]="96">96</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-auto d-flex justify-content-center align-items-center text-center">
+                <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" (pageChange)="getPage($event)"
+                  id="server"></pagination-controls>
+              </div>
+            </div>
+          <ng-container *ngIf="loading === true">
+            <div class="container">
+              <div class="my-5">
+                <mat-spinner mode="indeterminate" color="warn" class="my-5"></mat-spinner>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="loading === false">
+            <div class="col-12 col-md-6 col-lg-4 col-xxl-3 p-2"
+              *ngFor="let prod of products| paginate: {id: 'server', itemsPerPage: productsLimit, currentPage: page, totalItems: productsTotalCount}">
+              <div class="product h-100">
+                <div class="product-img border position-relative">
+                  <img alt="{{prod.name}}" src="{{prod.img}}" class="image w-100">
+                  <div class="middle">
+                    <div class="product-btns">
+                      <button class="add-to-cart-btn" [disabled]="prod.quantity < 1"
+                        [class.disabled]="prod.quantity < 1" (click)="AddToCart(prod.id)" [disabled]="prod.quantity < 1"><i
+                          class="fa fa-shopping-cart"></i></button>
+                      <button class="quick-view" (click)="SelectProduct(prod.id)"><i class="fa fa-eye"></i></button>
+                    </div>
+                  </div>
+                </div>
+                <!-- <ng-container>
+                  <div class="product-label">
+                    <span class="sale">-50%</span>
+                  </div>
+                </ng-container> -->
+                <div class="product-body text-center">
+                  <p class="product-category">{{prod.category}}</p>
+                  <h3 class="product-name"><a (click)="SelectProduct(prod.id)">{{prod.brand}} {{prod.name}}</a></h3>
+                  <h4 class="product-price">{{prod.price}} zł
+                    <!-- <del class="product-old-price">{{2*prod.price}} zł</del> -->
+                  </h4>
+                  <div class="product-rating">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+
+
+          <div class="text-center mt-5">
+            <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" (pageChange)="getPage($event)"
+              id="server"></pagination-controls>
+          </div>
+        </div>
+      </section>
+      <div class="container mt-5 p-2"  *ngIf="noProductMessage != undefined">
+        <span>{{noProductMessage}}</span>
+      </div>
+    </div>
+  </div>
+</div>

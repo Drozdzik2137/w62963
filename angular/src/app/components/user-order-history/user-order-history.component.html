@@ -1,0 +1,189 @@
+<section class="section m-5">
+  <div class="container">
+    <div class="row">
+      <div class="control-panel col-12 col-md-3 border-end">
+
+        <div class="row">
+          <div class="hello-user">
+            <div class="mb-4">
+              <span style="font-size: 14px;">Cześć,</span><br>
+              <span style="font-size: 16px; font-weight: 600;">{{userData?.fname}}</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/orders']">
+            <div class="col-12 col-md-2">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span><strong>Zamówienia</strong></span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/returns']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Reklamacje i zwroty</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/profile']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Ustawienia konta</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="order-section col-12 col-md-9">
+
+
+        <div class="order-title mb-4 py-1 ms-4">
+          <h4>Zamówienia</h4>
+        </div>
+
+        <div class="order-controls d-flex ms-3">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Sortuj</mat-label>
+                <mat-select disableOptionCentering [(value)]="orderOrdersBySelectedValue" (selectionChange)="getPage($any($event))">
+                  <mat-option [value]="1">Od najnowszych</mat-option>
+                  <mat-option [value]="2">Od najstarszych</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-12 col-md-6">
+              <mat-form-field appearance="fill">
+                <mat-label>Zamówienia na stronę</mat-label>
+                <mat-select disableOptionCentering [(value)]="ordersLimit" (selectionChange)="getPage($any($event))">
+                  <mat-option [value]="5">5</mat-option>
+                  <mat-option [value]="10">10</mat-option>
+                  <mat-option [value]="20">20</mat-option>
+                  <mat-option [value]="50">50</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-history py-1 ms-4">
+
+          <ng-container *ngIf="loading === true">
+            <div class="container">
+              <div class="d-flex justify-content-center align-items-center my-5">
+                <mat-spinner mode="indeterminate" color="warn" class="my-5"></mat-spinner>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="loading === false">
+            <!-- <div class="order-card mb-5" *ngFor="let order of orders | paginate: {id: 'server', itemsPerPage: ordersLimit, currentPage: page, totalItems: ordersTotalCount}">
+              <div class="row">
+                <div class="order-info border col-12 col-md-3">
+                  <div class="row">
+                    <div class="order-status">
+                      <span style="font-size: 16px;"><strong>Tu sie zrobi status
+                      </strong></span>
+                    </div>
+                    <div class="order-details py-2">
+                      <div class="row">
+                        <span style="font-size: 16px">{{order.created_at | date: "dd-MM-yyyy HH:mm"}}</span>
+                        <span style="font-size: 16px" class="text-muted">Nr {{order.id}}</span>
+                      </div>
+                    </div>
+                    <div class="order-price">
+                      <span style="font-size: 15px; font-weight: 500;">{{order.total}} zł</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="order-product border d-flex justify-content-start align-items-center col-12 col-md-9">
+                  <div class="row">
+
+                    <div class="order-img col-4">
+                      <img src="{{order.img}}" alt="" class="img-responsive center-block w-75">
+                    </div>
+
+                    <div class="order-name d-flex justify-content-start align-items-center col-8">
+                      <span style="font-weight: 500;"></span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+              <div class="order-list d-flex justify-content-start">
+                <div class="row">
+                  <div class="order-card">
+                    <mat-card class="mb-4" style="width: 280px;" *ngFor="let order of orders | paginate: {id: 'server', itemsPerPage: ordersLimit, currentPage: page, totalItems: ordersTotalCount}">
+                      <mat-card-content>
+                        <div class="row mb-3">
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 500; font-size: 15px;">Zamówienie nr</span>
+                          </div>
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 500; font-size: 15px;">{{order.id}}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 400; font-size: 14px;">Status:</span>
+                          </div>
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 500; font-size: 14px;">{{order.status}}</span>
+                          </div>
+                        </div>
+                        <div class="row mb-3">
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 400; font-size: 14px;">Data zamówienia:</span>
+                          </div>
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 500; font-size: 14px;">{{order.created_at | date: "dd-MM-yyy HH:mm"}}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 400; font-size: 14px;">Kwota zamówienia:</span>
+                          </div>
+                          <div class="col-6 d-flex justify-content-start align-items-center">
+                            <span style="font-weight: 500; font-size: 14px;">{{order.total | number: '1.2-2'}} zł</span>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                      <mat-card-footer>
+                        <div class="d-flex justify-content-center align-items-center my-3">
+                          <button type="button" class="btn-more w-75" (click)="SelectOrder(order.id, order.status)">Zobacz szczegóły</button>
+                        </div>
+
+                      </mat-card-footer>
+                    </mat-card>
+                  </div>
+                </div>
+              </div>
+
+
+          </ng-container>
+
+          <div class="text-center mt-5">
+            <pagination-controls previousLabel="Poprzednia" nextLabel="Następna" (pageChange)="getPage($event)"
+              id="server"></pagination-controls>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+

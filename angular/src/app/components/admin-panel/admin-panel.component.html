@@ -1,0 +1,32 @@
+<mat-toolbar class="admin-nav">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()"  >menu</mat-icon>
+    </button>
+    <h1>Zarządzanie treścią</h1>
+    <span class="menu-spacer"></span>
+  </mat-toolbar-row>
+
+</mat-toolbar>
+
+
+ <mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode="side" opened class="example-sidenav">
+    <div *ngIf="userData !== undefined" class="py-2 px-3 border-bottom">
+      <span>Cześć,</span><br>
+      <span mat-list-item style="font-size: 16px; font-weight: 500;">{{userData.fname}}</span>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/admin'"><strong class="fst-italic">Dashboard</strong></a>
+      <a mat-list-item [routerLink]="'/admin-products'"> Produkty </a>
+      <a mat-list-item [routerLink]="'/admin-categories'"> Kategorie </a>
+      <a mat-list-item [routerLink]="'/admin-orders'"> Historia zamówień </a>
+      <a mat-list-item [routerLink]="'/admin-users'"> Konta użytkowników </a>
+      <a mat-list-item (click)="sidenav.toggle()" mat-list-item class="d-flex justify-content-start align-items-center"><mat-icon >close</mat-icon>Zamknij</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content style="height: 90vh;">
+    <span>Strona w rozbudowie</span>
+  </mat-sidenav-content>
+</mat-sidenav-container>

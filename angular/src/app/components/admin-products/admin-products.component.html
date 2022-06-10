@@ -1,0 +1,110 @@
+<mat-toolbar class="admin-nav">
+  <mat-toolbar-row>
+    <button mat-icon-button>
+      <mat-icon (click)="sidenav.toggle()"  >menu</mat-icon>
+    </button>
+    <h1>Zarządzanie treścią</h1>
+    <span class="menu-spacer"></span>
+    <div class="d-flex justify-content-end align-items-center">
+      <button type="submit" class="add-btn" style="width:100%; max-width: 200px;" (click)="openDialog()"><i class="fa-solid fa-plus"></i> Dodaj produkt</button>
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+
+ <mat-sidenav-container class="example-container">
+  <mat-sidenav #sidenav mode="side" opened class="example-sidenav">
+    <div *ngIf="userData !== undefined" class="py-2 px-3 border-bottom">
+      <span>Cześć,</span><br>
+      <span mat-list-item style="font-size: 16px; font-weight: 500;">{{userData.fname}}</span>
+    </div>
+    <mat-nav-list>
+      <a mat-list-item [routerLink]="'/admin'"> Dashboard </a>
+      <a mat-list-item [routerLink]="'/admin-products'"><strong class="fst-italic">Produkty</strong></a>
+      <a mat-list-item [routerLink]="'/admin-categories'"> Kategorie </a>
+      <a mat-list-item [routerLink]="'/admin-orders'"> Historia zamówień </a>
+      <a mat-list-item [routerLink]="'/admin-users'"> Konta użytkowników </a>
+      <a mat-list-item (click)="sidenav.toggle()" mat-list-item class="d-flex justify-content-start align-items-center"><mat-icon >close</mat-icon>Zamknij</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content style="height: 90vh;">
+    <div class="container">
+
+      <div class="col-12 my-3">
+        <mat-form-field appearance="standard">
+          <mat-label>Filtruj</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Np. Fischer" #input>
+        </mat-form-field>
+
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort>
+
+            <ng-container matColumnDef="id" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%"> ID </th>
+              <td mat-cell *matCellDef="let row" style="width: 8%">{{row.id}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="img">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 12%"> Zdjęcie </th>
+              <td mat-cell *matCellDef="let row" style="width: 12%"> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="brand">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%"> Marka </th>
+              <td mat-cell *matCellDef="let row" style="width: 8%"> {{row.brand}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="name" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%"> Nazwa </th>
+              <td mat-cell *matCellDef="let row" style="width: 20%">{{row.brand}} {{row.name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="size" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%"> Rozmiar </th>
+              <td mat-cell *matCellDef="let row" style="width: 8%"> {{row.size}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="category" >
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 14%"> Kategoria </th>
+              <td mat-cell *matCellDef="let row" style="width: 14%"> {{row.category}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 8%"> Ilość </th>
+              <td mat-cell *matCellDef="let row" style="width: 8%"> {{row.quantity}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%"> Cena </th>
+              <td mat-cell *matCellDef="let row" style="width: 10%"> {{row.price}} zł</td>
+            </ng-container>
+
+            <ng-container matColumnDef="manage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 12%"> Zarządaj </th>
+              <td mat-cell *matCellDef="let row" style="width: 12%">
+                <button mat-icon-button (click)="editProduct(row)" class="edit-btn">
+                  <mat-icon >edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteProduct(row)" class="delete-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">Nie znaleziono produktu o nazwie "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]" pageSize="10" [length]="productsCount" aria-label="Select page of users"></mat-paginator>
+        </div>
+      </div>
+
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

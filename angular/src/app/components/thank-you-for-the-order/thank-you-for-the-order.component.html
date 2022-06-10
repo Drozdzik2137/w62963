@@ -1,0 +1,45 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="jumbotron text-center mt-4">
+        <h3>{{message}}</h3>
+        <p>Dziekujemy za zakupy w naszym sklepie!</p>
+        <hr class="mt-4">
+        <p>
+
+        <p style="font-size: 24px;">Nr zamówienia: <strong>{{orderId}}</strong></p>
+        <button type="submit" class="w-50 m-3" routerLink='/orders'>Zobacz historie zamówień</button>
+        <button type="submit" mat-raised-button color='warn' class="w-50 m-3" routerLink='/'>Powrót na strone główną</button>
+      </div>
+
+      <table class="table table-striped mt-4 mb-5">
+        <thead>
+        <tr>
+          <th>Zdjęcie</th>
+          <th>Nazwa</th>
+          <th>Cena</th>
+          <th>Ilość</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let p of products">
+          <td>
+            <img [src]="p.img" alt="" class="img-thumbnail" width="100px">
+          </td>
+          <td>{{p.brand}} {{p.name}}</td>
+          <td>{{p.price}} zł</td>
+          <td>{{p.quantity}}</td>
+        </tr>
+
+        <tr class="border-0">
+          <td style="border: none;"></td>
+          <td></td>
+          <td style="font-weight: 500;">RAZEM</td>
+          <td style="font-weight: 500;">{{cartTotal | number: '1.2-2'}} zł</td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

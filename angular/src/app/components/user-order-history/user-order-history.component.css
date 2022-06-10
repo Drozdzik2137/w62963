@@ -1,0 +1,146 @@
+.container{
+  max-width: 75%;
+}
+.profile-img{
+  position: relative;
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.profile-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.control-panel{
+  padding: 0px !important;
+}
+.profile-controls:hover{
+  cursor: pointer;
+  background-color: rgb(223, 223, 223);
+  transition: .5s;
+}
+.profile-controls i{
+  font-size: 24px;
+}
+.order-card{
+  cursor: pointer;
+}
+.order-info{
+  padding: 16px;
+  background-color: rgb(245, 245, 245);
+  border-radius: 8px 0px 0px 8px;
+}
+.order-product{
+  padding: 16px;
+  border-radius: 0px 8px 8px 0px;
+}
+.order-button{
+  display: flex;
+  justify-content: center;
+  padding-right: 8px;
+  font-size: 30px;
+}
+.order-button a{
+  color: gray;
+}
+.btn-more{
+  position: relative;
+  border: 2px solid transparent;
+  height: 40px;
+  padding: 0 20px;
+  background-color: #D10024;
+  color: #FFF;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 4px;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+.btn-more:hover{
+  background-color: #FFF;
+  color: #333638;
+  border-color: #333638;
+}
+
+.cart-ctn-btn {
+  position: relative;
+  border: 2px solid transparent;
+  height: 48px;
+  padding: 0 30px;
+  background-color: #333638;
+  color: #FFF;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 4px;
+  -webkit-transition: 0.3s all;
+  transition: 0.3s all;
+}
+.cart-ctn-btn>i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 48px;
+  height: 48px;
+  line-height: 42px;
+  color: #333638;
+  opacity: 0;
+  visibility: hidden;
+}
+.cart-ctn-btn:hover {
+  background-color: #FFF;
+  color: #333638;
+  border-color: #333638;
+  padding: 0px 30px 0px 50px;
+}
+.cart-ctn-btn:hover>i {
+  opacity: 1;
+  visibility: visible;
+}
+.ngx-pagination .current{
+  font-weight: 700;
+  background: #D10024 !important;
+}
+
+@media screen and (max-width: 998px) {
+  .container{
+    max-width: 100%;
+  }
+  .order-controls{
+    justify-items: center !important;
+  }
+  .order-list{
+    justify-content: center;
+  }
+  .card{
+    width: 50%;
+  }
+  .order-title{
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+  .order-history{
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+  .order-info{
+    border-radius: 8px 8px 0px 0px;
+
+  }.order-product{
+    border-radius: 0px 0px 8px 8px;
+  }
+
+}
+@media screen and (max-width: 768px) {
+  .control-panel{
+    width: 100% !important;
+    padding: 5% !important;
+  }
+  .order-section{
+    padding: 5% !important;
+    width: 100% !important;
+  }
+}
+
+

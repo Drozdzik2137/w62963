@@ -1,0 +1,25 @@
+<h4 mat-dialog-title>Usuwanie użytkownika</h4>
+<div mat-dialog-content>
+  <p>Czy na pewno chcesz usunąć użytkownika o ID: <strong>{{data.id}}</strong> i mailu: <strong>{{data.email}}</strong>?</p>
+  <p>Aby go usunąć wpisz tutaj <strong>na pewno</strong>.</p>
+  <form [formGroup]="dataForm" #formDirective="ngForm">
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Potwierdzenie</mat-label>
+      <input type="text" matInput formControlName="confirm" fillColor="accent">
+      <mat-error *ngIf="this.dataForm.controls.confirm.hasError('required')">
+        <strong>Musisz</strong> potwierdzić usunięcie produktu
+      </mat-error>
+      <mat-error *ngIf="this.dataForm.controls.confirm.hasError('pattern')">
+        Wpisz poprawnie frazę <strong>na pewno</strong>
+      </mat-error>
+    </mat-form-field>
+
+
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="warn"  (click)="onNoClick()">Wróć</button>
+  <button mat-stroked-button cdkFocusInitial [disabled]="dataForm.invalid" (click)="onSaveClick()">Usuń</button>
+</div>

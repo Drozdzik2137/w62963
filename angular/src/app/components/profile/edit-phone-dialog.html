@@ -1,0 +1,23 @@
+<h4 mat-dialog-title>Edycja numeru telefonu</h4>
+<div mat-dialog-content>
+  <p>Podaj swój numer telefonu</p>
+  <form [formGroup]="newPhoneNumberForm" #formDirective="ngForm">
+
+    <mat-form-field appearance="fill" style="width:100%">
+      <mat-label>Obecne hasło</mat-label>
+      <input type="text" matInput formControlName="phoneNumber" fillColor="accent" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" maxlength="9">
+      <mat-error *ngIf="this.newPhoneNumberForm.controls.phoneNumber.hasError('required')">
+        Numer telefonu jest <strong>wymagany</strong>
+      </mat-error>
+      <mat-error *ngIf="this.newPhoneNumberForm.controls.phoneNumber.hasError('pattern')">
+        Musisz podać <strong>poprawny</strong> numer telefonu
+      </mat-error>
+    </mat-form-field>
+
+  </form>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-stroked-button color="warn"  (click)="onNoClick()">Wróć</button>
+  <button mat-stroked-button cdkFocusInitial [disabled]="newPhoneNumberForm.invalid" (click)="onSaveClick()">Zapisz</button>
+</div>

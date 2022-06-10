@@ -1,0 +1,168 @@
+<section id="breadcrumb">
+  <div class="row">
+    <div class="col-md-12 ps-5">
+      <ul class="breadcrumb-tree">
+        <li><a href="#">Home</a></li>
+        <li class="active">Kontakt</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+
+<div class="container">
+  <section class="mb-4">
+    <h1 class="h1-responsive font-wight bold text-center my-5">Napisz do nas!</h1>
+    <p class="text-center w-responsive mx-auto mb-5">Masz jakieś pytania?
+      Nasz zespół chętnie odpowie na każde z nich! Jesteśmy do twojej dyspozycji.
+    </p>
+    <div class="row">
+      <div class="col-md-9 mb-4">
+        <form id="contactForm">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="md-form mb-2">
+                <mat-form-field appearance="fill" style="width:100%">
+                  <mat-label>Imię</mat-label>
+                  <input type="text" matInput [formControl]="fnameFormControl" placeholder="Np. Jan" fillColor="accent">
+                  <mat-error *ngIf="fnameFormControl.hasError('required')">
+                    Imię jest <strong>wymagane</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="md-form mb-0">
+                <mat-form-field appearance="fill" style="width:100%">
+                  <mat-label>Nazwisko</mat-label>
+                  <input type="text" matInput [formControl]="lnameFormControl" placeholder="Np.. Kowalski"
+                    fillColor="accent">
+                  <mat-error *ngIf="lnameFormControl.hasError('required')">
+                    Nazwisko jest <strong>wymagane</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="md-form mb-2">
+                <mat-form-field appearance="fill" style="width:100%">
+                  <mat-label>Email</mat-label>
+                  <input type="email" matInput [formControl]="emailFormControl" placeholder="Np. pat@example.com"
+                    fillColor="accent">
+                  <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                    Podaj poprawny adres email
+                  </mat-error>
+                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                    Email jest <strong>wymagany</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="md-form mb-2">
+                <mat-form-field appearance="fill" style="width:100%">
+                  <mat-label>Nr Telefonu</mat-label>
+                  <input type="text" matInput [formControl]="phoneFormControl" placeholder="Np.. 987654321"
+                    fillColor="accent">
+                  <mat-error *ngIf="phoneFormControl.hasError('required')">
+                    Telefon jest <strong>wymagany</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="md-form mb-2">
+                <mat-form-field appearance="fill" style="width:100%">
+                  <mat-label>Wiadomość</mat-label>
+                  <textarea type="text" matInput [formControl]="messageFormControl" fillColor="accent"></textarea>
+                  <mat-error *ngIf="messageFormControl.hasError('required')">
+                    Wiadomość jest <strong>wymagana</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center text-md-start">
+            <button type="submit" class="btnFormSub"><i class="fas fa-envelope"></i>Wyślij</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-md-3 text-center">
+        <ul class="list-unstyled fw-bold mb-0">
+          <li>
+            <a href="" class="text-decoration-none text-dark">
+              <i class="fas fa-map-marker-alt fa-3x"></i>
+              <p class="pt-2">Adres: <br>ul. Sucharskiego 2<br>
+                35-225<br>
+                Rzeszów</p>
+            </a>
+          </li>
+          <li>
+            <a href="" class="text-decoration-none text-dark">
+              <i class="fas fa-envelope mt-2 fa-3x"></i>
+              <p class="pt-2">Email: w62963@student.wsiz.edu.pl</p>
+            </a>
+          </li>
+          <li>
+            <a href="" class="text-decoration-none text-dark">
+              <i class="fas fa-phone mt-2 fa-3x"></i>
+              <p class="pt-2">Tel: 987-654-321</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="col-md-12 text-center">
+        <h2 class="h1-responsive font-wight bold text-center my-5">Odwiedź nasze Social Media!</h2>
+        <ul class="list-unstyled d-flex justify-content-center">
+          <li>
+            <a href="#" class="text-white text-decoration-none text-muted fs-4 me-5">
+              <i class="fab fa-facebook-f fa-2x"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-white text-decoration-none text-muted fs-4 me-5">
+              <i class="fab fa-twitter fa-2x"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-white text-decoration-none text-muted fs-4 me-5">
+              <i class="fab fa-instagram fa-2x"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="text-white text-decoration-none text-muted fs-4">
+              <i class="fab fa-tiktok fa-2x"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="mt-5">
+    <div class="col-md-12 text-center">
+      <h3 class="h1-responsive font-wight bold text-center">Nasza lokalizacja na mapie</h3>
+      <span><i class="fas fa-arrow-down text-dark fa-5x"></i></span>
+    <div *ngIf="apiLoaded | async">
+      <google-map width="100%" height="70vh" [options]="options">
+        <map-marker *ngFor="let markerPosition of markerPositions" [position]="markerPosition" [options]="markerOptions">
+        </map-marker>
+      </google-map>
+    </div>
+  </div>
+</section>

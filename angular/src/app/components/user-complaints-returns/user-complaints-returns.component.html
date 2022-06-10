@@ -1,0 +1,50 @@
+<section class="m-5">
+  <div class="container">
+    <div class="row">
+      <div class="control-panel col-12 col-md-3 border-end">
+
+        <div class="row">
+          <div class="hello-user">
+            <div class="mb-4">
+              <span style="font-size: 14px;">Cześć,</span><br>
+              <span style="font-size: 16px; font-weight: 600;">{{userData?.fname}}</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/orders']">
+            <div class="col-12 col-md-2">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Zamówienia</span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/returns']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-arrow-rotate-left"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span><strong>Reklamacje i zwroty</strong></span>
+            </div>
+          </div>
+          <div class="profile-controls row py-2" [routerLink]="['/profile']">
+            <div class="col-12 col-md-2">
+              <i class="fa-solid fa-gear"></i>
+            </div>
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" >
+              <span>Ustawienia konta</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="order-section col-12 col-md-9">
+        <span>Strona w rozbudowie</span>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</section>
