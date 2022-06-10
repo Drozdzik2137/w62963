@@ -27,11 +27,24 @@ export class ProductsByCategoryComponent implements OnInit {
   categoryId: any;
   noProductMessage: any;
 
-  constructor(private productService: ProductService, private router: Router, private cartService: CartService, private categoryService: CategoryService) { }
+  constructor(private productService: ProductService, private router: Router, private cartService: CartService, private categoryService: CategoryService) {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as {
+      categoryId: number
+    };
+    if(state !== undefined){
+      this.initAllCategories();
+      this.SelectedCategory(state.categoryId);
+
+    }else{
+      this.initAllCategories();
+      this.initAllProducts(this.page);
+    }
+   }
 
   ngOnInit(): void {
-    this.initAllCategories();
-    this.initAllProducts(this.page)
+
+
   }
 
   initAllCategories(){
@@ -65,49 +78,162 @@ export class ProductsByCategoryComponent implements OnInit {
           }
         })
 
-      // }else if(this.orderProductsBySelectedValue === 2){
+      }else if(this.orderProductsBySelectedValue === 2){
 
-      //   this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
-      //     this.productsLimit = prods.limit;
-      //     this.productsCount = prods.count;
-      //     this.productsTotalCount = prods.totalProducts;
-      //     this.page = prods.currentPage;
-      //     this.totalPages = prods.totalPages;
-      //     this.products = prods.products;
-      //   })
+        this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          if(data.status == 200){
+            // @ts-ignore
+            this.productsLimit = data.body.limit;
+            // @ts-ignore
+            this.productsCount = data.body.count;
+            // @ts-ignore
+            this.productsTotalCount = data.body.totalProducts;
+            // @ts-ignore
+            this.page = data.body.currentPage;
+            // @ts-ignore
+            this.totalPages = data.body.totalPages;
+            // @ts-ignore
+            this.products = data.body.products;
+          }else{
+            this.noProductMessage = 'Brak produktów w wybranej kategorii';
+          }
+        })
 
-      // }else if(this.orderProductsBySelectedValue === 3){
+      }else if(this.orderProductsBySelectedValue === 3){
 
-      //   this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
-      //     this.productsLimit = prods.limit;
-      //     this.productsCount = prods.count;
-      //     this.productsTotalCount = prods.totalProducts;
-      //     this.page = prods.currentPage;
-      //     this.totalPages = prods.totalPages;
-      //     this.products = prods.products;
-      //   })
-      // }else if(this.orderProductsBySelectedValue === 4){
+        this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          if(data.status == 200){
+            // @ts-ignore
+            this.productsLimit = data.body.limit;
+            // @ts-ignore
+            this.productsCount = data.body.count;
+            // @ts-ignore
+            this.productsTotalCount = data.body.totalProducts;
+            // @ts-ignore
+            this.page = data.body.currentPage;
+            // @ts-ignore
+            this.totalPages = data.body.totalPages;
+            // @ts-ignore
+            this.products = data.body.products;
+          }else{
+            this.noProductMessage = 'Brak produktów w wybranej kategorii';
+          }
+        })
+      }else if(this.orderProductsBySelectedValue === 4){
 
-      //   this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
-      //     this.productsLimit = prods.limit;
-      //     this.productsCount = prods.count;
-      //     this.productsTotalCount = prods.totalProducts;
-      //     this.page = prods.currentPage;
-      //     this.totalPages = prods.totalPages;
-      //     this.products = prods.products;
-      //   })
+        this.categoryService.getProductsFromCategory(page, category, limit, orderBy, orderType).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          if(data.status == 200){
+            // @ts-ignore
+            this.productsLimit = data.body.limit;
+            // @ts-ignore
+            this.productsCount = data.body.count;
+            // @ts-ignore
+            this.productsTotalCount = data.body.totalProducts;
+            // @ts-ignore
+            this.page = data.body.currentPage;
+            // @ts-ignore
+            this.totalPages = data.body.totalPages;
+            // @ts-ignore
+            this.products = data.body.products;
+          }else{
+            this.noProductMessage = 'Brak produktów w wybranej kategorii';
+          }
+        })
       }
     }else{
-      let orderBy = "brand";
-      let orderType = "ASC";
-      this.productService.getAllProducts(page, 12, orderBy, orderType).subscribe((prods: IServerResponse) => {
-        this.productsLimit = prods.limit;
-        this.productsCount = prods.count;
-        this.productsTotalCount = prods.totalProducts;
-        this.page = prods.currentPage;
-        this.totalPages = prods.totalPages;
-        this.products = prods.products;
-      })
+      if(limit !== undefined){
+        if(this.orderProductsBySelectedValue === 2){
+          let orderBy = "brand";
+          let orderType = "DESC";
+          this.productService.getAllProducts(page, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else if(this.orderProductsBySelectedValue === 3){
+          let orderBy = "price";
+          let orderType = "ASC";
+          this.productService.getAllProducts(page, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else if(this.orderProductsBySelectedValue === 4){
+          let orderBy = "price";
+          let orderType = "DESC";
+          this.productService.getAllProducts(page, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else{
+          let orderBy = "brand";
+          let orderType = "ASC";
+          this.productService.getAllProducts(page, limit, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }
+      }else{
+        if(this.orderProductsBySelectedValue === 2){
+          let orderBy = "brand";
+          let orderType = "DESC";
+          this.productService.getAllProducts(page, 12, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else if(this.orderProductsBySelectedValue === 3){
+          let orderBy = "price";
+          let orderType = "ASC";
+          this.productService.getAllProducts(page, 12, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else if(this.orderProductsBySelectedValue === 4){
+          let orderBy = "brand";
+          let orderType = "DESC";
+          this.productService.getAllProducts(page, 12, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }else{
+          let orderBy = "brand";
+          let orderType = "ASC";
+          this.productService.getAllProducts(page, 12, orderBy, orderType).subscribe((prods: IServerResponse) => {
+            this.productsLimit = prods.limit;
+            this.productsCount = prods.count;
+            this.productsTotalCount = prods.totalProducts;
+            this.page = prods.currentPage;
+            this.totalPages = prods.totalPages;
+            this.products = prods.products;
+          })
+        }
+      }
     }
   }
 

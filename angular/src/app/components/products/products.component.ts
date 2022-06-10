@@ -4,7 +4,7 @@ import { CartService } from './../../services/cart.service';
 import { ProductService } from './../../services/product.service';
 import { IProductModelServer, IServerResponse } from './../../models/product.model';
 import { Component, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -232,6 +232,18 @@ export class ProductsComponent implements OnInit {
 
   AddToCart(id: number){
     this.cartService.AddProductToCart(id);
+  }
+
+  goToCategory(id: number){
+    const navigationExtras: NavigationExtras = {
+      state: {
+        categoryId: id
+      }
+    }
+    // this.router.navigate(['/home'], {skipLocationChange: true}).then(() => {
+    //   this.router.navigate(['/category'], navigationExtras);
+    // })
+    this.router.navigate(['/category'], navigationExtras);
   }
 
 }

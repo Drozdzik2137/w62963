@@ -31,7 +31,7 @@
             </mat-tree-node>
           </mat-tree> -->
           <div class="categories-list row py-2 px-2" *ngFor="let cat of categories" >
-            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center">
+            <div class="col-12 col-md-10 d-flex justify-content-start align-items-center" (click)="goToCategory(cat.id)">
               <span> {{cat.name}}</span>
             </div>
           </div>

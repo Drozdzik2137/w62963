@@ -77,6 +77,8 @@ exports.getProducts = async (req, res) => {
         const numOfProducts = countQuery.rows[0].count
         const numOfPages = Math.ceil(numOfProducts / limit)
 
+        console.log(page, limit, orderBy, orderType)
+
         const {rows} = await client.query(`SELECT
         product.id,
         product.name,
@@ -451,7 +453,7 @@ exports.categories = async (req, res) => {
 
         const {rows} = await client.query(`SELECT *
         FROM category
-        ORDER BY id ASC`)
+        ORDER BY name ASC`)
         res.status(200).json({
             count: rows.length,
             categories: rows
@@ -550,13 +552,13 @@ exports.deleteCategory = async (req, res) => {
 
 exports.category = async (req, res) => {
     try{
-        console.log('Podłączono do bazy z routa category')
-
         let page = (req.query.page != undefined && req.query.page > 0) ? parseInt(req.query.page) : 1
         const limit = (req.query.limit != undefined && req.query.limit > 0) ? parseInt(req.query.limit) : 12
         const offset = (page - 1) * limit
         const categoryId = req.params.id
-
+        const orderType = (req.query.orderType != undefined && ["ASC", "DESC"].includes(req.query.orderType.toUpperCase())) ? req.query.orderType : "ASC"
+        const orderBy = (req.query.orderBy != undefined && (["brand", "price"].includes(req.query.orderBy.toLowerCase()))) ? req.query.orderBy : "brand"
+        
         if(categoryId !== undefined){
             const client = await pool.connect()
             const countQuery = await client.query(`SELECT COUNT(*) as count 
@@ -585,7 +587,7 @@ exports.category = async (req, res) => {
                 JOIN BRAND ON product.brand_id = brand.id
                 JOIN CATEGORY ON product.category_id = category.id
                 WHERE category.id=$1
-                ORDER BY product.name ASC
+                ORDER BY ${orderBy} ${orderType}
                 LIMIT $2
                 OFFSET $3`, [categoryId, limit, offset])
                 if(rows != null){
