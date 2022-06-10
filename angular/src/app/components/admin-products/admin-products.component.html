@@ -47,7 +47,7 @@
 
             <ng-container matColumnDef="img">
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 12%"> Zdjęcie </th>
-              <td mat-cell *matCellDef="let row" style="width: 12%"> {{row.img}} </td>
+              <td mat-cell *matCellDef="let row" style="width: 12%"> </td>
             </ng-container>
 
             <ng-container matColumnDef="brand">
@@ -67,7 +67,7 @@
 
             <ng-container matColumnDef="category" >
               <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 14%"> Kategoria </th>
-              <td mat-cell *matCellDef="let row" style="width: 12%"> {{row.category}} </td>
+              <td mat-cell *matCellDef="let row" style="width: 14%"> {{row.category}} </td>
             </ng-container>
 
             <ng-container matColumnDef="quantity">
@@ -76,8 +76,8 @@
             </ng-container>
 
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 11%"> Cena </th>
-              <td mat-cell *matCellDef="let row" style="width: 8%"> {{row.price}} zł</td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 10%"> Cena </th>
+              <td mat-cell *matCellDef="let row" style="width: 10%"> {{row.price}} zł</td>
             </ng-container>
 
             <ng-container matColumnDef="manage">

@@ -5,6 +5,9 @@
   font-size: 14px;
   width: 100%;
 }
+table {
+  width: 100%;
+}
 .add-btn {
   position: relative;
   border: 2px solid transparent;
