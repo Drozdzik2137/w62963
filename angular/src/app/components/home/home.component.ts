@@ -11,7 +11,6 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  prod: any;
   products: IProductModelServer[] = [];
 
   constructor(private productService: ProductService, private router: Router, private cartService: CartService) { }
