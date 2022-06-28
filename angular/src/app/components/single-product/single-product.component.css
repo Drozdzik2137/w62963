@@ -63,20 +63,11 @@
 .product-details .product-price {
   display: inline-block;
 }
-.product-details .product-freshness {
-  font-weight: 600;
-  font-size: 18px;
-}
-.product-details .product-freshness .freshness-type{
-  font-size: 18px;
-  text-transform: uppercase;
-  font-weight: 600;
-  color: #6c757d;
-}
+
 .product-details .product-price .product-old-price {
   font-size: 70%;
   font-weight: 400;
-  color: #343a40;
+  color: #8D99AE;
 }
 .product-details .product-size{
   margin-top: 20px;

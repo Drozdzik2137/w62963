@@ -1,6 +1,6 @@
 <section id="breadcrumb">
   <div class="row">
-    <div class="col-md-12 ps-5">
+    <div class="col-md-12 mt-5 ps-5 pt-5">
       <ul class="breadcrumb-tree">
         <li><a href="#">Home</a></li>
         <li><a href="#">{{product?.category}}</a></li>
@@ -33,14 +33,6 @@
           <h1><strong>{{product?.brand}}</strong></h1>
           <h2 class="pb-3">{{product?.name}}</h2>
           <h3 class="product-price">{{product?.price}} zł</h3>
-          <div class="col-12 pt-2">
-            <div class="product-freshness">
-              <p >Stan:
-                <span class="freshness-type">
-                  {{product?.freshness}}
-                </span>
-              </p>
-            </div>
           <div class="product-size">
             <div class="select-size">Rozmiar:
                 <select class="form-select mt-1 mb-3" aria-label="Default select example">
@@ -54,7 +46,6 @@
           <ng-template #noStock>
             <span class="product-notavailable">Niedostępny</span>
           </ng-template>
-          </div>
           <div class="add-to-cart">
             <div class="qty-label">
               Ilość
@@ -85,7 +76,7 @@
                 <div class="product-list mt-4 row gx-0 gy-3">
 
                   <div class="col-md-6 col-lg-4 col-xl-3 p-2" *ngFor="let prod of products">
-                    <div class="product h-100">
+                    <div class="product">
                       <div class="product-img border position-relative">
                         <img alt="{{prod.name}}" src="{{prod.img}}" class="w-100" (click)="SelectProduct(prod.id)">
                       </div>
@@ -124,7 +115,7 @@
                 <div class="product-list mt-4 row gx-0 gy-3">
 
                   <div class="col-md-6 col-lg-4 col-xl-3 p-2" *ngFor="let prod of products">
-                    <div class="product h-100">
+                    <div class="product">
                       <div class="product-img border position-relative">
                         <img alt="{{prod.name}}" src="{{prod.img}}" class="w-100" (click)="SelectProduct(prod.id)">
                       </div>
