@@ -9,23 +9,21 @@ import { catchError, map, Observable, of } from 'rxjs';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
-  options: google.maps.MapOptions = {
+  private apiLoaded: Observable<boolean>;
+  private center: google.maps.LatLngLiteral = {lat: 50.048924580103346, lng: 21.981803279444392};
+  private emailFormControl = new FormControl('', [Validators.required, Validators.email]);
+  private fnameFormControl = new FormControl('', [Validators.required]);
+  private lnameFormControl = new FormControl('', [Validators.required]);
+  private markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
+  private markerPositions: google.maps.LatLngLiteral[] = [];
+  private messageFormControl = new FormControl('', [Validators.required]);
+  private options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
     scrollwheel: false,
     center: {lat: 50.048924580103346, lng: 21.981803279444392},
     zoom: 17,
   }
-  apiLoaded: Observable<boolean>;
-  markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
-  markerPositions: google.maps.LatLngLiteral[] = [];
-  center: google.maps.LatLngLiteral = {lat: 50.048924580103346, lng: 21.981803279444392};
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  fnameFormControl = new FormControl('', [Validators.required]);
-  lnameFormControl = new FormControl('', [Validators.required]);
-  phoneFormControl = new FormControl('', [Validators.required]);
-  messageFormControl = new FormControl('', [Validators.required]);
-
-
+  private phoneFormControl = new FormControl('', [Validators.required]);
   constructor(http: HttpClient) {
     this.apiLoaded = http.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyAPzf55-x7RnpsDjG9yMj7ZHuYXyvUXSxQ', 'callback')
         .pipe(

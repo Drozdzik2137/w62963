@@ -12,24 +12,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  registrationForm = new FormGroup({
+  private hide = true;
+  private isChecked = false;
+  private registrationForm = new FormGroup({
     emailFormControl: new FormControl('',  [Validators.required, Validators.email, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$/)]),
     passwordFormControl: new FormControl('', [Validators.required, Validators.minLength(6)]),
     fnameFormControl: new FormControl('', [Validators.required]),
     lnameFormCntrol: new FormControl('', [Validators.required]),
     phoneFormControl: new FormControl('', [Validators.required, Validators.pattern('[5-9]\\d{8}')])
   });
-  hide = true;
-  isChecked = false;
-  registrationMessage!: string;
-  registrationStatus!: number;
+  private registrationMessage!: string;
+  private registrationStatus!: number;
 
   constructor(private userService: UserService, private toast: ToastrService, private router: Router) { }
 
-  ngOnInit(): void {
+  private OnChange(event: any){
+    if(this.isChecked == true){
+      this.isChecked = false
+    }else{
+      this.isChecked = true
+    }
   }
 
-  registerUser(){
+  private registerUser(){
     this.userService.registerUser(this.registrationForm.get('emailFormControl')?.value, this.registrationForm
     .get('passwordFormControl')?.value, this.registrationForm.get('fnameFormControl')?.value, this.registrationForm.get('lnameFormCntrol')?.value, this.registrationForm.get('phoneFormControl')?.value).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
       this.registrationStatus = data.status;
@@ -65,12 +70,6 @@ export class RegisterComponent implements OnInit {
   this.isChecked = false;
 }
 
-  OnChange(event: any){
-    if(this.isChecked == true){
-      this.isChecked = false
-    }else{
-      this.isChecked = true
-    }
+  ngOnInit(): void {
   }
-
 }

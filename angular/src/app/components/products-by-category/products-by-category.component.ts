@@ -14,19 +14,18 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./products-by-category.component.css']
 })
 export class ProductsByCategoryComponent implements OnInit {
-  productsLimit: number = 0;
-  productsCount: number = 0;
-  productsTotalCount: number = 0;
-  page: number = 1;
-  totalPages: number = 0;
-  products: IProductModelServer[] = [];
-  categories: ICategoryModelServer[] = [];
-  countCategories: number = 0;
-  loading: boolean = false;
-  orderProductsBySelectedValue: number = 1;
-  categoryId: any;
-  noProductMessage: any;
-
+  private categories: ICategoryModelServer[] = [];
+  private categoryId: any;
+  private countCategories: number = 0;
+  private loading: boolean = false;
+  private noProductMessage: any;
+  private orderProductsBySelectedValue: number = 1;
+  private page: number = 1;
+  private products: IProductModelServer[] = [];
+  private productsCount: number = 0;
+  private productsLimit: number = 0;
+  private productsTotalCount: number = 0;
+  private totalPages: number = 0;
   constructor(private productService: ProductService, private router: Router, private cartService: CartService, private categoryService: CategoryService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {
@@ -42,19 +41,60 @@ export class ProductsByCategoryComponent implements OnInit {
     }
    }
 
-  ngOnInit(): void {
-
-
+  private AddToCart(id: number){
+    this.cartService.AddProductToCart(id);
   }
 
-  initAllCategories(){
+  private getPage(page: number){
+    this.loading = true;
+    this.page = page;
+    let orderBy = "brand";
+    let orderType = "ASC";
+    if(this.orderProductsBySelectedValue === 2){
+      orderBy = "brand";
+      orderType = "DESC"
+
+      const getProducts = () =>{
+        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
+        this.loading = false;
+      }
+      window.setTimeout(getProducts, 500);
+    }if(this.orderProductsBySelectedValue === 3){
+      orderBy = "price";
+      orderType = "ASC"
+
+      const getProducts = () =>{
+        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
+        this.loading = false;
+      }
+      window.setTimeout(getProducts, 500);
+    }if(this.orderProductsBySelectedValue === 4){
+      orderBy = "price";
+      orderType = "DESC"
+
+      const getProducts = () =>{
+        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
+        this.loading = false;
+      }
+      window.setTimeout(getProducts, 500);
+    }else{
+      const getProducts = () =>{
+        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
+        this.loading = false;
+      }
+      window.setTimeout(getProducts, 500);
+    }
+    window.scroll(0,0);
+  }
+
+  private initAllCategories(){
     this.categoryService.getAllCategories().subscribe((categories: ICategoryServerResponse) => {
       this.categories = categories.categories;
       this.countCategories = categories.count;
     })
   }
 
-  initAllProducts(page: number, category?: number, limit?: number, orderBy?: string, orderType?: string){
+  private initAllProducts(page: number, category?: number, limit?: number, orderBy?: string, orderType?: string){
     this.noProductMessage = undefined;
     if(category !== undefined && limit !== undefined && orderBy !== undefined && orderType !== undefined)
     {
@@ -237,59 +277,17 @@ export class ProductsByCategoryComponent implements OnInit {
     }
   }
 
-  getPage(page: number){
-    this.loading = true;
-    this.page = page;
-    let orderBy = "brand";
-    let orderType = "ASC";
-    if(this.orderProductsBySelectedValue === 2){
-      orderBy = "brand";
-      orderType = "DESC"
-
-      const getProducts = () =>{
-        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
-        this.loading = false;
-      }
-      window.setTimeout(getProducts, 500);
-    }if(this.orderProductsBySelectedValue === 3){
-      orderBy = "price";
-      orderType = "ASC"
-
-      const getProducts = () =>{
-        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
-        this.loading = false;
-      }
-      window.setTimeout(getProducts, 500);
-    }if(this.orderProductsBySelectedValue === 4){
-      orderBy = "price";
-      orderType = "DESC"
-
-      const getProducts = () =>{
-        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
-        this.loading = false;
-      }
-      window.setTimeout(getProducts, 500);
-    }else{
-      const getProducts = () =>{
-        this.initAllProducts(this.page, this.categoryId, this.productsLimit, orderBy, orderType);
-        this.loading = false;
-      }
-      window.setTimeout(getProducts, 500);
-    }
-    window.scroll(0,0);
-  }
-
-  SelectedCategory(id: number){
+  private SelectedCategory(id: number){
     this.categoryId = id;
     this.getPage(this.page);
   }
 
-  SelectProduct(id: number){
+  private SelectProduct(id: number){
     this.router.navigate(['/product', id]).then();
   }
 
-  AddToCart(id: number){
-    this.cartService.AddProductToCart(id);
-  }
+  ngOnInit(): void {
 
+
+  }
 }

@@ -12,22 +12,21 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class HomeComponent implements OnInit {
 
-  products: IProductModelServer[] = [];
+  private products: IProductModelServer[] = [];
 
   constructor(private productService: ProductService, private router: Router, private cartService: CartService) { }
+
+  private AddToCart(id: number){
+    this.cartService.AddProductToCart(id);
+  }
+
+  private SelectProduct(id: number){
+    this.router.navigate(['/product', id]).then();
+  }
 
   ngOnInit(): void {
     this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
       this.products = prods.products;
     })
   }
-
-  SelectProduct(id: number){
-    this.router.navigate(['/product', id]).then();
-  }
-
-  AddToCart(id: number){
-    this.cartService.AddProductToCart(id);
-  }
-
 }

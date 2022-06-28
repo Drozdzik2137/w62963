@@ -11,12 +11,23 @@ import { IProductModelServer, IServerResponse } from 'src/app/models/product.mod
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  cartData!: ICartModelServer;
-  cartTotal!: number;
-  subTotal!: number;
-  products: IProductModelServer[] = [];
-
+  private cartData!: ICartModelServer;
+  private cartTotal!: number;
+  private products: IProductModelServer[] = [];
+  private subTotal!: number;
   constructor(public cartService: CartService, private router: Router, private productService: ProductService) { }
+
+  private AddToCart(id:number){
+    this.cartService.AddProductToCart(id);
+  }
+
+  private ChangeQuantity(id: number, increaseQuantity: boolean) {
+    this.cartService.UpdateProductQuantityFromCart(id, increaseQuantity);
+  }
+
+  private SelectProduct(id: number){
+    this.router.navigate(['/product', id]).then();
+  }
 
   ngOnInit(): void {
     this.cartService.cartData$.subscribe(data => this.cartData = data);
@@ -24,17 +35,5 @@ export class CartComponent implements OnInit {
     this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
       this.products = prods.products;
     });
-  }
-
-  ChangeQuantity(id: number, increaseQuantity: boolean) {
-    this.cartService.UpdateProductQuantityFromCart(id, increaseQuantity);
-  }
-
-  SelectProduct(id: number){
-    this.router.navigate(['/product', id]).then();
-  }
-
-  AddToCart(id:number){
-    this.cartService.AddProductToCart(id);
   }
 }

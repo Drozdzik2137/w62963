@@ -10,18 +10,16 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class UserService {
+  private _isAdmin$= new BehaviorSubject<boolean>(false);
+  private _isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  private helper = new JwtHelperService();
   private SERVER_URL = 'http://localhost:4000/api';
-  _isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  isAdmin$ = this._isAdmin$.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   // @ts-ignore
   userData$ = new BehaviorSubject<IUserResponseModel>(null);
   // @ts-ignore
   loginMessage$ = new BehaviorSubject<string>(null);
-  _isAdmin$= new BehaviorSubject<boolean>(false);
-  isAdmin$ = this._isAdmin$.asObservable();
-  helper = new JwtHelperService();
-
-
   constructor(private http: HttpClient, private router: Router, private toast: ToastrService) {
     // const token = localStorage.getItem('authToken');
     // this._isLoggedIn$.next(!!token);
@@ -87,7 +85,7 @@ export class UserService {
     return this.http.post(`${this.SERVER_URL}/auth/register`, {email, password, fname, lname, phoneNumber, photoUrl, type}, {observe: 'response'})
   }
 
-  isLoggedIn(){
+  private isLoggedIn(){
     const token = localStorage.getItem('authToken');
     if(token){
       const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
@@ -107,7 +105,7 @@ export class UserService {
     }
     return this._isLoggedIn$.next(false);
   }
-  isAdmin(){
+  private isAdmin(){
     const token = localStorage.getItem('authToken');
     if(token){
       const role = this.helper.decodeToken(token)

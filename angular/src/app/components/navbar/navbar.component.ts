@@ -12,36 +12,22 @@ import { CartService } from 'src/app/services/cart.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  cartData!: ICartModelServer;
-  cartTotal!: number;
-  isLoggedIn!: boolean;
+  private cartData!: ICartModelServer;
+  private cartTotal!: number;
+  private isLoggedIn!: boolean;
 
-  searchForm = new FormGroup({
+  private searchForm = new FormGroup({
     searchValue: new FormControl('')
   });
 
 
   constructor(public cartService: CartService, private router: Router, public userService: UserService) { }
 
-  ngOnInit(): void {
-    this.cartService.cartTotal$.subscribe(total=>{
-      this.cartTotal = total;
-    });
-
-    this.cartService.cartData$.subscribe(data=> this.cartData = data);
-
-    this.userService.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
-  }
-
-  SelectProduct(id: number){
-    this.router.navigate(['/product', id]).then();
-  }
-
-  logout(){
+  private logout(){
     this.userService.logout();
   }
 
-  onSubmit(){
+  private onSubmit(){
     let searchInput = this.searchForm.controls['searchValue'].value;
     const navigationExtras: NavigationExtras = {
       state: {
@@ -55,4 +41,17 @@ export class NavbarComponent implements OnInit {
     this.searchForm.reset();
   }
 
+  private SelectProduct(id: number){
+    this.router.navigate(['/product', id]).then();
+  }
+
+  ngOnInit(): void {
+    this.cartService.cartTotal$.subscribe(total=>{
+      this.cartTotal = total;
+    });
+
+    this.cartService.cartData$.subscribe(data=> this.cartData = data);
+
+    this.userService.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+  }
 }

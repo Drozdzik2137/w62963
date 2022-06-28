@@ -194,7 +194,7 @@ export class CartService {
     });
   }
 
-  DeleteProductFromCart(index: number){
+  private DeleteProductFromCart(index: number){
     if(window.confirm('Czy na pewno chcesz usunąć produkt z koszyka?')){
       // If user click 'yes'
         this.cartDataServer.data.splice(index, 1);
@@ -375,7 +375,7 @@ export class CartService {
     this.cartTotal$.next(this.cartDataServer.total);
   }
 
-  SubTotal(index: number){
+  private SubTotal(index: number){
     let subTotal = 0;
 
     const p = this.cartDataServer.data[index];

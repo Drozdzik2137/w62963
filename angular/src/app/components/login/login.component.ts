@@ -12,27 +12,16 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  loginForm = new FormGroup({
+  private hide = true;
+  private loginForm = new FormGroup({
     emailFormControl: new FormControl('', [Validators.required]),
     passwordFormControl: new FormControl('', [Validators.required])
   })
-  hide = true;
-  loginMessage: string | null = null;
+  private loginMessage: string | null = null;
 
   constructor(private userService: UserService, private router: Router, private route: ActivatedRoute, private toast: ToastrService) { }
 
-  ngOnInit(): void {
-    this.userService.isLoggedIn$.subscribe(isLoggedIn => {
-      if (isLoggedIn) {
-        this.router.navigateByUrl(this.route.snapshot.queryParams.returnUrl || '/orders');
-
-      } else {
-        this.router.navigateByUrl('/login');
-      }
-    });
-  }
-
-  login(){
+  private login(){
     const email = this.loginForm.get('emailFormControl')!.value;
     const password = this.loginForm.get('passwordFormControl')!.value;
 
@@ -68,5 +57,16 @@ export class LoginComponent implements OnInit {
     });
     this.loginForm.reset();
     this.loginMessage = null
+  }
+
+  ngOnInit(): void {
+    this.userService.isLoggedIn$.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        this.router.navigateByUrl(this.route.snapshot.queryParams.returnUrl || '/orders');
+
+      } else {
+        this.router.navigateByUrl('/login');
+      }
+    });
   }
 }

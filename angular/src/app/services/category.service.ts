@@ -12,6 +12,14 @@ export class CategoryService {
 
   constructor(private http: HttpClient) { }
 
+  addCategory(categoryName: string){
+    return this.http.post(`${this.SERVER_URL}/category`, {categoryName}, {observe: 'response'});
+  }
+
+  deleteCategory(id: number){
+    return this.http.delete(`${this.SERVER_URL}/category/` + id, {observe: 'response'});
+  }
+
   getAllCategories(){
     return this.http.get<ICategoryServerResponse>(this.SERVER_URL + '/categories')
   }
@@ -29,16 +37,7 @@ export class CategoryService {
     return this.http.get<IServerResponse>(this.SERVER_URL + '/category/' +  id, {params, observe: 'response'});
   }
 
-  addCategory(categoryName: string){
-    return this.http.post(`${this.SERVER_URL}/category`, {categoryName}, {observe: 'response'});
-  }
-
   updateCategory(id: number, categoryName: string){
     return this.http.patch(`${this.SERVER_URL}/category/` + id, {categoryName}, {observe: 'response'});
   }
-
-  deleteCategory(id: number){
-    return this.http.delete(`${this.SERVER_URL}/category/` + id, {observe: 'response'});
-  }
-
 }
