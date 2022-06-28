@@ -23,52 +23,19 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./admin-orders.component.css']
 })
 export class AdminOrdersComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  helper=  new JwtHelperService();
-  userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-  displayedColumns: string[] = ['id', 'email', 'phone', 'createdAt', 'status', 'manage'];
-  dataSource!: MatTableDataSource<IOrderModelServer>;
-  ordersCount: number = 0;
-  orders: IOrderModelServer[] = [];
-
-
+  private dataSource!: MatTableDataSource<IOrderModelServer>;
+  private displayedColumns: string[] = ['id', 'email', 'phone', 'createdAt', 'status', 'manage'];
+  private helper=  new JwtHelperService();
+  private isFontsLoaded!: boolean;
+  private orders: IOrderModelServer[] = [];
+  private ordersCount: number = 0;
+  @ViewChild(MatPaginator, { static: true }) private paginator!: MatPaginator;
+  @ViewChild(MatSort) private sort!: MatSort;
+  private userData!: IUserResponseModel;
   constructor(private userService: UserService, private orderService: OrderService, private dialog: MatDialog, private router: Router, private toast: ToastrService) {
   }
 
-  ngOnInit(): void {
-    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
-
-    document.fonts.ready.then(() => (this.isFontsLoaded = true));
-
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-
-    this.orderService.getAllOrders().subscribe((orders: IOrderServerResponse) => {
-      this.dataSource = new MatTableDataSource<IOrderModelServer>(orders.orders);
-      this.orders = orders.orders;
-      this.ordersCount = orders.count;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
-  }
-
-  applyFilter(event: Event) {
+  private applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -77,15 +44,7 @@ export class AdminOrdersComponent implements OnInit {
     }
   }
 
-  showOrder(row: any){
-    const dialogRef = this.dialog.open(ShowOrderDetailsDialog, {
-      width: '1000px',
-      data: row
-    });
-    // this.orderService.getSingleOrder(id)
-  }
-
-  editOrder(row: any){
+  private editOrder(row: any){
     const dialogRef = this.dialog.open(EditOrderStatusDialog, {
       width: '350px',
       data: row
@@ -126,7 +85,43 @@ export class AdminOrdersComponent implements OnInit {
 
   }
 
+  private showOrder(row: any){
+    const dialogRef = this.dialog.open(ShowOrderDetailsDialog, {
+      width: '1000px',
+      data: row
+    });
+    // this.orderService.getSingleOrder(id)
+  }
 
+  ngOnInit(): void {
+    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
+
+    document.fonts.ready.then(() => (this.isFontsLoaded = true));
+
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+          })
+        }
+      }else{
+        this.userData = data;
+      }
+    })
+
+    this.orderService.getAllOrders().subscribe((orders: IOrderServerResponse) => {
+      this.dataSource = new MatTableDataSource<IOrderModelServer>(orders.orders);
+      this.orders = orders.orders;
+      this.ordersCount = orders.count;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+  }
 }
 
 @Component({
@@ -135,15 +130,15 @@ export class AdminOrdersComponent implements OnInit {
   styleUrls: ['./show-order-details.css']
 })
 export class ShowOrderDetailsDialog {
-  orderId: any;
-  orderStatus: any;
-  products: any;
-  total: any
+  private orderId: any;
+  private orderStatus: any;
+  private products: any;
+  private total: any
 
   constructor(public dialogRef: MatDialogRef<EditOrderStatusDialog>, private orderService: OrderService, private productService: ProductService,
      @Inject(MAT_DIALOG_DATA) public data: IOrderModelServer){}
 
-  ngOnInit(): void {
+  private ngOnInit(): void {
     this.orderService.getSingleOrderTotal(this.data.id).subscribe(total => this.total = total);
     this.orderService.getSingleOrder(this.data.id).subscribe(prods => {
       console.log(this.data.id, this.data, prods);
@@ -153,7 +148,7 @@ export class ShowOrderDetailsDialog {
     });
   }
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
@@ -166,24 +161,24 @@ export class ShowOrderDetailsDialog {
   templateUrl: 'edit-order-status.html'
 })
 export class EditOrderStatusDialog {
-  dataForm = new FormGroup({
+  private dataForm = new FormGroup({
     orderStatus: new FormControl('', [Validators.required])
   });
 
   constructor(public dialogRef: MatDialogRef<EditOrderStatusDialog>,
      @Inject(MAT_DIALOG_DATA) public data: IOrderModelServer){}
 
-  ngOnInit(): void {
+  private ngOnInit(): void {
     if(this.data){
       this.dataForm.controls['orderStatus'].setValue(this.data.status);
     }
   }
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.dataForm.valid){
       this.dialogRef.close(this.dataForm.value);
     }

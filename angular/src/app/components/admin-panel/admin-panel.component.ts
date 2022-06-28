@@ -10,10 +10,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   styleUrls: ['./admin-panel.component.css']
 })
 export class AdminPanelComponent implements OnInit {
-  helper=  new JwtHelperService();
-  userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-
+  private helper=  new JwtHelperService();
+  private isFontsLoaded!: boolean;
+  private userData!: IUserResponseModel;
   constructor(private userService: UserService) {
   }
 

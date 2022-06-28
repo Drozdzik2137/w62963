@@ -20,49 +20,19 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./admin-users.component.css']
 })
 export class AdminUsersComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  helper=  new JwtHelperService();
-  userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-  displayedColumns: string[] = ['id', 'email', 'phone', 'fname', 'lname', 'createdAt', 'isAdmin', 'manage'];
-  dataSource!: MatTableDataSource<IUserAdminResponseModel>;
-  usersCount: number = 0;
-  users: IUserAdminResponseModel[] = [];
-
+  private dataSource!: MatTableDataSource<IUserAdminResponseModel>;
+  private displayedColumns: string[] = ['id', 'email', 'phone', 'fname', 'lname', 'createdAt', 'isAdmin', 'manage'];
+  private helper=  new JwtHelperService();
+  private isFontsLoaded!: boolean;
+  @ViewChild(MatPaginator, { static: true }) private paginator!: MatPaginator;
+  @ViewChild(MatSort) private sort!: MatSort;
+  private userData!: IUserResponseModel;
+  private users: IUserAdminResponseModel[] = [];
+  private usersCount: number = 0;
   constructor(private userService: UserService, private dialog: MatDialog, private router: Router, private toast: ToastrService) {
   }
 
-  ngOnInit(): void {
-    document.fonts.ready.then(() => (this.isFontsLoaded = true));
-
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-
-    this.userService.getAllUsers().subscribe((users: IUserAdminResponseServer) => {
-      this.dataSource = new MatTableDataSource<IUserAdminResponseModel>(users.users);
-      this.users = users.users;
-      this.usersCount = users.count;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
-  }
-
-  applyFilter(event: Event) {
+  private applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -71,7 +41,7 @@ export class AdminUsersComponent implements OnInit {
     }
   }
 
-  deleteUser(row: any){
+  private deleteUser(row: any){
     const dialogRef =  this.dialog.open(DeleteUserAdminDialog, {
       width: '350px',
       data: row
@@ -113,6 +83,33 @@ export class AdminUsersComponent implements OnInit {
 
   }
 
+  ngOnInit(): void {
+    document.fonts.ready.then(() => (this.isFontsLoaded = true));
+
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+          })
+        }
+      }else{
+        this.userData = data;
+      }
+    })
+
+    this.userService.getAllUsers().subscribe((users: IUserAdminResponseServer) => {
+      this.dataSource = new MatTableDataSource<IUserAdminResponseModel>(users.users);
+      this.users = users.users;
+      this.usersCount = users.count;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+  }
 }
 
 
@@ -121,7 +118,7 @@ export class AdminUsersComponent implements OnInit {
   templateUrl: 'delete-user-dialog.html'
 })
 export class DeleteUserAdminDialog {
-  dataForm = new FormGroup({
+  private dataForm = new FormGroup({
     confirm: new FormControl('', [Validators.required, Validators.pattern('na pewno')])
   });
 
@@ -130,11 +127,11 @@ export class DeleteUserAdminDialog {
      @Inject(MAT_DIALOG_DATA) public data: IUserAdminResponseModel){}
 
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.dataForm.valid){
       this.dialogRef.close(true);
     }

@@ -21,33 +21,14 @@ export interface EditDataDialog{
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  userData!: IUserResponseModel;
-  helper = new JwtHelperService();
-  fname!: string;
-  lname!: string;
-  password!: string;
-
+  private fname!: string;
+  private helper = new JwtHelperService();
+  private lname!: string;
+  private password!: string;
+  private userData!: IUserResponseModel;
   constructor(private userService: UserService, public dialog: MatDialog, private toast: ToastrService, private router: Router) { }
 
-  ngOnInit(): void {
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-  }
-
-  openDataDialog(): void {
+  private openDataDialog(): void {
     const dialogRef = this.dialog.open(EditDataDialog, {
       width: '300px'
     });
@@ -85,7 +66,45 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  openPasswordDialog(): void {
+  private openDeleteDialog(): void {
+    const dialogRef = this.dialog.open(DeleteUserDialog, {
+      width: '350px'
+    });
+
+    dialogRef.afterClosed().subscribe(next => {
+      if(next == true){
+        if(confirm('Na pewno chcesz usunąć konto? Zabieg jest nieodwracalny!')){
+          this.userService.deleteUserAccount(this.userData.userId).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+            let userDeleteStatus = data.status;
+            if(userDeleteStatus == 200){
+              // @ts-ignore
+              let successMessage = data.body.message;
+              this.toast.success(`${successMessage}`, 'Pomyślnie usunięto konto', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              })
+              this.userService.logout();
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/register']);
+              })
+            }else{
+            this.toast.error(`Nie udało się usunąć konta`, 'Niepowodzenie', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            })
+            }
+          })
+        }
+      }
+    })
+
+  }
+
+  private openPasswordDialog(): void {
     const dialogRef = this.dialog.open(EditPasswordDialog, {
       width: '300px'
     });
@@ -122,7 +141,7 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  openPhoneDialog(): void {
+  private openPhoneDialog(): void {
     const dialogRef = this.dialog.open(EditPhoneDialog, {
       width: '350px',
       data: this.userData.phoneNumber
@@ -162,44 +181,23 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  openDeleteDialog(): void {
-    const dialogRef = this.dialog.open(DeleteUserDialog, {
-      width: '350px'
-    });
-
-    dialogRef.afterClosed().subscribe(next => {
-      if(next == true){
-        if(confirm('Na pewno chcesz usunąć konto? Zabieg jest nieodwracalny!')){
-          this.userService.deleteUserAccount(this.userData.userId).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
-            let userDeleteStatus = data.status;
-            if(userDeleteStatus == 200){
-              // @ts-ignore
-              let successMessage = data.body.message;
-              this.toast.success(`${successMessage}`, 'Pomyślnie usunięto konto', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              })
-              this.userService.logout();
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/register']);
-              })
-            }else{
-            this.toast.error(`Nie udało się usunąć konta`, 'Niepowodzenie', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            })
-            }
+  ngOnInit(): void {
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
           })
         }
+      }else{
+        this.userData = data;
       }
     })
-
   }
-
 }
 
 @Component({
@@ -207,22 +205,20 @@ export class ProfileComponent implements OnInit {
   templateUrl: 'edit-data-dialog.html'
 })
 export class EditDataDialog {
-  fname: string = '';
-  lname: string = '';
-  editDataForm = new FormGroup({
+  private editDataForm = new FormGroup({
     fnameForm: new FormControl(this.fname, [Validators.required]),
     lnameForm: new FormControl(this.lname, [Validators.required])
   });
-
-
+  fname: string = '';
+  lname: string = '';
   constructor(public dialogRef: MatDialogRef<EditDataDialog>,
      @Inject(MAT_DIALOG_DATA) public data: EditDataDialog){}
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.editDataForm.valid){
       this.dialogRef.close(this.editDataForm.value)
     }
@@ -234,7 +230,7 @@ export class EditDataDialog {
   templateUrl: 'edit-password-dialog.html'
 })
 export class EditPasswordDialog {
-  editPasswordForm = new FormGroup({
+  private editPasswordForm = new FormGroup({
     oldPassword: new FormControl('', [Validators.required]),
     newPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
   });
@@ -243,11 +239,11 @@ export class EditPasswordDialog {
   constructor(public dialogRef: MatDialogRef<EditPasswordDialog>,
      @Inject(MAT_DIALOG_DATA) public data: EditPasswordDialog){}
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.editPasswordForm.valid){
       this.dialogRef.close(this.editPasswordForm.value);
     }
@@ -259,7 +255,7 @@ export class EditPasswordDialog {
   templateUrl: 'delete-user-dialog.html'
 })
 export class DeleteUserDialog {
-  confirmForm = new FormGroup({
+  private confirmForm = new FormGroup({
     confirm: new FormControl('', [Validators.required, Validators.pattern('na pewno')])
   })
 
@@ -267,11 +263,11 @@ export class DeleteUserDialog {
   constructor(public dialogRef: MatDialogRef<EditPasswordDialog>,
      @Inject(MAT_DIALOG_DATA) public data: EditPasswordDialog){}
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.confirmForm.valid){
       this.dialogRef.close(true);
     }
@@ -283,7 +279,7 @@ export class DeleteUserDialog {
   templateUrl: 'edit-phone-dialog.html'
 })
 export class EditPhoneDialog {
-  newPhoneNumberForm = new FormGroup({
+  private newPhoneNumberForm = new FormGroup({
     phoneNumber: new FormControl('', [Validators.required, Validators.pattern('[5-9]\\d{8}')])
   })
 
@@ -291,16 +287,16 @@ export class EditPhoneDialog {
   constructor(public dialogRef: MatDialogRef<EditPasswordDialog>,
      @Inject(MAT_DIALOG_DATA) public data: EditPasswordDialog){}
 
-  ngOnInit(): void {
+  private ngOnInit(): void {
     this.newPhoneNumberForm.controls['phoneNumber'].setValue(this.data)
 
   }
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.newPhoneNumberForm.valid){
       this.dialogRef.close(this.newPhoneNumberForm.value);
     }

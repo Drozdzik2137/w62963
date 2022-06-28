@@ -53,17 +53,17 @@ interface ExampleFlatNode {
 
 
 export class ProductsComponent implements OnInit {
-  productsLimit: number = 0;
-  productsCount: number = 0;
-  productsTotalCount: number = 0;
-  page: number = 1;
-  totalPages: number = 0;
-  products: IProductModelServer[] = [];
-  pageEvent!: PageEvent ;
-  categories: ICategoryModelServer[] = [];
-  countCategories: number = 0;
-  loading: boolean = false;
-  orderProductsBySelectedValue: number = 1;
+  private productsLimit: number = 0;
+  private productsCount: number = 0;
+  private productsTotalCount: number = 0;
+  private page: number = 1;
+  private totalPages: number = 0;
+  private products: IProductModelServer[] = [];
+  private pageEvent!: PageEvent ;
+  private categories: ICategoryModelServer[] = [];
+  private countCategories: number = 0;
+  private loading: boolean = false;
+  private orderProductsBySelectedValue: number = 1;
 
 
 
@@ -83,32 +83,32 @@ export class ProductsComponent implements OnInit {
   };//tree
 
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
+  private treeControl = new FlatTreeControl<ExampleFlatNode>(
     node => node.level,
     node => node.expandable,
   );//tree
 
-  treeFlattener = new MatTreeFlattener(
+  private treeFlattener = new MatTreeFlattener(
     this._transformer,
     node => node.level,
     node => node.expandable,
     node => node.children,
   ); //tree
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  private dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private productService: ProductService, private router: Router, private cartService: CartService, private categoryService: CategoryService) {
     this.dataSource.data = TREE_DATA; // tree
   }
 
 
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable; // tree
+  private hasChild = (_: number, node: ExampleFlatNode) => node.expandable; // tree
 
   // @ViewChild(MatPaginator, { static: true })
   // paginator!: MatPaginator;
 
 
-  initAllProducts(page: number, limit?: number, orderBy?: string, orderType?: string){
+  private initAllProducts(page: number, limit?: number, orderBy?: string, orderType?: string){
     if(limit !== undefined && orderBy !== undefined && orderType !== undefined)
     {
       if(this.orderProductsBySelectedValue === 1){
@@ -168,14 +168,14 @@ export class ProductsComponent implements OnInit {
     }
   }
 
-  initAllCategories(){
+  private initAllCategories(){
     this.categoryService.getAllCategories().subscribe((categories: ICategoryServerResponse) => {
       this.categories = categories.categories;
       this.countCategories = categories.count;
     })
   }
 
-  getPage(page: number){
+  private getPage(page: number){
     this.loading = true;
     this.page = page;
     let orderBy = "brand";
@@ -226,15 +226,15 @@ export class ProductsComponent implements OnInit {
   //   window.scroll(0,0);
   // }
 
-  SelectProduct(id: number){
+  private SelectProduct(id: number){
     this.router.navigate(['/product', id]).then();
   }
 
-  AddToCart(id: number){
+  private AddToCart(id: number){
     this.cartService.AddProductToCart(id);
   }
 
-  goToCategory(id: number){
+  private goToCategory(id: number){
     const navigationExtras: NavigationExtras = {
       state: {
         categoryId: id

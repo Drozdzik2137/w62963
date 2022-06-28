@@ -13,16 +13,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-order-details.component.css']
 })
 export class UserOrderDetailsComponent implements OnInit {
-  helper = new JwtHelperService();
-  userData!: IUserResponseModel;
-  loading: boolean = false;
-  orderId: any;
-  orderStatus: any;
-  products: any;
-  total: any
-
-
-
+  private helper = new JwtHelperService();
+  private loading: boolean = false;
+  private orderId: any;
+  private orderStatus: any;
+  private products: any;
+  private total: any
+  private userData!: IUserResponseModel;
   constructor(private userService: UserService, private router: Router, private orderService: OrderService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {

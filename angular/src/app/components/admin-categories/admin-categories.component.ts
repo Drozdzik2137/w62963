@@ -20,50 +20,18 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./admin-categories.component.css']
 })
 export class AdminCategoriesComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  helper=  new JwtHelperService();
-  userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-  displayedColumns: string[] = ['id', 'name', 'manage'];
-  dataSource!: MatTableDataSource<ICategoryModelServer>;
-  categoriesCount: number = 0;
-  categories: ICategoryModelServer[] = [];
-
+  private categories: ICategoryModelServer[] = [];
+  private categoriesCount: number = 0;
+  private dataSource!: MatTableDataSource<ICategoryModelServer>;
+  private displayedColumns: string[] = ['id', 'name', 'manage'];
+  private helper=  new JwtHelperService();
+  private isFontsLoaded!: boolean;
+  @ViewChild(MatPaginator, { static: true }) private paginator!: MatPaginator;
+  @ViewChild(MatSort) private sort!: MatSort;
+  private userData!: IUserResponseModel;
   constructor(private userService: UserService, private categoryService: CategoryService, private dialog: MatDialog, private toast: ToastrService, private router: Router) { }
 
-  ngOnInit(): void {
-    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
-
-    document.fonts.ready.then(() => (this.isFontsLoaded = true));
-
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-
-    this.categoryService.getAllCategories().subscribe((categories: ICategoryServerResponse) => {
-      this.dataSource = new MatTableDataSource<ICategoryModelServer>(categories.categories);
-      this.categories = categories.categories;
-      this.categoriesCount = categories.count;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
-  }
-
-  applyFilter(event: Event) {
+  private applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -72,48 +40,45 @@ export class AdminCategoriesComponent implements OnInit {
     }
   }
 
-  openDialog(){
-    const dialogRef = this.dialog.open(CategoryDialog, {
-      width: '350px'
+  private deleteCategory(row: any){
+    const dialogRef =  this.dialog.open(DeleteCategoryDialog, {
+      width: '350px',
+      data: row
     });
 
     dialogRef.afterClosed().subscribe(data => {
       if(data !== undefined){
-        this.categoryService.addCategory(data.categoryName).pipe(catchError((err:HttpErrorResponse) => of(err))).subscribe(data => {
-          let addCategoryStatus = data.status;
-          if(addCategoryStatus == 200){
-            //@ts-ignore
-            let successMessage = data.body.message;
-            this.toast.success(`${successMessage}`, 'Udane', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            });
-            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/admin-categories']);
-            });
-
-          }else{
-            // @ts-ignore
-            let errorCategoryMessage = data.error.message;
-            this.toast.error(`${errorCategoryMessage}`, 'Nieudane', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            });
-            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/admin-categories']);
-            });
-          }
-        })
+        if(confirm('Na pewno chcesz usunąć kategorie? Zabiej jest nieodwracalny!')){
+          this.categoryService.deleteCategory(data).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+            let categoryDeleteStatus = data.status;
+            if(categoryDeleteStatus == 200){
+              this.toast.success(`Pomyślnie usunięto kategorie`, 'Uadane', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-categories']);
+              });
+            }else{
+              this.toast.error(`Nie udało się usunąć kategorii`, 'Niepowodzenie', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-categories']);
+              });
+            }
+          })
+        }
       }
     })
-
   }
 
-  editCategory(row: any){
+  private editCategory(row: any){
     const dialogRef = this.dialog.open(CategoryDialog, {
       width: '350px',
       data: row
@@ -155,46 +120,76 @@ export class AdminCategoriesComponent implements OnInit {
 
   }
 
-  deleteCategory(row: any){
-    const dialogRef =  this.dialog.open(DeleteCategoryDialog, {
-      width: '350px',
-      data: row
+  private openDialog(){
+    const dialogRef = this.dialog.open(CategoryDialog, {
+      width: '350px'
     });
 
     dialogRef.afterClosed().subscribe(data => {
       if(data !== undefined){
-        if(confirm('Na pewno chcesz usunąć kategorie? Zabiej jest nieodwracalny!')){
-          this.categoryService.deleteCategory(data).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
-            let categoryDeleteStatus = data.status;
-            if(categoryDeleteStatus == 200){
-              this.toast.success(`Pomyślnie usunięto kategorie`, 'Uadane', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              });
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/admin-categories']);
-              });
-            }else{
-              this.toast.error(`Nie udało się usunąć kategorii`, 'Niepowodzenie', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              });
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/admin-categories']);
-              });
-            }
-          })
-        }
+        this.categoryService.addCategory(data.categoryName).pipe(catchError((err:HttpErrorResponse) => of(err))).subscribe(data => {
+          let addCategoryStatus = data.status;
+          if(addCategoryStatus == 200){
+            //@ts-ignore
+            let successMessage = data.body.message;
+            this.toast.success(`${successMessage}`, 'Udane', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-categories']);
+            });
+
+          }else{
+            // @ts-ignore
+            let errorCategoryMessage = data.error.message;
+            this.toast.error(`${errorCategoryMessage}`, 'Nieudane', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-categories']);
+            });
+          }
+        })
       }
     })
+
   }
 
+  ngOnInit(): void {
+    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
 
+    document.fonts.ready.then(() => (this.isFontsLoaded = true));
 
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+          })
+        }
+      }else{
+        this.userData = data;
+      }
+    })
+
+    this.categoryService.getAllCategories().subscribe((categories: ICategoryServerResponse) => {
+      this.dataSource = new MatTableDataSource<ICategoryModelServer>(categories.categories);
+      this.categories = categories.categories;
+      this.categoriesCount = categories.count;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+  }
 }
 
 @Component({
@@ -202,16 +197,16 @@ export class AdminCategoriesComponent implements OnInit {
   templateUrl: 'category-dialog.html'
 })
 export class CategoryDialog {
-  actionBtn: string = 'Dodaj';
-  actionLabel: string = 'Dodawanie'
-  dataForm = new FormGroup({
+  private actionBtn: string = 'Dodaj';
+  private actionLabel: string = 'Dodawanie'
+  private dataForm = new FormGroup({
     categoryName: new FormControl('', [Validators.required])
   });
 
   constructor(public dialogRef: MatDialogRef<CategoryDialog>,
      @Inject(MAT_DIALOG_DATA) public data: ICategoryModelServer){}
 
-  ngOnInit(): void {
+  private ngOnInit(): void {
     if(this.data){
       this.actionBtn = "Zmień"
       this.actionLabel = 'Edytowanie'
@@ -219,11 +214,11 @@ export class CategoryDialog {
     }
   }
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.dataForm.valid){
       this.dialogRef.close(this.dataForm.value);
     }
@@ -236,7 +231,7 @@ export class CategoryDialog {
   templateUrl: 'delete-category-dialog.html'
 })
 export class DeleteCategoryDialog {
-  dataForm = new FormGroup({
+  private dataForm = new FormGroup({
     confirm: new FormControl('', [Validators.required, Validators.pattern('na pewno')])
   });
 
@@ -245,11 +240,11 @@ export class DeleteCategoryDialog {
      @Inject(MAT_DIALOG_DATA) public data: ICategoryModelServer){}
 
 
-  onNoClick(): void {
+  private onNoClick(): void {
     this.dialogRef.close();
   }
 
-  onSaveClick(){
+  private onSaveClick(){
     if(this.dataForm.valid){
       this.dialogRef.close(this.data.id);
     }
