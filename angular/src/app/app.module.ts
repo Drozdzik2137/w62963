@@ -1,4 +1,4 @@
-import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+import { HttpClientJsonpModule, HttpClientModule, HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -43,7 +43,6 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ProfileComponent, EditDataDialog, EditPasswordDialog, DeleteUserDialog, EditPhoneDialog } from './components/profile/profile.component';
 import { JwtModule } from "@auth0/angular-jwt";
-import { UserOrderHistoryComponent } from "./components/user-order-history/user-order-history.component";
 import { UserComplaintsReturnsComponent } from './components/user-complaints-returns/user-complaints-returns.component';
 import { ThankYouForTheOrderComponent } from './components/thank-you-for-the-order/thank-you-for-the-order.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
@@ -57,6 +56,7 @@ import { AdminUsersComponent, DeleteUserAdminDialog } from './components/admin-u
 import { MatSortModule } from '@angular/material/sort';
 import { SearchProductsComponent } from './components/search-products/search-products.component';
 import { ProductsByCategoryComponent } from './components/products-by-category/products-by-category.component';
+import { UserOrderHistoryComponent } from './components/user-order-history/user-order-history.component';
 
 
 
@@ -77,11 +77,11 @@ import { ProductsByCategoryComponent } from './components/products-by-category/p
     LoginComponent,
     RegisterComponent,
     ProfileComponent,
-    UserOrderHistoryComponent,
     UserComplaintsReturnsComponent,
     ThankYouForTheOrderComponent,
     CheckoutComponent,
     UserOrderDetailsComponent,
+    UserOrderHistoryComponent,
     EditDataDialog,
     EditPasswordDialog,
     DeleteUserDialog,
@@ -99,7 +99,7 @@ import { ProductsByCategoryComponent } from './components/products-by-category/p
     DeleteUserAdminDialog,
     ShowOrderDetailsDialog,
     SearchProductsComponent,
-    ProductsByCategoryComponent
+    ProductsByCategoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -137,7 +137,7 @@ import { ProductsByCategoryComponent } from './components/products-by-category/p
     MatDialogModule,
     MatCardModule,
     MatListModule,
-    MatSortModule
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

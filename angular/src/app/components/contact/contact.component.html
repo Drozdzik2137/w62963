@@ -19,15 +19,15 @@
     </p>
     <div class="row">
       <div class="col-md-9 mb-4">
-        <form id="contactForm">
+        <form id="contactForm" [formGroup]="contactForm">
 
           <div class="row">
             <div class="col-md-6">
               <div class="md-form mb-2">
                 <mat-form-field appearance="fill" style="width:100%">
                   <mat-label>Imię</mat-label>
-                  <input type="text" matInput [formControl]="fnameFormControl" placeholder="Np. Jan" fillColor="accent">
-                  <mat-error *ngIf="fnameFormControl.hasError('required')">
+                  <input type="text" matInput formControlName="fnameFormControl" placeholder="Np. Jan" fillColor="accent">
+                  <mat-error *ngIf="this.contactForm.controls.fnameFormControl.hasError('required')">
                     Imię jest <strong>wymagane</strong>
                   </mat-error>
                 </mat-form-field>
@@ -38,9 +38,9 @@
               <div class="md-form mb-0">
                 <mat-form-field appearance="fill" style="width:100%">
                   <mat-label>Nazwisko</mat-label>
-                  <input type="text" matInput [formControl]="lnameFormControl" placeholder="Np.. Kowalski"
+                  <input type="text" matInput formControlName="lnameFormControl" placeholder="Np.. Kowalski"
                     fillColor="accent">
-                  <mat-error *ngIf="lnameFormControl.hasError('required')">
+                  <mat-error *ngIf="this.contactForm.controls.lnameFormControl.hasError('required')">
                     Nazwisko jest <strong>wymagane</strong>
                   </mat-error>
                 </mat-form-field>
@@ -54,12 +54,12 @@
               <div class="md-form mb-2">
                 <mat-form-field appearance="fill" style="width:100%">
                   <mat-label>Email</mat-label>
-                  <input type="email" matInput [formControl]="emailFormControl" placeholder="Np. pat@example.com"
+                  <input type="email" matInput formControlName="emailFormControl" placeholder="Np. pat@example.com"
                     fillColor="accent">
-                  <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                  <mat-error *ngIf="this.contactForm.controls.emailFormControl.hasError('email') && !this.contactForm.controls.emailFormControl.hasError('required')">
                     Podaj poprawny adres email
                   </mat-error>
-                  <mat-error *ngIf="emailFormControl.hasError('required')">
+                  <mat-error *ngIf="this.contactForm.controls.emailFormControl.hasError('required')">
                     Email jest <strong>wymagany</strong>
                   </mat-error>
                 </mat-form-field>
@@ -70,9 +70,9 @@
               <div class="md-form mb-2">
                 <mat-form-field appearance="fill" style="width:100%">
                   <mat-label>Nr Telefonu</mat-label>
-                  <input type="text" matInput [formControl]="phoneFormControl" placeholder="Np.. 987654321"
+                  <input type="text" matInput formControlName="phoneFormControl" placeholder="Np.. 987654321"
                     fillColor="accent">
-                  <mat-error *ngIf="phoneFormControl.hasError('required')">
+                  <mat-error *ngIf="this.contactForm.controls.phoneFormControl.hasError('required')">
                     Telefon jest <strong>wymagany</strong>
                   </mat-error>
                 </mat-form-field>
@@ -85,8 +85,8 @@
               <div class="md-form mb-2">
                 <mat-form-field appearance="fill" style="width:100%">
                   <mat-label>Wiadomość</mat-label>
-                  <textarea type="text" matInput [formControl]="messageFormControl" fillColor="accent"></textarea>
-                  <mat-error *ngIf="messageFormControl.hasError('required')">
+                  <textarea type="text" matInput formControlName="messageFormControl" fillColor="accent"></textarea>
+                  <mat-error *ngIf="this.contactForm.controls.messageFormControl.hasError('required')">
                     Wiadomość jest <strong>wymagana</strong>
                   </mat-error>
                 </mat-form-field>

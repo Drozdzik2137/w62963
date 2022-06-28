@@ -1,14 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
+
 
 import { UserComplaintsReturnsComponent } from './user-complaints-returns.component';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ToastrService } from 'ngx-toastr';
 
 describe('UserComplaintsReturnsComponent', () => {
   let component: UserComplaintsReturnsComponent;
   let fixture: ComponentFixture<UserComplaintsReturnsComponent>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserComplaintsReturnsComponent ]
+      declarations: [ UserComplaintsReturnsComponent ],
+      imports: [HttpClientTestingModule, RouterTestingModule],
+      providers: [UserComplaintsReturnsComponent, { provide: ToastrService, useValue: ToastrService }],
     })
     .compileComponents();
   });

@@ -1,6 +1,7 @@
+import { environment } from './../../../environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { catchError, map, Observable, of } from 'rxjs';
 
 @Component({
@@ -9,11 +10,17 @@ import { catchError, map, Observable, of } from 'rxjs';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
+  contactForm = new FormGroup({
+    emailFormControl: new FormControl('', [Validators.required, Validators.email]),
+    fnameFormControl: new FormControl('', [Validators.required]),
+    lnameFormControl: new FormControl('', [Validators.required]),
+    phoneFormControl: new FormControl('', [Validators.required]),
+    messageFormControl: new FormControl('', [Validators.required])
+  })
+
+  // Google maps package not working in karma test, fault from karma
   apiLoaded: Observable<boolean>;
   center: google.maps.LatLngLiteral = {lat: 50.048924580103346, lng: 21.981803279444392};
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  fnameFormControl = new FormControl('', [Validators.required]);
-  lnameFormControl = new FormControl('', [Validators.required]);
   markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
   markerPositions: google.maps.LatLngLiteral[] = [];
   messageFormControl = new FormControl('', [Validators.required]);
@@ -23,9 +30,9 @@ export class ContactComponent implements OnInit {
     center: {lat: 50.048924580103346, lng: 21.981803279444392},
     zoom: 17,
   }
-  phoneFormControl = new FormControl('', [Validators.required]);
+  apiKey = environment.apiKey;
   constructor(http: HttpClient) {
-    this.apiLoaded = http.jsonp('https://maps.googleapis.com/maps/api/js?key=AIzaSyAPzf55-x7RnpsDjG9yMj7ZHuYXyvUXSxQ', 'callback')
+    this.apiLoaded = http.jsonp(this.apiKey, 'callback')
         .pipe(
           map(() => true),
           catchError(() => of(false)),

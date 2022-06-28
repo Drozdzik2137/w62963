@@ -28,7 +28,7 @@ export class AdminProductsComponent implements OnInit {
   displayedColumns: string[] = ['id', 'img', 'brand', 'name', 'category', 'size', 'quantity', 'price', 'manage'];
   helper=  new JwtHelperService();
   isFontsLoaded!: boolean;
-  @ViewChild(MatPaginator, { static: true }) private paginator!: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   products: IProductModelServer[] = [];
   productsCount: number = 0;
   @ViewChild(MatSort) private sort!: MatSort;
