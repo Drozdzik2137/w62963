@@ -7,11 +7,11 @@ import { Component, OnInit, Inject, HostListener } from '@angular/core';
   styleUrls: ['./scroll-to-top.component.css'],
 })
 export class ScrollToTopComponent implements OnInit {
-  private windowScrolled!: boolean;
+  windowScrolled!: boolean;
 
   constructor(@Inject(DOCUMENT) private document: Document) { }
   @HostListener("window:scroll", [])
-  private onWindowScroll(){
+  onWindowScroll(){
     if(window.pageYOffset || document.documentElement.scrollTop || this.document.body.scrollTop > 100) {
       this.windowScrolled = true;
     }else if
@@ -19,7 +19,7 @@ export class ScrollToTopComponent implements OnInit {
       this.windowScrolled = false;
     }
   }
-  private scrollToTop() {
+  scrollToTop() {
     window.scroll({
       top: 0,
       left: 0,

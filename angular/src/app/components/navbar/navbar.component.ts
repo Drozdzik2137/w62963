@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   cartTotal!: number;
   isLoggedIn!: boolean;
 
-  private searchForm = new FormGroup({
+  searchForm = new FormGroup({
     searchValue: new FormControl('')
   });
 

@@ -15,7 +15,7 @@ export class ContactComponent implements OnInit {
   fnameFormControl = new FormControl('', [Validators.required]);
   lnameFormControl = new FormControl('', [Validators.required]);
   markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
-  private markerPositions: google.maps.LatLngLiteral[] = [];
+  markerPositions: google.maps.LatLngLiteral[] = [];
   messageFormControl = new FormControl('', [Validators.required]);
   options: google.maps.MapOptions = {
     mapTypeId: 'hybrid',
