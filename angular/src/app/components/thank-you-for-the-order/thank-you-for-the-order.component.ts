@@ -8,11 +8,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./thank-you-for-the-order.component.css']
 })
 export class ThankYouForTheOrderComponent implements OnInit {
+  cartTotal: any;
   message: any;
   orderId: any;
   products: any;
-  cartTotal: any;
-
   constructor(private router: Router) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {

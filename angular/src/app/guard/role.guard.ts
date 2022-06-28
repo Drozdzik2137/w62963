@@ -9,10 +9,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class RoleGuard implements CanActivate {
-  userData!: IUserResponseModel;
   helper = new JwtHelperService();
   isAdmin: boolean = false;
-
+  userData!: IUserResponseModel;
   constructor(private userService: UserService, private router: Router){}
 
   canActivate(

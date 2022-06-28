@@ -13,17 +13,12 @@ import { IProductModelServer, IServerResponse } from 'src/app/models/product.mod
 export class CartComponent implements OnInit {
   cartData!: ICartModelServer;
   cartTotal!: number;
-  subTotal!: number;
   products: IProductModelServer[] = [];
-
+  subTotal!: number;
   constructor(public cartService: CartService, private router: Router, private productService: ProductService) { }
 
-  ngOnInit(): void {
-    this.cartService.cartData$.subscribe(data => this.cartData = data);
-    this.cartService.cartTotal$.subscribe(total => this.cartTotal = total);
-    this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
-      this.products = prods.products;
-    });
+  AddToCart(id:number){
+    this.cartService.AddProductToCart(id);
   }
 
   ChangeQuantity(id: number, increaseQuantity: boolean) {
@@ -34,7 +29,11 @@ export class CartComponent implements OnInit {
     this.router.navigate(['/product', id]).then();
   }
 
-  AddToCart(id:number){
-    this.cartService.AddProductToCart(id);
+  ngOnInit(): void {
+    this.cartService.cartData$.subscribe(data => this.cartData = data);
+    this.cartService.cartTotal$.subscribe(total => this.cartTotal = total);
+    this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
+      this.products = prods.products;
+    });
   }
 }

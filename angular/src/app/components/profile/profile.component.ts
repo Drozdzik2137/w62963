@@ -21,31 +21,12 @@ export interface EditDataDialog{
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  userData!: IUserResponseModel;
-  helper = new JwtHelperService();
   fname!: string;
+  helper = new JwtHelperService();
   lname!: string;
   password!: string;
-
+  userData!: IUserResponseModel;
   constructor(private userService: UserService, public dialog: MatDialog, private toast: ToastrService, private router: Router) { }
-
-  ngOnInit(): void {
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-  }
 
   openDataDialog(): void {
     const dialogRef = this.dialog.open(EditDataDialog, {
@@ -80,6 +61,44 @@ export class ProfileComponent implements OnInit {
             })
           }
         })
+      }
+    })
+
+  }
+
+  openDeleteDialog(): void {
+    const dialogRef = this.dialog.open(DeleteUserDialog, {
+      width: '350px'
+    });
+
+    dialogRef.afterClosed().subscribe(next => {
+      if(next == true){
+        if(confirm('Na pewno chcesz usunąć konto? Zabieg jest nieodwracalny!')){
+          this.userService.deleteUserAccount(this.userData.userId).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+            let userDeleteStatus = data.status;
+            if(userDeleteStatus == 200){
+              // @ts-ignore
+              let successMessage = data.body.message;
+              this.toast.success(`${successMessage}`, 'Pomyślnie usunięto konto', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              })
+              this.userService.logout();
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/register']);
+              })
+            }else{
+            this.toast.error(`Nie udało się usunąć konta`, 'Niepowodzenie', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            })
+            }
+          })
+        }
       }
     })
 
@@ -162,44 +181,23 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  openDeleteDialog(): void {
-    const dialogRef = this.dialog.open(DeleteUserDialog, {
-      width: '350px'
-    });
-
-    dialogRef.afterClosed().subscribe(next => {
-      if(next == true){
-        if(confirm('Na pewno chcesz usunąć konto? Zabieg jest nieodwracalny!')){
-          this.userService.deleteUserAccount(this.userData.userId).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
-            let userDeleteStatus = data.status;
-            if(userDeleteStatus == 200){
-              // @ts-ignore
-              let successMessage = data.body.message;
-              this.toast.success(`${successMessage}`, 'Pomyślnie usunięto konto', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              })
-              this.userService.logout();
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/register']);
-              })
-            }else{
-            this.toast.error(`Nie udało się usunąć konta`, 'Niepowodzenie', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            })
-            }
+  ngOnInit(): void {
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
           })
         }
+      }else{
+        this.userData = data;
       }
     })
-
   }
-
 }
 
 @Component({
@@ -207,14 +205,12 @@ export class ProfileComponent implements OnInit {
   templateUrl: 'edit-data-dialog.html'
 })
 export class EditDataDialog {
-  fname: string = '';
-  lname: string = '';
   editDataForm = new FormGroup({
     fnameForm: new FormControl(this.fname, [Validators.required]),
     lnameForm: new FormControl(this.lname, [Validators.required])
   });
-
-
+  fname: string = '';
+  lname: string = '';
   constructor(public dialogRef: MatDialogRef<EditDataDialog>,
      @Inject(MAT_DIALOG_DATA) public data: EditDataDialog){}
 

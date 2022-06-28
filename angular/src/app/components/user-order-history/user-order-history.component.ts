@@ -15,79 +15,17 @@ import { IOrderModelServer, IOrderServerResponse } from './../../models/order.mo
   encapsulation: ViewEncapsulation.None,
 })
 export class UserOrderHistoryComponent implements OnInit {
-  userData!: IUserResponseModel;
   helper = new JwtHelperService();
-  ordersLimit: number = 0;
+  loading: boolean = false;
+  orderOrdersBySelectedValue: number = 1;
+  orders: IOrderModelServer[] = [];
   ordersCount: number = 0;
+  ordersLimit: number = 0;
   ordersTotalCount: number = 0;
   page: number = 1;
   totalPage: number = 0;
-  orders: IOrderModelServer[] = [];
-  loading: boolean = false;
-  orderOrdersBySelectedValue: number = 1;
-
-
+  userData!: IUserResponseModel;
   constructor(private userService: UserService, private orderService: OrderService, private router: Router) { }
-
-  ngOnInit(): void {
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if (!data) {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-          const userToken = this.helper.decodeToken(token);
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-            this.initUserOrders(this.page)
-          });
-        }
-      } else {
-        this.userData = data;
-        this.initUserOrders(this.page)
-      }
-    });
-
-
-
-  }
-
-  initUserOrders(page: number, ordersLimit?: number, orderType?: string) {
-    if (ordersLimit !== undefined && orderType !== undefined) {
-      if (this.orderOrdersBySelectedValue === 1) {
-        // console.log(page, ordersLimit, orderType)
-        this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
-          this.ordersLimit = orders.limit;
-          this.ordersCount = orders.count;
-          this.ordersTotalCount = orders.totalOrders;
-          this.page = orders.currentPage;
-          this.totalPage = orders.totalPages;
-          this.orders = orders.orders;
-        });
-      } else if (this.orderOrdersBySelectedValue === 2) {
-        // console.log(page, ordersLimit, orderType)
-        this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
-          this.ordersLimit = orders.limit;
-          this.ordersCount = orders.count;
-          this.ordersTotalCount = orders.totalOrders;
-          this.page = orders.currentPage;
-          this.totalPage = orders.totalPages;
-          this.orders = orders.orders;
-        });
-      }
-    }else {
-      let orderType = 'DESC';
-      this.orderService.getUserOrders(this.userData.userId, page, 5, orderType).subscribe((orders: IOrderServerResponse) => {
-        this.ordersLimit = orders.limit;
-        this.ordersCount = orders.count;
-        this.ordersTotalCount = orders.totalOrders;
-        this.page = orders.currentPage;
-        this.totalPage = orders.totalPages;
-        this.orders = orders.orders;
-      });
-    }
-
-  }
 
   getPage(page: number){
     this.loading = true;
@@ -128,6 +66,43 @@ export class UserOrderHistoryComponent implements OnInit {
     window.scroll(0,0);
   }
 
+  initUserOrders(page: number, ordersLimit?: number, orderType?: string) {
+    if (ordersLimit !== undefined && orderType !== undefined) {
+      if (this.orderOrdersBySelectedValue === 1) {
+        // console.log(page, ordersLimit, orderType)
+        this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
+          this.ordersLimit = orders.limit;
+          this.ordersCount = orders.count;
+          this.ordersTotalCount = orders.totalOrders;
+          this.page = orders.currentPage;
+          this.totalPage = orders.totalPages;
+          this.orders = orders.orders;
+        });
+      } else if (this.orderOrdersBySelectedValue === 2) {
+        // console.log(page, ordersLimit, orderType)
+        this.orderService.getUserOrders(this.userData.userId, page, ordersLimit, orderType).subscribe((orders: IOrderServerResponse) => {
+          this.ordersLimit = orders.limit;
+          this.ordersCount = orders.count;
+          this.ordersTotalCount = orders.totalOrders;
+          this.page = orders.currentPage;
+          this.totalPage = orders.totalPages;
+          this.orders = orders.orders;
+        });
+      }
+    }else {
+      let orderType = 'DESC';
+      this.orderService.getUserOrders(this.userData.userId, page, 5, orderType).subscribe((orders: IOrderServerResponse) => {
+        this.ordersLimit = orders.limit;
+        this.ordersCount = orders.count;
+        this.ordersTotalCount = orders.totalOrders;
+        this.page = orders.currentPage;
+        this.totalPage = orders.totalPages;
+        this.orders = orders.orders;
+      });
+    }
+
+  }
+
   SelectOrder(id: number, status: string){
     console.log(id,status);
     this.orderService.getSingleOrder(id).subscribe(prods => {
@@ -143,4 +118,26 @@ export class UserOrderHistoryComponent implements OnInit {
 
   }
 
+  ngOnInit(): void {
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if (!data) {
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          const userToken = this.helper.decodeToken(token);
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+            this.initUserOrders(this.page)
+          });
+        }
+      } else {
+        this.userData = data;
+        this.initUserOrders(this.page)
+      }
+    });
+
+
+
+  }
 }

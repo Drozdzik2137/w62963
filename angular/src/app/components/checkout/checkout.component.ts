@@ -18,11 +18,21 @@ import { NgxSpinnerService } from "ngx-spinner";
 export class CheckoutComponent implements OnInit {
   cartData!: ICartModelServer;
   cartTotal!: number;
-  userData!: IUserResponseModel;
   helper = new JwtHelperService();
+  userData!: IUserResponseModel;
   userId!: number;
 
   constructor(private cartService: CartService, private orderService: OrderService, private router: Router, private spinner: NgxSpinnerService, private userService: UserService) { }
+
+  onCheckout(){
+    if(this.cartTotal > 0) {
+      this.spinner.show().then(p => {
+        this.cartService.CheckoutFromCart(this.userId);
+      });
+    }else{
+      return;
+    }
+  }
 
   ngOnInit(): void {
     this.cartService.cartData$.subscribe(data => this.cartData = data);
@@ -45,15 +55,4 @@ export class CheckoutComponent implements OnInit {
       }
     });
   }
-
-  onCheckout(){
-    if(this.cartTotal > 0) {
-      this.spinner.show().then(p => {
-        this.cartService.CheckoutFromCart(this.userId);
-      });
-    }else{
-      return;
-    }
-  }
-
 }

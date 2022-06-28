@@ -24,7 +24,7 @@ interface PageObject {
 })
 
 export class StylePaginatorDirective  {
-  // Style for Mat Paginator, now using ngx paginator
+// Style for Mat Paginator, now using ngx paginator
 
   // public currentPage = 1;
   // public directiveLoaded = false;
@@ -134,6 +134,7 @@ export class StylePaginatorDirective  {
   private _pageGapTxt = "...";
   private _rangeStart!: number;
   private _rangeEnd!: number;
+  private _showTotalPages = 2;
   private _buttons = [];
   private _curPageObj: PageObject = {
     length: 0,
@@ -141,8 +142,6 @@ export class StylePaginatorDirective  {
     pageSize: 0,
     previousPageIndex: 0
   };
-
-  private _showTotalPages = 2;
   @Input()
   get showTotalPages(): number {
     return this._showTotalPages;

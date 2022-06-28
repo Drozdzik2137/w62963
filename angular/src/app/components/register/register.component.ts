@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  hide = true;
+  isChecked = false;
   registrationForm = new FormGroup({
     emailFormControl: new FormControl('',  [Validators.required, Validators.email, Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,6}$/)]),
     passwordFormControl: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -19,14 +21,17 @@ export class RegisterComponent implements OnInit {
     lnameFormCntrol: new FormControl('', [Validators.required]),
     phoneFormControl: new FormControl('', [Validators.required, Validators.pattern('[5-9]\\d{8}')])
   });
-  hide = true;
-  isChecked = false;
   registrationMessage!: string;
   registrationStatus!: number;
 
   constructor(private userService: UserService, private toast: ToastrService, private router: Router) { }
 
-  ngOnInit(): void {
+  OnChange(event: any){
+    if(this.isChecked == true){
+      this.isChecked = false
+    }else{
+      this.isChecked = true
+    }
   }
 
   registerUser(){
@@ -65,12 +70,6 @@ export class RegisterComponent implements OnInit {
   this.isChecked = false;
 }
 
-  OnChange(event: any){
-    if(this.isChecked == true){
-      this.isChecked = false
-    }else{
-      this.isChecked = true
-    }
+  ngOnInit(): void {
   }
-
 }

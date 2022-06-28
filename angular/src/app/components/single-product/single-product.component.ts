@@ -13,14 +13,53 @@ import { map } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None
 })
 export class SingleProductComponent implements OnInit {
-  products: IProductModelServer[] = [];
   id!: number;
   images: any[] = [];
   product: any;
-
-  @ViewChild('quantity') quantityInput: any;
+  products: IProductModelServer[] = [];
+  @ViewChild('quantity') private quantityInput: any;
 
   constructor(private productService: ProductService, private router: Router, private route: ActivatedRoute, private cartService: CartService) {}
+
+  AddToCart(id:number){
+    this.cartService.AddProductToCart(id);
+  }
+
+  AddToCartQuantity(id: number) {
+    this.cartService.AddProductToCart(id, this.quantityInput.nativeElement.value);
+  }
+
+  Decrease(){
+    let value = parseInt(this.quantityInput.nativeElement.value)
+    if(this.product.quantity > 0){
+      value--
+
+      if(value <= 1){
+        value = 1;
+      }
+    }else{
+      return;
+    }
+    this.quantityInput.nativeElement.value = value.toString();
+  }
+
+  Increase(){
+    let value = parseInt(this.quantityInput.nativeElement.value)
+    if(this.product.quantity >= 1){
+      value++;
+
+      if(value > this.product.quantity){
+        value = this.product.quantity
+      }
+    }else{
+      return;
+    }
+    this.quantityInput.nativeElement.value = value.toString();
+  }
+
+  SelectProduct(id: number){
+    this.router.navigate(['/product', id]).then();
+  }
 
   ngOnInit(): void {
     this.route.paramMap.pipe(
@@ -40,50 +79,8 @@ export class SingleProductComponent implements OnInit {
 
   this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
     this.products = prods.products;
-  });
-}
-
-SelectProduct(id: number){
-  this.router.navigate(['/product', id]).then();
-}
-
-Increase(){
-  let value = parseInt(this.quantityInput.nativeElement.value)
-  if(this.product.quantity >= 1){
-    value++;
-
-    if(value > this.product.quantity){
-      value = this.product.quantity
-    }
-  }else{
-    return;
+    });
   }
-  this.quantityInput.nativeElement.value = value.toString();
-}
-
-Decrease(){
-  let value = parseInt(this.quantityInput.nativeElement.value)
-  if(this.product.quantity > 0){
-    value--
-
-    if(value <= 1){
-      value = 1;
-    }
-  }else{
-    return;
-  }
-  this.quantityInput.nativeElement.value = value.toString();
-}
-
-AddToCartQuantity(id: number) {
-  this.cartService.AddProductToCart(id, this.quantityInput.nativeElement.value);
-}
-AddToCart(id:number){
-  this.cartService.AddProductToCart(id);
-}
-
-
-
 }
 
 

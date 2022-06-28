@@ -10,18 +10,16 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class UserService {
-  private SERVER_URL = 'http://localhost:4000/api';
+  _isAdmin$= new BehaviorSubject<boolean>(false);
   _isLoggedIn$ = new BehaviorSubject<boolean>(false);
+  helper = new JwtHelperService();
+  SERVER_URL = 'http://localhost:4000/api';
+  isAdmin$ = this._isAdmin$.asObservable();
   isLoggedIn$ = this._isLoggedIn$.asObservable();
   // @ts-ignore
   userData$ = new BehaviorSubject<IUserResponseModel>(null);
   // @ts-ignore
   loginMessage$ = new BehaviorSubject<string>(null);
-  _isAdmin$= new BehaviorSubject<boolean>(false);
-  isAdmin$ = this._isAdmin$.asObservable();
-  helper = new JwtHelperService();
-
-
   constructor(private http: HttpClient, private router: Router, private toast: ToastrService) {
     // const token = localStorage.getItem('authToken');
     // this._isLoggedIn$.next(!!token);

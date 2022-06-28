@@ -10,8 +10,8 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./user-complaints-returns.component.css']
 })
 export class UserComplaintsReturnsComponent implements OnInit {
-  userData!: IUserResponseModel;
   helper = new JwtHelperService();
+  userData!: IUserResponseModel;
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {

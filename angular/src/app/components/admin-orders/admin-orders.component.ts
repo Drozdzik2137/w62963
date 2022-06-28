@@ -23,49 +23,16 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./admin-orders.component.css']
 })
 export class AdminOrdersComponent implements OnInit {
+  dataSource!: MatTableDataSource<IOrderModelServer>;
+  displayedColumns: string[] = ['id', 'email', 'phone', 'createdAt', 'status', 'manage'];
+  helper=  new JwtHelperService();
+  isFontsLoaded!: boolean;
+  orders: IOrderModelServer[] = [];
+  ordersCount: number = 0;
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  helper=  new JwtHelperService();
   userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-  displayedColumns: string[] = ['id', 'email', 'phone', 'createdAt', 'status', 'manage'];
-  dataSource!: MatTableDataSource<IOrderModelServer>;
-  ordersCount: number = 0;
-  orders: IOrderModelServer[] = [];
-
-
   constructor(private userService: UserService, private orderService: OrderService, private dialog: MatDialog, private router: Router, private toast: ToastrService) {
-  }
-
-  ngOnInit(): void {
-    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
-
-    document.fonts.ready.then(() => (this.isFontsLoaded = true));
-
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-
-    this.orderService.getAllOrders().subscribe((orders: IOrderServerResponse) => {
-      this.dataSource = new MatTableDataSource<IOrderModelServer>(orders.orders);
-      this.orders = orders.orders;
-      this.ordersCount = orders.count;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
   }
 
   applyFilter(event: Event) {
@@ -75,14 +42,6 @@ export class AdminOrdersComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  showOrder(row: any){
-    const dialogRef = this.dialog.open(ShowOrderDetailsDialog, {
-      width: '1000px',
-      data: row
-    });
-    // this.orderService.getSingleOrder(id)
   }
 
   editOrder(row: any){
@@ -126,7 +85,43 @@ export class AdminOrdersComponent implements OnInit {
 
   }
 
+  showOrder(row: any){
+    const dialogRef = this.dialog.open(ShowOrderDetailsDialog, {
+      width: '1000px',
+      data: row
+    });
+    // this.orderService.getSingleOrder(id)
+  }
 
+  ngOnInit(): void {
+    this.paginator._intl.itemsPerPageLabel="Kategorie na stronę: ";
+
+    document.fonts.ready.then(() => (this.isFontsLoaded = true));
+
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+          })
+        }
+      }else{
+        this.userData = data;
+      }
+    })
+
+    this.orderService.getAllOrders().subscribe((orders: IOrderServerResponse) => {
+      this.dataSource = new MatTableDataSource<IOrderModelServer>(orders.orders);
+      this.orders = orders.orders;
+      this.ordersCount = orders.count;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+  }
 }
 
 @Component({

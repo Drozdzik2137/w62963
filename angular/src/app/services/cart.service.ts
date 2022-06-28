@@ -13,10 +13,10 @@ import { NavigationExtras, Router } from '@angular/router';
   providedIn: 'root'
 })
 export class CartService {
-  private SERVER_URL = 'http://localhost:4000/api';
+  SERVER_URL = 'http://localhost:4000/api';
 
   // Data variable to store the cart info on the local storage (in browser)
-  private cartDataClient: ICartModelPublic = {
+  cartDataClient: ICartModelPublic = {
     total: 0,
     productData: [{
       inCart: 0,
@@ -25,7 +25,7 @@ export class CartService {
   };
 
   // Data variable to store the cart info on the server
-  private cartDataServer: ICartModelServer = {
+  cartDataServer: ICartModelServer = {
     total: 0,
     data: [{
       //@ts-ignore
@@ -362,7 +362,7 @@ export class CartService {
   }
 
 
-  private CalculateTotal() {
+  CalculateTotal() {
     let total = 0;
 
     this.cartDataServer.data.forEach(p => {
@@ -383,7 +383,7 @@ export class CartService {
     return subTotal
   }
 
-  private resetServerData() {
+  resetServerData() {
     this.cartDataServer = {
       total: 0,
       data: [{

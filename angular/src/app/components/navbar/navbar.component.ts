@@ -16,26 +16,12 @@ export class NavbarComponent implements OnInit {
   cartTotal!: number;
   isLoggedIn!: boolean;
 
-  searchForm = new FormGroup({
+  private searchForm = new FormGroup({
     searchValue: new FormControl('')
   });
 
 
   constructor(public cartService: CartService, private router: Router, public userService: UserService) { }
-
-  ngOnInit(): void {
-    this.cartService.cartTotal$.subscribe(total=>{
-      this.cartTotal = total;
-    });
-
-    this.cartService.cartData$.subscribe(data=> this.cartData = data);
-
-    this.userService.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
-  }
-
-  SelectProduct(id: number){
-    this.router.navigate(['/product', id]).then();
-  }
 
   logout(){
     this.userService.logout();
@@ -55,4 +41,17 @@ export class NavbarComponent implements OnInit {
     this.searchForm.reset();
   }
 
+  SelectProduct(id: number){
+    this.router.navigate(['/product', id]).then();
+  }
+
+  ngOnInit(): void {
+    this.cartService.cartTotal$.subscribe(total=>{
+      this.cartTotal = total;
+    });
+
+    this.cartService.cartData$.subscribe(data=> this.cartData = data);
+
+    this.userService.isLoggedIn$.subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
+  }
 }

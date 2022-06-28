@@ -14,15 +14,12 @@ import { Router } from '@angular/router';
 })
 export class UserOrderDetailsComponent implements OnInit {
   helper = new JwtHelperService();
-  userData!: IUserResponseModel;
   loading: boolean = false;
   orderId: any;
   orderStatus: any;
   products: any;
   total: any
-
-
-
+  userData!: IUserResponseModel;
   constructor(private userService: UserService, private router: Router, private orderService: OrderService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as {

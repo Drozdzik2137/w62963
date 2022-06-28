@@ -24,88 +24,16 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit {
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  helper=  new JwtHelperService();
-  userData!: IUserResponseModel;
-  isFontsLoaded!: boolean;
-  displayedColumns: string[] = ['id', 'img', 'brand', 'name', 'category', 'size', 'quantity', 'price', 'manage'];
   dataSource!: MatTableDataSource<IProductModelServer>;
-  productsCount: number = 0;
+  displayedColumns: string[] = ['id', 'img', 'brand', 'name', 'category', 'size', 'quantity', 'price', 'manage'];
+  helper=  new JwtHelperService();
+  isFontsLoaded!: boolean;
+  @ViewChild(MatPaginator, { static: true }) private paginator!: MatPaginator;
   products: IProductModelServer[] = [];
-
+  productsCount: number = 0;
+  @ViewChild(MatSort) private sort!: MatSort;
+  userData!: IUserResponseModel;
   constructor(private router: Router, private userService: UserService, private productService: ProductService, private dialog: MatDialog, private toast: ToastrService) {}
-
-  ngOnInit(): void {
-    this.paginator._intl.itemsPerPageLabel="Produkty na stronę: ";
-    document.fonts.ready.then(() => (this.isFontsLoaded = true));
-
-    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
-      return user;
-    })).subscribe((data: IUserResponseModel) => {
-      if(!data){
-        const token = localStorage.getItem('authToken');
-        if(token){
-          const userToken = this.helper.decodeToken(token)
-          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
-            this.userData = user;
-          })
-        }
-      }else{
-        this.userData = data;
-      }
-    })
-
-    this.productService.getAllProductsAdmin().subscribe((prods: IServerResponse) => {
-      this.dataSource = new MatTableDataSource<IProductModelServer>(prods.products);
-      this.products = prods.products;
-      this.productsCount = prods.count;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
-
-
-
-  }
-
-  openDialog(){
-    const dialogRef = this.dialog.open(ProductDialog, {
-      width: '350px'
-    });
-
-    dialogRef.afterClosed().subscribe(data => {
-      if(data !== undefined){
-        this.productService.addProduct(data.prodName, data.prodImg, parseFloat(data.prodPrice).toFixed(2), data.prodQuantity, data.prodShortDesc,
-        data.prodDescription, data.prodSize, data.prodBrand, data.prodCategory, data.prodImages, data.prodFreshness).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
-          let productAddStatus = data.status;
-          if(productAddStatus == 200){
-            //@ts-ignore
-            let successMessage = data.body.message;
-            this.toast.success(`${successMessage}`, 'Udane', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            });
-            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/admin-products']);
-            });
-          }else{
-            this.toast.error(`Nie udało się dodać produktu`, 'Niepowodzenie', {
-              timeOut: 5000,
-              progressBar: true,
-              progressAnimation: 'increasing',
-              positionClass: 'toast-top-right'
-            });
-            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/admin-products']);
-            });
-          }
-        })
-      }
-    })
-  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -114,6 +42,45 @@ export class AdminProductsComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  deleteProduct(row: any){
+    const dialogRef =  this.dialog.open(DeleteDialog, {
+      width: '350px',
+      data: row
+    });
+
+    dialogRef.afterClosed().subscribe(data => {
+      if(data !== undefined){
+        if(confirm('Na pewno chcesz usunąć produkt? Zabieg jest nieodwracalny!')){
+          this.productService.deleteProduct(data).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+            let prodDeleteStatus = data.status;
+            if(prodDeleteStatus == 200){
+              this.toast.success(`Pomyślnie usunięto produkt`, 'Udane', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-products']);
+              });
+            }else{
+              this.toast.error(`Nie udało się usunąć produktu`, 'Niepowodzenie', {
+                timeOut: 5000,
+                progressBar: true,
+                progressAnimation: 'increasing',
+                positionClass: 'toast-top-right'
+              });
+              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+                this.router.navigate(['/admin-products']);
+              });
+            }
+          })
+        }
+      }
+    });
+
   }
 
   editProduct(row: any){
@@ -156,46 +123,75 @@ export class AdminProductsComponent implements OnInit {
 
   }
 
-  deleteProduct(row: any){
-    const dialogRef =  this.dialog.open(DeleteDialog, {
-      width: '350px',
-      data: row
+  openDialog(){
+    const dialogRef = this.dialog.open(ProductDialog, {
+      width: '350px'
     });
 
     dialogRef.afterClosed().subscribe(data => {
       if(data !== undefined){
-        if(confirm('Na pewno chcesz usunąć produkt? Zabieg jest nieodwracalny!')){
-          this.productService.deleteProduct(data).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
-            let prodDeleteStatus = data.status;
-            if(prodDeleteStatus == 200){
-              this.toast.success(`Pomyślnie usunięto produkt`, 'Udane', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              });
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/admin-products']);
-              });
-            }else{
-              this.toast.error(`Nie udało się usunąć produktu`, 'Niepowodzenie', {
-                timeOut: 5000,
-                progressBar: true,
-                progressAnimation: 'increasing',
-                positionClass: 'toast-top-right'
-              });
-              this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
-                this.router.navigate(['/admin-products']);
-              });
-            }
-          })
-        }
+        this.productService.addProduct(data.prodName, data.prodImg, parseFloat(data.prodPrice).toFixed(2), data.prodQuantity, data.prodShortDesc,
+        data.prodDescription, data.prodSize, data.prodBrand, data.prodCategory, data.prodImages, data.prodFreshness).pipe(catchError((err: HttpErrorResponse) => of(err))).subscribe(data => {
+          let productAddStatus = data.status;
+          if(productAddStatus == 200){
+            //@ts-ignore
+            let successMessage = data.body.message;
+            this.toast.success(`${successMessage}`, 'Udane', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-products']);
+            });
+          }else{
+            this.toast.error(`Nie udało się dodać produktu`, 'Niepowodzenie', {
+              timeOut: 5000,
+              progressBar: true,
+              progressAnimation: 'increasing',
+              positionClass: 'toast-top-right'
+            });
+            this.router.navigateByUrl('/home', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/admin-products']);
+            });
+          }
+        })
       }
-    });
-
+    })
   }
 
+  ngOnInit(): void {
+    this.paginator._intl.itemsPerPageLabel="Produkty na stronę: ";
+    document.fonts.ready.then(() => (this.isFontsLoaded = true));
 
+    this.userService.userData$.pipe(map((user: IUserResponseModel) => {
+      return user;
+    })).subscribe((data: IUserResponseModel) => {
+      if(!data){
+        const token = localStorage.getItem('authToken');
+        if(token){
+          const userToken = this.helper.decodeToken(token)
+          this.userService.getUser(userToken.id).subscribe((user: IUserResponseModel) => {
+            this.userData = user;
+          })
+        }
+      }else{
+        this.userData = data;
+      }
+    })
+
+    this.productService.getAllProductsAdmin().subscribe((prods: IServerResponse) => {
+      this.dataSource = new MatTableDataSource<IProductModelServer>(prods.products);
+      this.products = prods.products;
+      this.productsCount = prods.count;
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    })
+
+
+
+  }
 }
 
 
@@ -206,6 +202,8 @@ export class AdminProductsComponent implements OnInit {
 export class ProductDialog {
   actionBtn: string = 'Dodaj';
   actionLabel: string = 'Dodawanie'
+  brands: IBrandModelServer[] = [];
+  categories: ICategoryModelServer[] = [];
   dataForm = new FormGroup({
     prodId: new FormControl(''),
     prodName: new FormControl('', [Validators.required]),
@@ -220,9 +218,6 @@ export class ProductDialog {
     prodImages: new FormControl('', [Validators.required]),
     prodFreshness: new FormControl('', [Validators.required])
   });
-  categories: ICategoryModelServer[] = [];
-  brands: IBrandModelServer[] = [];
-
   constructor(public dialogRef: MatDialogRef<ProductDialog>, private categoryService: CategoryService, private productService: ProductService,
      @Inject(MAT_DIALOG_DATA) public data: IProductModelServer){}
 

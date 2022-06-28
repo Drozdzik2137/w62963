@@ -15,18 +15,17 @@ export class HomeComponent implements OnInit {
 
   constructor(private productService: ProductService, private router: Router, private cartService: CartService) { }
 
-  ngOnInit(): void {
-    this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
-      this.products = prods.products;
-    })
+  AddToCart(id: number){
+    this.cartService.AddProductToCart(id);
   }
 
   SelectProduct(id: number){
     this.router.navigate(['/product', id]).then();
   }
 
-  AddToCart(id: number){
-    this.cartService.AddProductToCart(id);
+  ngOnInit(): void {
+    this.productService.getNewProducts().subscribe((prods: IServerResponse) => {
+      this.products = prods.products;
+    })
   }
-
 }

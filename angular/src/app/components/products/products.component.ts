@@ -83,19 +83,19 @@ export class ProductsComponent implements OnInit {
   };//tree
 
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
+  private treeControl = new FlatTreeControl<ExampleFlatNode>(
     node => node.level,
     node => node.expandable,
   );//tree
 
-  treeFlattener = new MatTreeFlattener(
+  private treeFlattener = new MatTreeFlattener(
     this._transformer,
     node => node.level,
     node => node.expandable,
     node => node.children,
   ); //tree
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+  private dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
   constructor(private productService: ProductService, private router: Router, private cartService: CartService, private categoryService: CategoryService) {
     this.dataSource.data = TREE_DATA; // tree

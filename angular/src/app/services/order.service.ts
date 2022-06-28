@@ -9,9 +9,21 @@ import { ICheckoutOrderResponseModel, IOrderServerResponse } from '../models/ord
   providedIn: 'root'
 })
 export class OrderService {
-  private SERVER_URL = 'http://localhost:4000/api';
+  SERVER_URL = 'http://localhost:4000/api';
 
   constructor(private http: HttpClient) { }
+
+  getAllOrders(){
+    return this.http.get<IOrderServerResponse>(`${this.SERVER_URL}/allOrders`);
+  }
+
+  getSingleOrder(orderId: number){
+    return this.http.get<ICheckoutOrderResponseModel[]>(`${this.SERVER_URL}/order/${orderId}`);
+  }
+
+  getSingleOrderTotal(orderId: number){
+    return this.http.get(`${this.SERVER_URL}/orderTotal/` + orderId);
+  }
 
   getUserOrders(id: number, page: number, limit: number, orderType: string){
     let params = new HttpParams();
@@ -24,18 +36,6 @@ export class OrderService {
       map((orders: IOrderServerResponse) => orders),
       catchError(err => throwError(err))
     );
-  }
-
-  getSingleOrder(orderId: number){
-    return this.http.get<ICheckoutOrderResponseModel[]>(`${this.SERVER_URL}/order/${orderId}`);
-  }
-
-  getSingleOrderTotal(orderId: number){
-    return this.http.get(`${this.SERVER_URL}/orderTotal/` + orderId);
-  }
-
-  getAllOrders(){
-    return this.http.get<IOrderServerResponse>(`${this.SERVER_URL}/allOrders`);
   }
 
   updateOrderStatus(id:number, orderStatus: string){
