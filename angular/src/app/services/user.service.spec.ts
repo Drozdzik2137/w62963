@@ -55,6 +55,7 @@ describe('UserService', () => {
       beforeEach(() => {
         spyOn(http, 'get').and.returnValue(of(response))
       });
+
       it('should be equal', () => {
         service.getUser(0).subscribe(user => {
           // @ts-ignore
