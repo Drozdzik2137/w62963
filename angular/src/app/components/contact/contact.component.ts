@@ -17,8 +17,6 @@ export class ContactComponent implements OnInit {
     phoneFormControl: new FormControl('', [Validators.required]),
     messageFormControl: new FormControl('', [Validators.required])
   })
-
-  // Google maps package not working in karma test, fault from karma
   apiLoaded: Observable<boolean>;
   center: google.maps.LatLngLiteral = {lat: 50.048924580103346, lng: 21.981803279444392};
   markerOptions: google.maps.MarkerOptions = {clickable: false, optimized: false, title: 'WSIiZ' };
