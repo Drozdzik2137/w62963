@@ -24,8 +24,8 @@
           <tbody class="text-center">
             <tr *ngFor="let c of cartData.data; let i=index" scope="row">
               <td>
-                <div class="cart-product-img">
-                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}">
+                <div class="cart-product-img d-flex justify-content-center">
+                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}" style="height: 280px;object-fit: cover">
                   <div class="middle">
                     <button class="quick-view" (click)="SelectProduct(c.product.id)"><i class="fa fa-eye"></i></button>
                   </div>

@@ -3,7 +3,15 @@
     <div class="col-md-12 ps-5">
       <ul class="breadcrumb-tree">
         <li><a href="" [routerLink]="['/home']">Home</a></li>
-        <li class="active">Produkty</li>
+        <ng-container *ngIf="!categoryId">
+          <li class="active" [routerLink]="['/products']">Produkty</li>
+        </ng-container>
+        <ng-container *ngIf="categoryId">
+          <li><a href="" [routerLink]="['/products']">Produkty</a></li>
+          <ng-container *ngFor="let cat of categories">
+            <li class="active" [routerLink]="['/{{cat.name}}']" *ngIf="cat.id == categoryId">{{cat.name}}</li>
+          </ng-container>
+        </ng-container>
       </ul>
     </div>
   </div>

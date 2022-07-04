@@ -272,6 +272,9 @@
     right: auto;
     left: -90px !important;
   }
+  .user-dropdown .dropdown-menu{
+    left: -60px !important;
+  }
   .cart-empty-btn{
     font-size: 18px;
   }
@@ -284,10 +287,16 @@
     left: -70px !important;
     width: 320px;
   }
+  .user-dropdown .dropdown-menu{
+    left: -60px !important;
+  }
 }
   @media screen and (max-width: 340px) {
     .shop-cart-dropdown .dropdown-menu {
-      left: -70px !important;
+      left: -60px !important;
       width: 280px;
+    }
+    .user-dropdown .dropdown-menu{
+      left: -60px !important;
     }
 }

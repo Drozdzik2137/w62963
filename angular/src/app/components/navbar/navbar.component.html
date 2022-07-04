@@ -20,7 +20,7 @@
             <div class="cart-list" id="style-scroll" *ngIf="cartData.data[0].numInCart !==0 else emptyCart">
               <div class="product-widget justify-content-between p-3" *ngFor="let c of cartData.data; let i=index">
                 <div class="product-img">
-                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}">
+                  <img class="image" [src]="c.product.img" alt="{{c.product.name}}" style="height: 80px;object-fit: cover">
                   <div class="middle">
                     <button class="quick-view" (click)="SelectProduct(c.product.id)"><i class="fa fa-eye"></i></button>
                   </div>
@@ -56,7 +56,7 @@
             </ng-template>
           </ul>
         </div>
-        <div class="dropdown pe-all ps-2">
+        <div class="user-dropdown dropdown pe-all ps-2">
           <button type="button" class="btn position-relative dropdown" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-user"></i>
           </button>
