@@ -79,6 +79,7 @@ export class UserService {
       progressAnimation: 'increasing',
       positionClass: 'toast-top-right'
     })
+    this.isAdmin();
   }
 
   registerUser(email: string, password: string, fname: string, lname: string, phoneNumber: string, photoUrl?: string, type?: string){

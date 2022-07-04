@@ -61,7 +61,7 @@
             <i class="fas fa-user"></i>
           </button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li *ngIf="userService._isAdmin$| async"><a role="button" class="dropdown-item"
+            <li *ngIf="userService.isAdmin$ | async"><a role="button" class="dropdown-item"
               [routerLink]="['/admin']">Panel administratora</a></li>
             <li *ngIf="userService.isLoggedIn$ | async"><a role="button" class="dropdown-item"
                 [routerLink]="['/profile']">Moje konto</a></li>
