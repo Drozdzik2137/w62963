@@ -247,12 +247,6 @@ export class CartService {
     let data = this.cartDataServer.data[index];
 
     if(increase) {
-      data.numInCart < data.product.quantity ? data.numInCart++ : data.product?.quantity;
-      this.cartDataClient.productData[index].inCart = data.numInCart;
-      this.CalculateTotal();
-      this.cartDataClient.total = this.cartDataServer.total
-      localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
-      this.cartData$.next({...this.cartDataServer});
       if(data.numInCart === data.product.quantity){
         this.toast.error(`Nie możesz zwiększyć ilości produktu w koszyku.`, 'Ups...', {
           timeOut: 3000,
@@ -260,6 +254,13 @@ export class CartService {
           progressAnimation: 'increasing',
           positionClass: 'toast-top-right'
         })
+      }else{
+        data.numInCart < data.product.quantity ? data.numInCart++ : data.product?.quantity;
+        this.cartDataClient.productData[index].inCart = data.numInCart;
+        this.CalculateTotal();
+        this.cartDataClient.total = this.cartDataServer.total
+        localStorage.setItem('cart', JSON.stringify(this.cartDataClient));
+        this.cartData$.next({...this.cartDataServer});
       }
     }else{
       data.numInCart--;
