@@ -30,7 +30,8 @@ export class ProfileComponent implements OnInit {
 
   openDataDialog(): void {
     const dialogRef = this.dialog.open(EditDataDialog, {
-      width: '300px'
+      width: '300px',
+      data: this.userData
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -175,8 +176,6 @@ export class ProfileComponent implements OnInit {
             })
           }
         })
-      }else{
-
       }
     })
   }
@@ -206,13 +205,16 @@ export class ProfileComponent implements OnInit {
 })
 export class EditDataDialog {
   editDataForm = new FormGroup({
-    fnameForm: new FormControl(this.fname, [Validators.required]),
-    lnameForm: new FormControl(this.lname, [Validators.required])
+    fnameForm: new FormControl('', [Validators.required]),
+    lnameForm: new FormControl('', [Validators.required])
   });
-  fname: string = '';
-  lname: string = '';
   constructor(public dialogRef: MatDialogRef<EditDataDialog>,
-     @Inject(MAT_DIALOG_DATA) public data: EditDataDialog){}
+     @Inject(MAT_DIALOG_DATA) public data: IUserResponseModel){}
+
+  ngOnInit(): void {
+    this.editDataForm.controls['fnameForm'].setValue(this.data.fname)
+    this.editDataForm.controls['lnameForm'].setValue(this.data.lname)
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
